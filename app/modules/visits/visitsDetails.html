@@ -1,0 +1,74 @@
+<ion-view title="{{VISITSCONSTANTS.VISITTITLE}}">
+    <ion-nav-buttons side="left"> <span ng-click="myGoBack()"><button class="button button-clear icon ion-ios-arrow-back"></button></span>
+        <div class="app-logo"> <img class="title-image" src="img/ajax-loader.gif" ng-src="{{orgLogoURL?orgLogoURL:defaultLogoURL}}" err-SRC="{{errorLogoURL}}" height="25" /> </div>
+    </ion-nav-buttons>
+    <ion-nav-buttons side="right">
+        <button title="Notifications" class="button button-clear ion-android-notifications notification" ui-sref="app.patientReminder"><span class="badge badge-assertive">{{Notification}}</span></button>
+        <button class="button button-clear ion-android-more-vertical right-menu" ng-click="popover.show($event)"> </button>
+    </ion-nav-buttons>
+    <ion-content has-header="true" class="bottom-50">
+        <ion-list>
+            <ion-item class="no-padding">
+                <div class="item-text-wrap item-thumbnail-left book-doc-thumbnail padding-right-10"> <img class="book-doc-image pointer" src="img/ajax-loader.gif" ng-src="{{visitData.physicianProfileUrl?visitData.physicianProfileUrl:defaultUserImage}}" err-SRC="{{defaultUserImage}}" />
+                    <div class="row no-padding min-height-50">
+                        <div class="col no-padding">
+                            <div><span class="text-white main-title pointer">{{visitData.firstname | capitalize}} {{visitData.lastname | capitalize}}</span></div>
+                            <div><span class="book-sub-text">{{visitData.specialty}}</span></div>
+                        </div>
+                        <div class="col no-padding">
+                            <div class="text-right"><span class="book-sub-text">{{visitData.date | date:'MMM dd yyyy'}}</span> </div>
+                            <div class="text-right"><span class="book-sub-text">{{VISITSCONSTANTS.VISITNOLABEL}} : {{visitData.encounter}}</span> </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row appointment-card patientportal-menu" style="border-top: solid 1px rgba(255, 255, 255, 0.1);">
+                    <div class="col col-25 no-padding">
+                        <a title="Message" class="button button-clear icon ion-ios-email-outline absolute-center text-white" ui-sref="app.composeMessage({'PhysicianId': visitData.provider_id})"></a>
+                    </div>
+                    <div class="col col-25 no-padding">
+                        <a title="Share" class="button button-clear icon ion-android-share-alt absolute-center text-white" ng-click="shareFile(visitData)"></a>
+                    </div>
+                    <div class="col col-25 no-padding">
+                        <a title="Download" class="button button-clear icon ion-ios-download absolute-center text-white" ng-click="downloadAndOpenFile(visitData)"></a>
+                    </div>
+                    <div class="col col-25 no-padding">
+                        <a class="button button-clear icon ion-ios-paper absolute-center text-white" title="Consent"> </a>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="row top-border-xs">
+                        <div class="col no-padding">
+                            <p><span class="font-medium">Facility</span> : {{visitData.facility}}</p>
+                        </div>
+                    </div>
+                    <div class="row top-border-xs">
+                        <div class="col no-padding">
+                            <span ng-if='visitData.admit=="1"'><span class="font-medium">Status</span> : Admitted</span>
+                            <span ng-if='visitData.admit=="0"'><span class="font-medium">Status</span> : Not Admitted</span>
+                        </div>
+                    </div>
+                    <div class="row top-border-xs">
+                        <!-- ng-if='visitData.admit=="1"' -->
+                        <div class="col no-padding">
+                            <span class="pull-left"><span class="font-medium">Room Number</span> : {{visitData.roomNo}}</span>
+                            <span class="pull-right"><span class="font-medium">Bed Number</span> : {{visitData.bedNo}}</span>
+
+                        </div>
+                    </div>
+                    <div class="row top-border-xs">
+                        <div class="col no-padding">
+                            <p style="white-space: pre-wrap;"><span class="font-medium">Description</span> : {{visitData.reason}}</p>
+                        </div>
+                    </div>
+                </div>
+            </ion-item>
+        </ion-list>
+
+    </ion-content>
+    <div class="tabs ng-scope tabs-icon-top tabs-positive">
+        <a class="tab-item disable-user-behavior bottom-icon" title="Issues" ui-sref="app.medicalHistory"> <i class="icon icon-problem"></i><span class="tab-title"></span><span>Issues</span></a>
+        <a class="tab-item disable-user-behavior bottom-icon" title="Vitals" ui-sref="app.viewMedicalRecords({type:'vital'})"> <i class="icon ion-ios-pulse-strong"></i><span class="tab-title"></span><span>Vitals</span></a>
+        <a class="tab-item disable-user-behavior bottom-icon" title="Prescription" ui-sref="app.prescriptions({physicianId:visitData.provider_id,encounter:visitData.encounter})"> <i class="icon icon-prescriptions"></i><span class="tab-title"></span><span>Prescription</span></a>
+        <a class="tab-item disable-user-behavior bottom-icon" title="Bill" ui-sref="app.billing({physicianId:visitData.provider_id,encounter:visitData.encounter})"> <i class="icon icon-indian-rupee"></i><span class="tab-title"></span><span>Bill</span></a>
+    </div>
+</ion-view>

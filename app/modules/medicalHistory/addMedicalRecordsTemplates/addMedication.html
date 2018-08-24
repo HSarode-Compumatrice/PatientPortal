@@ -1,0 +1,129 @@
+<ion-view title="Medications">
+    <ion-nav-buttons side="left"> <span ng-click="myGoBack()"><button class="button button-clear icon ion-ios-arrow-back left-menu"></button></span> </ion-nav-buttons>
+    <ion-nav-buttons side="right">
+        <button title="Notifications" class="button button-clear ion-android-notifications notification" ui-sref="app.patientReminder"><span class="badge badge-assertive">{{Notification}}</span></button>
+        <button class="button button-clear ion-android-more-vertical right-menu" ng-click="popover.show($event)"> </button>
+    </ion-nav-buttons>
+    <ion-content has-header="true" class="bg-gray">
+        <ion-list>
+            <ion-item class="padding-10">
+                <div class="left-padding-5"><span>Drug Search&nbsp;</span></div>
+                <label class="item item-input no-padding">
+                    <input class="input" ng-model="" type="text" placeholder="Drug Search">
+                    <div class="right record-option"> <span class="record-option-box icon ion-ios-search-strong"></span> </div>
+                </label>
+            </ion-item>
+            <ion-item class="padding-10">
+                <div class="left-padding-5"><span>Dose&nbsp;</span></div>
+                <label class="item item-input no-padding">
+                    <input class="input" ng-model="" type="text" placeholder="Dose">
+                    <div class="right record-option">
+                        <select class="record-option-box" name="typeID" ng-options="" ng-model="" required>
+                            <option selected="selected" value="">mg</option>
+                            <option value="">mg/1cc</option>
+                            <option value="">mg/2cc</option>
+                            <option value="">mg/3cc</option>
+                            <option value="">mg/4cc</option>
+                        </select>
+                    </div>
+                </label>
+            </ion-item>
+            <ion-item class="padding-10">
+                <div class="left-padding-5"><span>Dispense&nbsp;</span></div>
+                <label class="item item-input no-padding">
+                    <input class="input" ng-model="" type="text" placeholder="Dispense"> </label>
+            </ion-item>
+            <ion-item class="padding-10">
+                <div class="left-padding-5"><span>Route&nbsp;</span></div>
+                <div class="record-option">
+                    <select class="full-option-box" name="typeID" ng-options="" ng-model="" required>
+                        <option selected="selected" value="">Per oris</option>
+                        <option value="">Per rectum</option>
+                        <option value="">TO skin</option>
+                        <option value="">To affected area</option>
+                        <option value="">Sublingual</option>
+                    </select>
+                </div>
+            </ion-item>
+            <ion-item class="padding-10">
+                <div class="left-padding-5"><span>Refill&nbsp;</span></div>
+                <div class="record-option">
+                    <select class="full-option-box" name="typeID" ng-options="" ng-model="" required>
+                        <option selected="selected" value="">1</option>
+                        <option value="">2</option>
+                        <option value="">3</option>
+                        <option value="">4</option>
+                        <option value="">5</option>
+                    </select>
+                </div>
+            </ion-item>
+            <ion-item class="padding-10">
+                <div class="left-padding-5"><span>Frequency&nbsp;</span></div>
+                <div class="record-option">
+                    <select class="full-option-box" name="typeID" ng-options="" ng-model="" required>
+                        <option selected="selected" value="">b.i.d</option>
+                        <option value="">t.i.d</option>
+                        <option value="">q.i.d</option>
+                        <option value="">q.3h</option>
+                        <option value="">q.4h</option>
+                    </select>
+                </div>
+            </ion-item>
+            <ion-item class="padding-10">
+                <div class="left-padding-5"><span>Prescriber Name&nbsp;</span></div>
+                <label class="item item-input no-padding">
+                    <input class="input" ng-model="" type="text" placeholder="Prescriber Name"> </label>
+            </ion-item>
+            <ion-item class="padding-10">
+                <div class="left-padding-5"><span>Requested Refill Date&nbsp;</span></div>
+                <label class="item item-input no-padding">
+                    <input class="input" ng-model="" type="text" placeholder="Requested Refill Date">
+                    <div class="right record-option"> <span class="record-option-box icon ion-calendar"></span> </div>
+                </label>
+            </ion-item>
+            <ion-item class="padding-10">
+                <div class="left-padding-5"><span>Drug Form&nbsp;</span></div>
+                <label class="item item-input no-padding">
+                    <input class="input" ng-model="" type="text" placeholder="Dose">
+                    <div class="right record-option">
+                        <select class="dose-option-box" name="typeID" ng-options="" ng-model="" required>
+                            <option selected="selected" value="">tablet</option>
+                            <option value="">Suspension</option>
+                            <option value="">Capsule</option>
+                            <option value="">Solution</option>
+                            <option value="">tsp</option>
+                        </select>
+                    </div>
+                </label>
+            </ion-item>
+            <ion-item class="padding-10">
+                <div class="left-padding-5"><span>Start Date&nbsp;</span></div>
+                <label class="item item-input no-padding">
+                    <input class="input" ng-model="" type="text" placeholder="Start Date">
+                    <div class="right record-option"> <span class="record-option-box icon ion-calendar"></span> </div>
+                </label>
+            </ion-item>
+            <ion-item class="padding-10">
+                <div class="left-padding-5"><span>Stop Date&nbsp;</span></div>
+                <label class="item item-input no-padding">
+                    <input class="input" ng-model="" type="text" placeholder="Stop Date">
+                    <div class="right record-option"> <span class="record-option-box icon ion-calendar"></span> </div>
+                </label>
+            </ion-item>
+            <ion-item class="padding-10">
+                <div class="left-padding-5"><span>Indication&nbsp;</span></div>
+                <label class="item item-input no-padding">
+                    <input class="input" ng-model="" type="text" placeholder="Indication"> </label>
+            </ion-item>
+            <ion-item class="padding-10">
+                <div class="left-padding-5"><span>Special Instruction&nbsp;</span></div>
+                <label class="item item-input no-padding">
+                    <input class="input" ng-model="" type="text" placeholder="Type your notes here"> </label>
+            </ion-item>
+            <ion-item class="padding">
+                <button title="Save" class="button button-full button-positive">Save</button>
+                <button title="Cancel" class="button button-full button-stable" ng-click="myGoBack()">Cancel</button>
+            </ion-item>
+        </ion-list>
+    </ion-content>
+</ion-view>

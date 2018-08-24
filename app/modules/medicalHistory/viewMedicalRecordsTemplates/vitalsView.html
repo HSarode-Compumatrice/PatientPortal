@@ -1,0 +1,118 @@
+<ion-view title="{{MEDICALRECORDSCONSTANTS.VITALSTITLE}}">
+    <ion-nav-buttons side="left"> <span ng-click="myGoBack()">
+                <button class="button button-clear icon ion-ios-arrow-back left-menu"></button>
+            </span> </ion-nav-buttons>
+    <ion-nav-buttons side="right">
+        <button class="button button-clear ion-android-notifications notification" ui-sref="app.patientReminder"> <span class="badge badge-assertive">{{Notification}}</span> </button>
+        <button class="button button-clear ion-android-more-vertical right-menu" ng-click="popover.show($event)"> </button>
+    </ion-nav-buttons>
+    <ion-content has-header="true" class="bottom-50 add-vitals bg-gray">
+        <div class="row">
+            <div class="col col-50 border-none">
+                <a class="button button-outline button-royal button-date" ng-model="vitalFromDate" ng-click="openVitalFromDatePicker()"> <span class="d-block">{{MEDICALRECORDSCONSTANTS.FROMDATELABEL}}</span> <i class="icon icon-calendar-plus"></i>&nbsp;{{vitalFromDate}}</a>
+            </div>
+            <div class="col col-50 border-none">
+                <a class="button button-outline button-royal button-date" ng-model="vitalToDate" ng-click="openVitalToDatePicker()"> <span class="d-block">{{MEDICALRECORDSCONSTANTS.TODATELABEL}}</span> <i class="icon icon-calendar-plus"></i>&nbsp;{{vitalToDate}}</a>
+            </div>
+        </div>
+        <div class="no-data-center" ng-if="vitals.length==0">
+            <div class="row alert-padding">
+                <div class="col no-data"> <i class="icon ion-information-circled"> </i>
+                    <h5 class="item-text-wrap">{{MEDICALRECORDSCONSTANTS.NOVITALMESSAGE}} </h5> </div>
+            </div>
+        </div>
+        <div class="row no-padding vital-table" ng-if="vitals.length>0 && statisticalView">
+            <!-- <button class="button button-clear icon ion-chevron-left button-royal no-padding navigation-button"></button>
+                <button class="button button-clear icon ion-chevron-right button-royal no-padding navigation-button"></button> -->
+            <div class="col col-25 text-center no-padding">
+                <div class="col left first-heading col-header"> <i class="ion ion-ios-pulse-strong royal"></i>
+                    <h6 class="no-margin" class="text-ellipsis">{{MEDICALRECORDSCONSTANTS.VITALSLABEL}}</h6> </div>
+                <div class="col left text-center col-header">
+                    <h6 class="header text-ellipsis">{{MEDICALRECORDSCONSTANTS.HEIGHTLABEL}}</h6> </div>
+                <div class="col left text-center col-header">
+                    <h6 class="header text-ellipsis">{{MEDICALRECORDSCONSTANTS.WEIGHTLABEL}}Weight</h6> </div>
+                <div class="col left text-center col-header">
+                    <h6 class="header text-ellipsis">{{MEDICALRECORDSCONSTANTS.BPSYSTOLICLABEL}}</h6> </div>
+                <div class="col left text-center col-header">
+                    <h6 class="header text-ellipsis">{{MEDICALRECORDSCONSTANTS.BPDIASTOLICLABEL}}</h6> </div>
+                <div class="col left text-center col-header">
+                    <h6 class="header text-ellipsis">{{MEDICALRECORDSCONSTANTS.TEMPERATURELABEL}}</h6> </div>
+                <div class="col left text-center col-header">
+                    <h6 class="header text-ellipsis">{{MEDICALRECORDSCONSTANTS.PULSELABEL}}</h6> </div>
+                <div class="col left text-center col-header">
+                    <h6 class="header text-ellipsis">{{MEDICALRECORDSCONSTANTS.HEADCICUMLABEL}}</h6> </div>
+                <div class="col left text-center col-header">
+                    <h6 class="header text-ellipsis">{{MEDICALRECORDSCONSTANTS.RESPIRATIONLABEL}}</h6> </div>
+                <div class="col left text-center col-header">
+                    <h6 class="header text-ellipsis">{{MEDICALRECORDSCONSTANTS.WAISTCIRCUMLABEL}}</h6> </div>
+                <div class="col left text-center col-header">
+                    <h6 class="header text-ellipsis">{{MEDICALRECORDSCONSTANTS.OXYGENSATULABEL}}</h6> </div>
+            </div>
+            <!-- <ion-slide-box >
+                    <ion-slide >-->
+            <!--            <ion-scroll direction="x" direction="y" zooming="false" delegate-handle="horizontal4" horizontal-scroll-fix="mainScroll">-->
+            <div ng-repeat="vital in vitals" ng-class="{'col-75': vitals.length==1, 'col-37': vitals.length==2}" class="col col-25 text-center no-padding left  ">
+                <div class="col first-heading col-header">
+                    <h6 class="no-margin">{{vital.month}}</h6>
+                    <h6 class="date no-margin">{{vital.date}}</h6>
+                    <h6 class="no-margin">{{vital.year}}</h6> </div>
+                <div class="col text-center">
+                    <h6 class="text-ellipsis">{{vital.height | round}}</h6> </div>
+                <div class="col text-center">
+                    <h6 class="text-ellipsis">{{vital.weight}}</h6> </div>
+                <div class="col text-center">
+                    <h6 class="text-ellipsis">{{vital.bps}}</h6> </div>
+                <div class="col text-center">
+                    <h6 class="text-ellipsis">{{vital.bpd}}</h6> </div>
+                <div class="col text-center">
+                    <h6 class="text-ellipsis">{{vital.temperature}}</h6> </div>
+                <div class="col text-center">
+                    <h6 class="text-ellipsis">{{vital.pulse}}</h6> </div>
+                <div class="col text-center">
+                    <h6 class="text-ellipsis">{{vital.head_circ}}</h6> </div>
+                <div class="col text-center">
+                    <h6 class="text-ellipsis">{{vital.respiration}}</h6> </div>
+                <div class="col text-center">
+                    <h6 class="text-ellipsis">{{vital.waist_circ}}</h6> </div>
+                <div class="col text-center">
+                    <h6 class="text-ellipsis">{{vital.oxygen_saturation}}</h6> </div>
+            </div>
+            <!--         </ion-scroll>-->
+            <!-- </ion-slide>
+                </ion-slide-box> -->
+        </div>
+        <div ng-if="graphicalView && vitals.length>0">
+            <div class="card margin-md">
+                <div class="item dashboard-header">
+                    <h2><i class="icon ion-stats-bars"></i> {{DASHBOARDCONSTANTS.MYVITALSLABEL}}</h2> </div>
+                <div ng-if="vitals.length>=2">
+                    <canvas id="bar" class="chart chart-line" data="graph.data" ng-if="vitals.length>0" labels="graph.labels" series="graph.series"></canvas>
+                </div>
+                <div class="row graph-small-content text-center" ng-if="vitals.length==1">
+                    <div class="col col-25 no-padding Weight-color">
+                        <p>{{DASHBOARDCONSTANTS.WEIGHTLABEL}}</p>
+                        <p class="content">{{graph.data[0]}}<span>{{DASHBOARDCONSTANTS.WEIGHTUNITLABEL}}</span></p>
+                    </div>
+                    <div class="col col-25 no-padding BP-color">
+                        <p>{{DASHBOARDCONSTANTS.HEIGHTLABEL}}</p>
+                        <p class="content">{{graph.data[1] | round}}<span>{{DASHBOARDCONSTANTS.CMLABEL}}</span></p>
+                    </div>
+                    <div class="col col-25 no-padding BMI-color">
+                        <p>{{DASHBOARDCONSTANTS.BMILABEL}}</p>
+                        <p class="content">{{graph.data[2]}}</p>
+                    </div>
+                    <div class="col col-25 no-padding temp-color">
+                        <p>{{DASHBOARDCONSTANTS.TEMPRATURELABEL}}</p>
+                        <p class="content">{{graph.data[3]}}<span class="sup">&#8451;</span></p>
+                    </div>
+                </div>
+                <!-- <div ng-show="Vitals.length<=0" class="alert alert-info icon ion-information-circled">&nbsp;&nbsp;{{DASHBOARDCONSTANTS.NOVITALS}}</div> -->
+                <div class="graph-content bg-gray" ng-if="vitals.length > 0"> <span class="icon ion-stop Weight-color"></span><span> {{DASHBOARDCONSTANTS.WEIGHTLABEL}}  ({{DASHBOARDCONSTANTS.WEIGHTUNITLABEL}})</span> <span class="icon ion-stop BP-color"></span> <span> {{DASHBOARDCONSTANTS.HEIGHTLABEL}}({{DASHBOARDCONSTANTS.CMLABEL}})</span> <span class="icon ion-stop BMI-color"></span> <span> {{DASHBOARDCONSTANTS.BMILABEL}}</span> <span class="icon ion-stop temp-color"></span> <span> {{DASHBOARDCONSTANTS.TEMPRATURELABEL}}({{DASHBOARDCONSTANTS.TEMPRATUREUNITLABEL}})</span> </div>
+            </div>
+        </div>
+    </ion-content>
+    <div class="tabs tabs-icon-top tabs-positive">
+        <a class="tab-item " ng-click="changeView('statistical')" ng-class="{'active':statisticalView, 'inactive':!statisticalView}"> <i class="icon ion-grid"></i> <span class="tab-title">{{MEDICALRECORDSCONSTANTS.STATISTICALVIEWLABEL}}</span> </a>
+        <a class="tab-item" ng-click="changeView('graphical')" ng-class="{'active':graphicalView, 'inactive':!graphicalView}"> <i class="icon ion-arrow-graph-up-right"></i> <span class="tab-title">{{MEDICALRECORDSCONSTANTS.GRAPHICALVIEWLABEL}}</span> </a>
+    </div>
+</ion-view>

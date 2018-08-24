@@ -1,0 +1,38 @@
+<ion-view title="Hospitals">
+    <div class="bar-positive nav-title-slide-ios bar bar-header">
+        <div class="home-logo"> <img class="title-image" src="img/small-icon.svg" ng-src="img/small-icon.svg" err-src="img/patientConnect360-36x36.png" height="25"> </div>
+    </div>
+    <ion-content has-header="true" class="body-grey">
+        <div id="showHospitallistid" style="display:none;">
+            <ion-list>
+                <div class="hospital-list-container">
+                    <div class="card bottom-margin-md hospital-list" ng-repeat="hospital in hospitals">
+                        <div class="item item-avatar bottom-border-xs"> <img src="img/patientConnect360.svg">
+                            <h2 class="text-primary">{{hospital.OrgName}}</h2>
+                            <p>{{hospital.OrgDetails.address}}</p>
+                        </div>
+                        <div class="item item-body no-padding">
+                            <div class="padding font-13">
+                                <div class="row no-padding">
+                                    <div class="col" ng-if="hospital.OrgDetails.email"><i class="icon icon-fw ion-ios-email"></i>&nbsp;{{hospital.OrgDetails.email}}</div>
+                                </div>
+                                <div class="text-justify" ng-if="hospital.OrgDetails.aboutus"> {{hospital.OrgDetails.aboutus}} </div>
+                            </div>
+                            <div class="row footer">
+                                <div class="col no-padding">
+                                    <a class="button button-clear text-primary icon ion-eye absolute-center" ui-sref="hospitalDetails({hospital:hospital})"></a>
+                                </div>
+                                <div class="col no-padding">
+                                    <a class="button button-clear text-primary icon ion-ios-location-outline absolute-center"></a>
+                                </div>
+                                <div class="col no-padding">
+                                    <a ng-click="gotoHospital(hospital,false)" class="button button-clear text-primary icon ion-log-in list-chat absolute-center"></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </ion-list>
+        </div>
+    </ion-content>
+</ion-view>

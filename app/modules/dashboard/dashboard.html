@@ -1,0 +1,577 @@
+<ion-view title="{{PageName}}">
+    <ion-nav-buttons side="left">
+        <button menu-toggle="left" class="button button-clear icon ion-navicon"></button>
+        <div class="app-logo"> <img class="title-image" src="img/ajax-loader.gif" ng-src="{{orgLogoURL?orgLogoURL:defaultLogoURL}}" err-SRC="{{errorLogoURL}}" height="25" /> </div>
+    </ion-nav-buttons>
+    <ion-nav-buttons side="right">
+        <button title="Notifications" class="button button-clear ion-android-notifications notification" ui-sref="app.patientReminder"><span class="badge badge-assertive">{{Notification}}</span></button>
+        <button class="button button-clear ion-android-more-vertical right-menu" ng-click="popover.show($event)"> </button>
+    </ion-nav-buttons>
+    <ion-content has-header="true" class="body-grey" delegate-handle="mainScroll">
+        <!-- Biography Section-->
+        <div class="biography" ng-if="showNewDashboard">
+            <div class="item-profile">
+                <div class="item-avatar">
+                    <!-- <img ng-src="img/Userm.jpg"> --><img src="img/ajax-loader.gif" ng-src="{{profileimgUrl?profileimgUrl:defaultPatientImage}}" err-SRC="{{defaultPatientImage}}" width="100%" height="100%" />
+                    <!--<img ng-click="toggleLeft()" src="img/ajax-loader.gif" ng-src="{{profileimgUrl+patinetProfileId}}" err-SRC="{{defaultPatientImage}}" width="100%" height="100%" /> --></div>
+                <div class="row no-padding min-height-60 bio-info">
+                    <div class="col col-60 pointer" ui-sref="app.profileSetting">
+                        <p class="no-margin" ng-if="profileData.FirstName"><strong>{{DASHBOARDCONSTANTS.WELCOMELABEL}}, </strong>{{profileData.FirstName | capitalize}} {{profileData.LastName | capitalize}}</p>
+                        <p class="no-margin" ng-if="profileData.Sex"><strong>{{DASHBOARDCONSTANTS.GENDERLABEL}}:</strong> {{profileData.Sex}} </p>
+                        <p class="no-margin" ng-if="profileData.blood_group"><strong>{{DASHBOARDCONSTANTS.BLOODGROUPLABEL}}:</strong> {{profileData.blood_group}} </p>
+                    </div>
+                    <div class="col col-40 text-right pointer">
+                        <div class="profile-strength" ng-click="gotoProfile()">
+                            <div class="progress-wrapper pp-dashboard">
+                                <div class="progress ng-cloak" ng-style="getStyle()"> <i class="ion-android-bicycle icon-progress"></i>
+                                    <p class="no-margin">{{ preciseCurrent || profileStrength }}/{{ maxProfileStrength }}</p>
+                                    <p class="text-12 text-danger no-margin" ng-if="profileStrength < 25">{{DASHBOARDCONSTANTS.POORLABEL}}</p>
+                                    <p class="text-12 text-pending no-margin" ng-if="profileStrength >= 25 && profileStrength < 50">{{DASHBOARDCONSTANTS.AVERAGELABEL}}</p>
+                                    <p class="text-12 text-success no-margin" ng-if="profileStrength >= 50 && profileStrength < 75">{{DASHBOARDCONSTANTS.GOODLABEL}}</p>
+                                    <p class="text-12 text-green no-margin" ng-if="profileStrength >= 75">{{DASHBOARDCONSTANTS.EXCELLENTLABEL}}</p>
+                                    <p class="heading-p no-margin">{{DASHBOARDCONSTANTS.PROFILESTRENGTHLABEL}}</p>
+                                </div>
+                                <round-progress max="maxProfileStrength" current="profileStrength" color="{{ getColor() }}" bgcolor="{{ bgColor }}" radius="{{ radius }}" semi="isSemi" rounded="rounded" stroke="{{ stroke }}" clockwise="clockwise" responsive="responsive" duration="{{ duration }}" animation="{{ currentAnimation }}" offset="{{ offset }}" animation-delay="{{ animationDelay }}" on-render="showPreciseCurrent">
+                                    <svg>
+                                        <linearGradient id="gradient" x1="0" x2="0" y1="0" y2="1">
+                                            <stop offset="5%" stop-color="green" />
+                                            <stop offset="95%" stop-color="gold" /> </linearGradient>
+                                    </svg>
+                                </round-progress>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- emergency-contact Section-->
+        <div class="emergency-contact" ng-if="showNewDashboard">
+            <div class="corner-btn" ng-if="profileData.emergency_contact"><a title="Edit" class="pointer" ui-sref="app.editEmergencyContact"><i class="icon ion-edit" style="font-size: 18px;"></i></a></div>
+            <div class="arrow-btn" ng-if="profileData.emergency_contact"> </div>
+            <ion-scroll direction="x" class="scroll-x" zooming="false" delegate-handle="horizontal" horizontal-scroll-fix="mainScroll">
+                <div class="top-margin-sm" ng-if="!profileData.emergency_contact"><strong>{{DASHBOARDCONSTANTS.EMERGENCYCONTACTSLABEL}}:&nbsp;&nbsp; </strong> <a class="pointer text-white" ui-sref="app.editEmergencyContact"><i class="icon ion-ios-plus-outline"></i> {{DASHBOARDCONSTANTS.ADDEMERGENCYCONTACTLABEL}}</a></div>
+                <div class="top-margin-sm" ng-if="profileData.emergency_contact"><strong>{{DASHBOARDCONSTANTS.EMERGENCYCONTACTSLABEL}}:&nbsp;&nbsp;</strong><a class="pointer text-white" ng-repeat="contact in emergencyContact track by $index" ng-click="callPhysician(contact)">{{contact}}<span ng-show="!$last">, </span></a></div>
+            </ion-scroll>
+        </div>
+        <!-- vitals Section-->
+        <div class="d-vitals d-main-card pointer" ng-if="showNewDashboard">
+            <div class="corner-btn" ng-if="!isNewUser" style="right: 6px;"><a title="Add" class="pointer" ui-sref="app.addMedicalRecords({type:'vital',redirect:'dash'})"><i class="icon ion-plus-circled" style="font-size: 15px;"></i></a></div>
+            <div ng-if="!isNewUser" class="arrow-btn" ui-sref="app.addMedicalRecords({type:'vital',redirect:'dash'})"> </div>
+            <div class="text-center d-heading"><a style="color:#000;"  ui-sref="app.viewMedicalRecords({type:'vital'})"><i class="icon ion-ios-pulse-strong i-fw"></i> {{DASHBOARDCONSTANTS.VITALSLABEL}}</a></div>
+            <div class="vitals-overlay" align="center" ng-show="isNewUser"> <a class="add-icon" ui-sref="app.addMedicalRecords({type:'vital',redirect:'dash'})"><i class="ion-android-add-circle"></i> <span> {{DASHBOARDCONSTANTS.ADDVITALSLABEL}}</span></a> </div>
+            <ion-scroll class="vitals-data" direction="x" zooming="false" delegate-handle="horizontal2" horizontal-scroll-fix="mainScroll">
+                <div class="list-vital" ng-class="currentHeight > 0? 'showRoundProgressBar' : 'hideRoundProgressBar'">
+                    <div class="progress-wrapper pp-dashboard">
+                        <div class="progress ng-cloak" ng-style="getStyle()"> <i class="ion-speedometer icon-vital"></i>
+                            <p class="no-margin"> {{ currentHeight | round }} {{DASHBOARDCONSTANTS.CMLABEL}}</p>
+                            <!-- <p class="text-12 text-green no-margin">Normal</p> -->
+                            <p class="heading-p no-margin">{{DASHBOARDCONSTANTS.HEIGHTLABEL}}</p>
+                        </div>
+                        <round-progress max="maxHeight" current="currentHeight" color="{{ getColor() }}" bgcolor="{{ bgColor }}" radius="{{ radius }}" semi="isSemi" rounded="rounded" stroke="{{ stroke }}" clockwise="clockwise" responsive="responsive" duration="{{ duration }}" animation="{{ currentAnimation }}" offset="{{ offset }}" animation-delay="{{ animationDelay }} ">
+                            <svg>
+                                <linearGradient id="gradient" x1="0" x2="0" y1="0" y2="1">
+                                    <stop offset="5%" stop-color="green" />
+                                    <stop offset="95%" stop-color="gold" /> </linearGradient>
+                            </svg>
+                        </round-progress>
+                    </div>
+                </div>
+                <div class="list-vital" ng-class="currentWeight > 0? 'showRoundProgressBar' : 'hideRoundProgressBar'">
+                    <div class="progress-wrapper pp-dashboard">
+                        <div class="progress ng-cloak" ng-style="getStyle()"> <i class="ion-speedometer icon-vital"></i>
+                            <p class="no-margin"> {{currentWeight }} {{DASHBOARDCONSTANTS.WEIGHTUNITLABEL}}</p>
+                            <!-- <p class="text-12 text-green no-margin">Normal</p> -->
+                            <p class="heading-p no-margin">{{DASHBOARDCONSTANTS.WEIGHTLABEL}}</p>
+                        </div>
+                        <round-progress max="maxWeight" current="currentWeight" color="{{ getColor() }}" bgcolor="{{ bgColor }}" radius="{{ radius }}" semi="isSemi" rounded="rounded" stroke="{{ stroke }}" clockwise="clockwise" responsive="responsive" duration="{{ duration }}" animation="{{ currentAnimation }}" offset="{{ offset }}" animation-delay="{{ animationDelay }}">
+                            <svg>
+                                <linearGradient id="gradient" x1="0" x2="0" y1="0" y2="1">
+                                    <stop offset="5%" stop-color="green" />
+                                    <stop offset="95%" stop-color="gold" /> </linearGradient>
+                            </svg>
+                        </round-progress>
+                    </div>
+                </div>
+                <div class="list-vital" ng-class="currentBMI > 0? 'showRoundProgressBar' : 'hideRoundProgressBar'">
+                    <div class="progress-wrapper pp-dashboard">
+                        <div class="progress ng-cloak" ng-style="getStyle()"> <i class="ion-speedometer icon-vital"></i>
+                            <p class="no-margin"> {{ currentBMI }} </p>
+                            <!-- <p class="text-12 text-green no-margin">Normal</p> -->
+                            <p class="heading-p no-margin">{{DASHBOARDCONSTANTS.BMILABEL}}</p>
+                        </div>
+                        <round-progress max="maxBMI" current="currentBMI" color="{{ getColor() }}" bgcolor="{{ bgColor }}" radius="{{ radius }}" semi="isSemi" rounded="rounded" stroke="{{ stroke }}" clockwise="clockwise" responsive="responsive" duration="{{ duration }}" animation="{{ currentAnimation }}" offset="{{ offset }}" animation-delay="{{ animationDelay }}">
+                            <svg>
+                                <linearGradient id="gradient" x1="0" x2="0" y1="0" y2="1">
+                                    <stop offset="5%" stop-color="green" />
+                                    <stop offset="95%" stop-color="gold" /> </linearGradient>
+                            </svg>
+                        </round-progress>
+                    </div>
+                </div>
+                <div class="list-vital" ng-class="(currentBP != 0 || $scope.currentBP  != undefined) ? 'showRoundProgressBar' : 'hideRoundProgressBar'">
+                    <div class="progress-wrapper pp-dashboard">
+                        <div class="progress ng-cloak" ng-style="getStyle()"> <i class="ion-ios-heart icon-vital"></i>
+                            <p class="no-margin"> {{ currentBP }} {{DASHBOARDCONSTANTS.MMHGLABEL}}</p>
+                            <p class="heading-p no-margin">{{DASHBOARDCONSTANTS.BLOODPRESSURELABEL}}</p>
+                        </div>
+                        <round-progress max="maxBP" current="currentBP" color="{{ getColor() }}" bgcolor="{{ bgColor }}" radius="{{ radius }}" semi="isSemi" rounded="rounded" stroke="{{ stroke }}" clockwise="clockwise" responsive="responsive" duration="{{ duration }}" animation="{{ currentAnimation }}" offset="{{ offset }}" animation-delay="{{ animationDelay }}">
+                            <svg>
+                                <linearGradient id="gradient" x1="0" x2="0" y1="0" y2="1">
+                                    <stop offset="5%" stop-color="green" />
+                                    <stop offset="95%" stop-color="gold" /> </linearGradient>
+                            </svg>
+                        </round-progress>
+                    </div>
+                </div>
+                <div class="list-vital" ng-class="cuurentTemp > 0? 'showRoundProgressBar' : 'hideRoundProgressBar'">
+                    <div class="progress-wrapper pp-dashboard">
+                        <div class="progress ng-cloak" ng-style="getStyle()"> <i class="ion-thermometer icon-vital"></i>
+                            <p class="no-margin"> {{ cuurentTemp }} {{DASHBOARDCONSTANTS.TEMPRATUREUNITLABEL}}</p>
+                            <!-- <p class="text-12 text-green no-margin">Normal</p> -->
+                            <p class="heading-p no-margin">{{DASHBOARDCONSTANTS.TEMPRATURELABEL}} {{DASHBOARDCONSTANTS.TEMPRATUREUNITLABEL}}</p>
+                        </div>
+                        <round-progress max="maxTemp" current="cuurentTemp" color="{{ getColor() }}" bgcolor="{{ bgColor }}" radius="{{ radius }}" semi="isSemi" rounded="rounded" stroke="{{ stroke }}" clockwise="clockwise" responsive="responsive" duration="{{ duration }}" animation="{{ currentAnimation }}" offset="{{ offset }}" animation-delay="{{ animationDelay }}">
+                            <svg>
+                                <linearGradient id="gradient" x1="0" x2="0" y1="0" y2="1">
+                                    <stop offset="5%" stop-color="green" />
+                                    <stop offset="95%" stop-color="gold" /> </linearGradient>
+                            </svg>
+                        </round-progress>
+                    </div>
+                </div>
+                <div class="list-vital" ng-class="currentPluse > 0? 'showRoundProgressBar' : 'hideRoundProgressBar'">
+                    <div class="progress-wrapper pp-dashboard">
+                        <div class="progress ng-cloak" ng-style="getStyle()"> <i class="ion-ios-pulse-strong icon-vital"></i>
+                            <p class="no-margin"> {{ currentPluse}} {{DASHBOARDCONSTANTS.PERMINLABEL}}</p>
+                            <p class="heading-p no-margin">{{DASHBOARDCONSTANTS.PLUSLABEL}}</p>
+                        </div>
+                        <round-progress max="maxPluse" current="currentPluse" color="{{ getColor() }}" bgcolor="{{ bgColor }}" radius="{{ radius }}" semi="isSemi" rounded="rounded" stroke="{{ stroke }}" clockwise="clockwise" responsive="responsive" duration="{{ duration }}" animation="{{ currentAnimation }}" offset="{{ offset }}" animation-delay="{{ animationDelay }}">
+                            <svg>
+                                <linearGradient id="gradient" x1="0" x2="0" y1="0" y2="1">
+                                    <stop offset="5%" stop-color="green" />
+                                    <stop offset="95%" stop-color="gold" /> </linearGradient>
+                            </svg>
+                        </round-progress>
+                    </div>
+                </div>
+                <div class="list-vital" ng-class="currentHeadCirc > 0? 'showRoundProgressBar' : 'hideRoundProgressBar'">
+                    <div class="progress-wrapper pp-dashboard">
+                        <div class="progress ng-cloak" ng-style="getStyle()"> <i class="ion-ios-personadd icon-vital"></i>
+                            <p class="no-margin"> {{currentHeadCirc}} {{DASHBOARDCONSTANTS.INLABEL}}</p>
+                            <p class="heading-p no-margin">{{DASHBOARDCONSTANTS.HEADCIRCUMLABEL}}</p>
+                        </div>
+                        <round-progress max="maxHeadCirc" current="currentHeadCirc" color="{{ getColor() }}" bgcolor="{{ bgColor }}" radius="{{ radius }}" semi="isSemi" rounded="rounded" stroke="{{ stroke }}" clockwise="clockwise" responsive="responsive" duration="{{ duration }}" animation="{{ currentAnimation }}" offset="{{ offset }}" animation-delay="{{ animationDelay }}">
+                            <svg>
+                                <linearGradient id="gradient" x1="0" x2="0" y1="0" y2="1">
+                                    <stop offset="5%" stop-color="green" />
+                                    <stop offset="95%" stop-color="gold" /> </linearGradient>
+                            </svg>
+                        </round-progress>
+                    </div>
+                </div>
+                <div class="list-vital" ng-class="currentWaistCirc > 0? 'showRoundProgressBar' : 'hideRoundProgressBar'">
+                    <div class="progress-wrapper pp-dashboard">
+                        <div class="progress ng-cloak" ng-style="getStyle()"> <i class="ion-ios-body icon-vital"></i>
+                            <p class="no-margin"> {{currentWaistCirc}} {{DASHBOARDCONSTANTS.INLABEL}}</p>
+                            <p class="heading-p no-margin">{{DASHBOARDCONSTANTS.WAISTCIRCUMLABEL}}</p>
+                        </div>
+                        <round-progress max="maxWaistCirc" current="currentWaistCirc" color="{{ getColor() }}" bgcolor="{{ bgColor }}" radius="{{ radius }}" semi="isSemi" rounded="rounded" stroke="{{ stroke }}" clockwise="clockwise" responsive="responsive" duration="{{ duration }}" animation="{{ currentAnimation }}" offset="{{ offset }}" animation-delay="{{ animationDelay }}">
+                            <svg>
+                                <linearGradient id="gradient" x1="0" x2="0" y1="0" y2="1">
+                                    <stop offset="5%" stop-color="green" />
+                                    <stop offset="95%" stop-color="gold" /> </linearGradient>
+                            </svg>
+                        </round-progress>
+                    </div>
+                </div>
+                <div class="list-vital" ng-class="currentResip > 0? 'showRoundProgressBar' : 'hideRoundProgressBar'">
+                    <div class="progress-wrapper pp-dashboard">
+                        <div class="progress ng-cloak" ng-style="getStyle()"> <i class="ion-heart-broken icon-vital"></i>
+                            <p class="no-margin"> {{currentResip}} {{DASHBOARDCONSTANTS.PERMINLABEL}}</p>
+                            <p class="heading-p no-margin">{{DASHBOARDCONSTANTS.RESPERATIONLABEL}}</p>
+                        </div>
+                        <round-progress max="maxResipra" current="currentResip" color="{{ getColor() }}" bgcolor="{{ bgColor }}" radius="{{ radius }}" semi="isSemi" rounded="rounded" stroke="{{ stroke }}" clockwise="clockwise" responsive="responsive" duration="{{ duration }}" animation="{{ currentAnimation }}" offset="{{ offset }}" animation-delay="{{ animationDelay }}">
+                            <svg>
+                                <linearGradient id="gradient" x1="0" x2="0" y1="0" y2="1">
+                                    <stop offset="5%" stop-color="green" />
+                                    <stop offset="95%" stop-color="gold" /> </linearGradient>
+                            </svg>
+                        </round-progress>
+                    </div>
+                </div>
+                <div class="list-vital" ng-class="currentOxySat > 0? 'showRoundProgressBar' : 'hideRoundProgressBar'">
+                    <div class="progress-wrapper pp-dashboard">
+                        <div class="progress ng-cloak" ng-style="getStyle()"> <i class="ion-ios-ionic-outline icon-vital"></i>
+                            <p class="no-margin"> {{currentOxySat}} {{DASHBOARDCONSTANTS.PERCENTAGELABEL}}</p>
+                            <p class="heading-p no-margin">{{DASHBOARDCONSTANTS.OXYGENSATURATIONLABEL}}</p>
+                        </div>
+                        <round-progress max="maxOxy" current="currentOxySat" color="{{ getColor() }}" bgcolor="{{ bgColor }}" radius="{{ radius }}" semi="isSemi" rounded="rounded" stroke="{{ stroke }}" clockwise="clockwise" responsive="responsive" duration="{{ duration }}" animation="{{ currentAnimation }}" offset="{{ offset }}" animation-delay="{{ animationDelay }}">
+                            <svg>
+                                <linearGradient id="gradient" x1="0" x2="0" y1="0" y2="1">
+                                    <stop offset="5%" stop-color="green" />
+                                    <stop offset="95%" stop-color="gold" /> </linearGradient>
+                            </svg>
+                        </round-progress>
+                    </div>
+                </div>
+            </ion-scroll>
+        </div>
+        <!-- search doctor Section-->
+        <div class="d-search d-main-card" ng-if="showNewDashboard">
+            <div class="search-box">
+                <div class="item-input-wrapper no-padding">
+                    <label class="item-input item-md-label no-padding no-margin full-width">
+                        <input type="text" class="input md-input" placeholder="{{DASHBOARDCONSTANTS.PHYSICIANSEARCHPLACEHOLDER}}" ng-model="$parent.searchString" />
+                        <div class="highlight highlight-calm"></div>
+                    </label>
+                    <button title="Search" class="button button-positive go-btn search-btn" ui-sref="app.physicians({'searchString': $parent.searchString,'viewAllStatus':true})"><i class="icon ion-ios-search placeholder-icon text-white"></i></button>
+                </div>
+            </div>
+        </div>
+        <!-- Personal Doctor Section-->
+        <div class="p-doctor d-main-card" ng-if="showNewDashboard">
+            <div class="corner-btn" ui-sref="app.provider({'physicianselected':myProvider})" ng-if="myProvider.length>0" style="right: 6px;"><a title="Add" class="pointer"><i class="icon ion-plus-circled" style="font-size: 15px;"></i></a></div>
+            <div class="arrow-btn" ui-sref="app.provider({'physicianselected':myProvider})" ng-if="myProvider.length>0"> </div>
+            <div class="text-center d-heading"><i class="icon icon-fw ion-ios-people"></i> {{DASHBOARDCONSTANTS.FAMILYDOCTORLABEL}}</div>
+            <div class="vitals-overlay Family-d-overlay" align="center" ng-show="myProvider.length<=0"> <a class="add-icon" ui-sref="app.provider({'physicianselected':myProvider})"><i class="ion-android-add-circle"></i> <span> {{DASHBOARDCONSTANTS.ADDPERSONALDOCTORLABEL}}</span></a> </div>
+            <ion-scroll direction="x" zooming="false" delegate-handle="horizontal3" horizontal-scroll-fix="mainScroll">
+                <div class="card margin-md if-one" ng-repeat="physician in myProvider">
+                    <div class="list">
+                        <div class="item item-thumbnail-left list-body" ng-class="{'doc-offline':physician.isOnline=='0' , 'doc-online': physician.isOnline=='1'}" ui-sref="app.physicianProfile({ 'physicianId': null, 'physician': physician})"> <img src="img/ajax-loader.gif" ng-src="{{physician.profileimage?physician.profileimage:defaultUserImage}}" err-SRC="{{defaultUserImage}}" />
+                            <div class="row no-padding min-height-60">
+                                <div class="col col-70 pointer">
+                                    <p class="no-margin text-14">{{physician.title}} {{physician.firstname | capitalize}} {{physician.lastname | capitalize}}</p>
+                                    <p class="no-margin text-12">{{physician.degree}}</p>
+                                    <p class="no-margin text-12 font-italic" ng-if="physician.specialty">{{physician.specialty}} </p>
+                                    <p class="no-margin text-12"><a class="pointer" ng-click="callPhysician(physician.mobile); $event.stopPropagation();">{{physician.mobile}}</a></p>
+                                    <div class="text-ellipsis"> <span class="sub-text">{{physician.mainAddressLine1}}</span> <span class="sub-text" ng-if="physician.mainAddressLine1">, </span><span class="sub-text">{{physician.mainCity}}</span><span class="sub-text" ng-if="physician.mainCity">, </span><span class="sub-text">{{physician.mainState}}</span> </div>
+                                    <p class="no-margin text-12" style="position: absolute;
+    top: 40px;right: 20px;" ng-if="physician.distance>-1 && physician.distance>0">{{physician.distance|number:0}} {{DASHBOARDCONSTANTS.KMLABEL}}</p>
+                                </div>
+                                <div class="col col-30">
+                                    <!--<i class="ion-ios-star"> </i><i class="ion-ios-star"> </i><i class="ion-ios-star"> </i><i class="ion-ios-star"> </i><i class="ion-ios-star-outline"> </i>-->
+                                    <p class="pointer right rating-list-page" ng-show="physician.rating" ui-sref="app.physicianProfile({'physician': physician,'isProfile':false})"> <span><i ng-class="{'ion-ios-star':physician.rating>0,'ion-ios-star-outline':physician.rating<1}"></i></span> <span><i ng-class="{'ion-ios-star':physician.rating>1,'ion-ios-star-outline':physician.rating<2}"></i></span> <span><i ng-class="{'ion-ios-star':physician.rating>2,'ion-ios-star-outline':physician.rating<3}"></i></span> <span><i ng-class="{'ion-ios-star':physician.rating>3,'ion-ios-star-outline':physician.rating<4}"></i></span> <span><i ng-class="{'ion-ios-star':physician.rating>4,'ion-ios-star-outline':physician.rating<5}"></i></span></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row appointment-card">
+                            <div class="col col-25 no-padding">
+                                <a title="Message" class="button button-clear text-primary icon ion-ios-email-outline absolute-center" ui-sref="app.composeMessage({ 'PhysicianId': physician.id})"></a>
+                            </div>
+                            <div class="col col-25 no-padding">
+                                <a title="Map" class="button button-clear text-primary icon ion-ios-location-outline absolute-center" ui-sref="app.map({physician:physician})"></a>
+                            </div>
+                            <div class="col col-25 no-padding">
+                                <a title="Schedule" class="button button-clear text-primary icon ion-android-time absolute-center" ng-if="physician.isAppointmentRequested==0" ui-sref="app.addAppointment({'status':1,'physician':physician})"></a>
+                                <a title="Re-Request" class="button button-clear text-primary icon icon-calendar-plus absolute-center" ng-if="physician.isAppointmentRequested==1" ui-sref="app.addAppointment({status:0,'physician':physician})"> </a>
+                            </div>
+                            <div class="col col-25 no-padding">
+                                <a title="Chat" ng-click="chatDetails(physician)" class="button button-clear text-primary icon ion-ios-chatboxes-outline list-chat absolute-center" ng-disabled="physician.isChatallow!=1"></a>
+                            </div>
+                            <!--<div class="col col-20 no-padding">
+                            <a style="margin-top: -5px;" ng-disabled="!physician.mobile" ng-click="callPhysician(physician.mobile)" class="button button-clear text-primary icon icon-fw ion-ios-telephone-outline absolute-center"></a>
+                        </div>--></div>
+                    </div>
+                </div>
+            </ion-scroll>
+        </div>
+        <!-- appointment Section-->
+        <div class="d-appointment d-main-card" ng-show="Appointments.length >0 && showNewDashboard">
+            <div class="corner-btn" title="Appointment" ui-sref="app.appointmentlist({'status':1})" style="right: 6px;"><a title="Add" class="pointer"><i class="icon ion-information-circled" style="font-size: 15px;"></i></a></div>
+            <div class="arrow-btn" ui-sref="app.appointmentlist({'status':1})"> </div>
+            <div class="text-center d-heading"><i class="icon icon-fw ion-calendar"></i> {{DASHBOARDCONSTANTS.MYAPPOINTMENTLABEL}}</div>
+            <ion-scroll direction="x" zooming="false" delegate-handle="horizontal4" horizontal-scroll-fix="mainScroll">
+                <div class="card margin-md if-one" ng-repeat="appointment in Appointments">
+                    <div class="list">
+                        <a class="item item-thumbnail-left list-body"> <img src="img/ajax-loader.gif" ng-src="{{physicianProfileImageUrl+appointment.uprovider_id}}" err-SRC="{{defaultUserImage}}" width="100%" />
+                            <div class="row no-padding min-height-60">
+                                <div class="col col-70 pointer" ng-click="appointmentDetails(appointment)">
+                                    <p class="no-margin text-14">{{DASHBOARDCONSTANTS.DRTITLELABEL}} {{appointment.userFirstName | capitalize}} {{appointment.userLastName | capitalize}}</p>
+                                    <p class="no-margin text-12 font-italic ">{{appointment.speciality}}</p>
+                                    <p class="no-margin text-12 font-italic ">{{appointment.pc_hometext}}</p>
+                                    <p class="sub-text" ng-if="appointment.appointmentTitle">{{appointment.appointmentTitle}}</p>
+                                </div>
+                                <div class="col col-30 no-padding text-center pointer right-panel">
+                                    <p ng-switch="appointment.pc_apptstatus"><span ng-switch-when="-">{{DASHBOARDCONSTANTS.STATUSNONE}}</span><span ng-switch-when="*">{{DASHBOARDCONSTANTS.STATUSREMDONE}}</span><span ng-switch-when="+">{{DASHBOARDCONSTANTS.STATUSCHARTPULLED}}</span><span ng-switch-when="x">{{DASHBOARDCONSTANTS.STATUSCANCELED}}</span><span ng-switch-when="?">{{DASHBOARDCONSTANTS.STATUSNOSHOW}}</span><span ng-switch-when="@">{{DASHBOARDCONSTANTS.STATUSARRIVED}}</span><span ng-switch-when="~">{{DASHBOARDCONSTANTS.STATUSARRIVEDLATE}}</span><span ng-switch-when="!">{{DASHBOARDCONSTANTS.STATUSLEFTWOVISIT}}</span><span ng-switch-when="#">{{DASHBOARDCONSTANTS.STATUSINSISSUE}}</span><span ng-switch-when="&lt;">{{DASHBOARDCONSTANTS.STATUSINEXAM}}</span><span ng-switch-when="&gt;">{{DASHBOARDCONSTANTS.STATUSCHECKEDOUT}}</span><span ng-switch-when="$">{{DASHBOARDCONSTANTS.STATUSCODINGDONE}}</span><span ng-switch-when="%">{{DASHBOARDCONSTANTS.STATUSCANCELED24}}</span><span ng-switch-default>{{DASHBOARDCONSTANTS.STATUSNONE}}</span></p>
+                                    <p class="text-primary no-margin">{{appointment.eventDate | date:'MMM'}}</p>
+                                    <p class="date text-primary">{{appointment.eventDate | date:'dd'}}</p>
+                                    <p class="text-primary">{{appointment.eventDate | date:'yyyy'}}</p>
+                                    <p class="sub-text"><b>{{appointment.appointmentStartTime}}</b></p>
+                                </div>
+                            </div>
+                        </a>
+                        <div class="row appointment-card" ng-if="!showNewDashboard">
+                            <div class="col col-20 no-padding">
+                                <a title="Message" ui-sref="app.composeMessage({'PhysicianId': appointment.uprovider_id})" class="button button-clear text-primary icon ion-ios-email-outline absolute-center"></a>
+                            </div>
+                            <div class="col col-20 no-padding">
+                                <a title="Cancel" ng-click="cancelAppointment(appointment)" class="button button-clear text-danger icon ion-android-cancel absolute-center"></a>
+                            </div>
+                            <div class="col col-20 no-padding">
+                                <a title="Re-Schedule" ng-click="resheduleAppointment(appointment)" class="button button-clear text-primary icon icon-re-schedule absolute-center"></a>
+                            </div>
+                            <div class="col col-20 no-padding" ng-if="appointment.pceventstatus!=3 && appointment.pceventstatus!=0">
+                                <a title="Forms" class="button button-clear text-primary icon ion-ios-paper absolute-center" ui-sref="app.patientForms({appointment: appointment,type: 'Consent'})"></a>
+                            </div>
+                            <div class="col col-20 no-padding" ng-if="appointment.pceventstatus!=3 && appointment.pceventstatus!=0">
+                                <a title="Laboratory" class="button button-clear text-primary icon ion-beaker absolute-center" ui-sref="app.patientForms({appointment: appointment,type:'Laboratory'})"></a>
+                            </div>
+                        </div>
+                        <div class="row appointment-card" ng-if="showNewDashboard">
+                            <div class="col col-33 no-padding">
+                                <a title="Message" ui-sref="app.composeMessage({'PhysicianId': appointment.uprovider_id})" class="button button-clear text-primary icon ion-ios-email-outline absolute-center"></a>
+                            </div>
+                            <div class="col col-33 no-padding">
+                                <a title="Cancel" ng-click="cancelAppointment(appointment)" class="button button-clear text-danger icon ion-android-cancel absolute-center"></a>
+                            </div>
+                            <div class="col col-33 no-padding">
+                                <a title="Re-Schedule" ng-click="resheduleAppointment(appointment)" class="button button-clear text-primary icon icon-re-schedule absolute-center"></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </ion-scroll>
+        </div>
+        <!-- R-Visit Section-->
+        <div class="r-visit d-main-card" ng-show="myVisits.length>0 && showNewDashboard">
+            <div class="corner-btn" title="Visit" ui-sref="app.visits" style="right: 6px;"><a class="pointer"><i class="icon ion-information-circled" style="font-size: 15px;"></i></a></div>
+            <div class="arrow-btn" ui-sref="app.visits"> </div>
+            <div class="text-center d-heading"><i class="icon icon-fw ion-medkit"></i> {{DASHBOARDCONSTANTS.RECENTVISITLABLE}}</div>
+            <ion-scroll direction="x" zooming="false" delegate-handle="horizontal5" horizontal-scroll-fix="mainScroll">
+                <div class="card margin-md if-one" ng-repeat="myVisit in myVisits" ng-show="$first">
+                    <div class="list">
+                        <a class="item item-thumbnail-left list-body">
+                            <!--<img src="img/Userm.jpg">--><img src="img/ajax-loader.gif" ng-src="{{physicianProfileImageUrl+myVisit.provider_id}}" err-SRC="{{defaultUserImage}}" width="100%" />
+                            <div class="row no-padding min-height-60" ui-sref="app.details({'visit': myVisit})">
+                                <div class="col col-70 pointer">
+                                    <p class="no-margin text-14" ui-sref="app.physicianProfile({'physicianId': myVisit.provider_id})">{{myVisit.utitle | capitalize}} {{myVisit.firstname | capitalize}} {{myVisit.lastname | capitalize}}</p>
+                                    <p class="no-margin text-12 font-italic" ui-sref="app.details({'visit': myVisit})">{{myVisit.specialty}}</p>
+                                    <p class="no-margin text-12">{{myVisit.reason}}</p>
+                                </div>
+                                <div class="col col-30 no-padding text-center pointer">
+                                    <p><strong>V.No.:</strong> {{myVisit.encounter}}</p>
+                                    <p class="text-primary no-margin">{{myVisit.date | date:'MMM'}}</p>
+                                    <p class="date text-primary">{{myVisit.date | date:'dd'}}</p>
+                                    <p class="text-primary">{{myVisit.date | date:'yyyy'}}</p>
+                                </div>
+                            </div>
+                        </a>
+                        <div class="row appointment-card">
+                            <div class="col col-25 no-padding">
+                                <a title="Message" ui-sref="app.composeMessage({'PhysicianId': myVisit.provider_id})" class="button button-clear text-primary icon ion-ios-email-outline absolute-center"></a>
+                            </div>
+                            <div class="col col-25 no-padding">
+                                <a title="Share" ng-click="shareVisitFile(myVisit)" class="button button-clear text-primary icon ion-android-share-alt absolute-center"></a>
+                            </div>
+                            <div class="col col-25 no-padding">
+                                <a title="Download" ng-click="downloadAndOpenFile(myVisit)" class="button button-clear text-primary icon ion-ios-download absolute-center"></a>
+                            </div>
+                            <div class="col col-25 no-padding">
+                                <a title="Request" ng-if="myVisit.isAppointmentRequested==1" ui-sref="app.addAppointment({'status':0,'physicianId': myVisit.provider_id })" class="button button-clear text-primary icon icon-calendar-plus absolute-center"> </a>
+                                <a title="Schedule" ng-if="myVisit.isAppointmentRequested==0" ui-sref="app.addAppointment({'status':1,'physicianId': myVisit.provider_id })" class="button button-clear text-primary icon ion-android-time absolute-center"> </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </ion-scroll>
+        </div>
+        <div class="bottom-space"></div>
+        <div class="" ng-if="!showNewDashboard">
+            <div class="search-box">
+                <div class="item-input-wrapper no-padding">
+                    <label class="item-input item-md-label no-padding no-margin full-width">
+                        <input type="text" class="input md-input" placeholder="{{DASHBOARDCONSTANTS.PHYSICIANSEARCHPLACEHOLDER}}" ng-model="$parent.searchString" />
+                        <div class="highlight highlight-calm"></div>
+                    </label>
+                    <button title="Search" class="button button-positive go-btn search-btn" ui-sref="app.physicians({'searchString': $parent.searchString,'viewAllStatus':true})"><i class="icon ion-ios-search placeholder-icon text-white"></i></button>
+                </div>
+            </div>
+            <!--Upcoming appointment-->
+            <div class="card margin-md if-one">
+                <div class="item dashboard-header"> <a title="View All" class="button button-clear text-primary" ui-sref="app.appointmentlist({status:1,'viewAllStatus':true})" ng-show="Appointments.length>0 ||filteredItems.length<=0">{{DASHBOARDCONSTANTS.VIEWALLLABEL}}</a>
+                    <h2><i class="icon ion-calendar"></i> {{DASHBOARDCONSTANTS.MYAPPOINTMENTLABEL}}</h2> </div>
+                <ion-list>
+                    <ion-item class="alert alert-info icon ion-information-circled" ng-show="Appointments.length<=0">&nbsp;&nbsp;{{DASHBOARDCONSTANTS.MYAPPOINTMENT}}</ion-item>
+                    <ion-item class="no-padding" ng-repeat="appointment in Appointments | orderBy:['eventDate','appointmentStartTime'] as filteredItems" ng-show="$first">
+                        <div class="card ideal-card">
+                            <div class="item no-padding">
+                                <div class="row no-padding min-height-60">
+                                    <div class="col col-15 no-padding text-center text-primary">
+                                        <p class="text-primary">{{appointment.eventDate | date:'MMM'}}</p>
+                                        <p class="date text-primary">{{appointment.eventDate | date:'dd'}}</p>
+                                        <p class="text-primary">{{appointment.eventDate | date:'yyyy'}}</p>
+                                    </div>
+                                    <div class="col col-85 no-padding pointer" ng-click="appointmentDetails(appointment)">
+                                        <p class="text-primary no-spacing right right-margin-10">{{appointment.appointmentStartTime}}</p>
+                                        <p>{{DASHBOARDCONSTANTS.DRTITLELABEL}} {{appointment.userFirstName | capitalize}} {{appointment.userLastName | capitalize}}</p>
+                                        <p class="text-primary right right-margin-10" ng-switch="appointment.pc_apptstatus"><span ng-switch-when="-">{{DASHBOARDCONSTANTS.STATUSNONE}}</span><span ng-switch-when="*">{{DASHBOARDCONSTANTS.STATUSREMDONE}}</span><span ng-switch-when="+">{{DASHBOARDCONSTANTS.STATUSCHARTPULLED}}</span><span ng-switch-when="x">{{DASHBOARDCONSTANTS.STATUSCANCELED}}</span><span ng-switch-when="?">{{DASHBOARDCONSTANTS.STATUSNOSHOW}}</span><span ng-switch-when="@">{{DASHBOARDCONSTANTS.STATUSARRIVED}}</span><span ng-switch-when="~">{{DASHBOARDCONSTANTS.STATUSARRIVEDLATE}}</span><span ng-switch-when="!">{{DASHBOARDCONSTANTS.STATUSLEFTWOVISIT}}</span><span ng-switch-when="#">{{DASHBOARDCONSTANTS.STATUSINSISSUE}}</span><span ng-switch-when="&lt;">{{DASHBOARDCONSTANTS.STATUSINEXAM}}</span><span ng-switch-when="&gt;">{{DASHBOARDCONSTANTS.STATUSCHECKEDOUT}}</span><span ng-switch-when="$">{{DASHBOARDCONSTANTS.STATUSCODINGDONE}}</span><span ng-switch-when="%">{{DASHBOARDCONSTANTS.STATUSCANCELED24}}</span><span ng-switch-default>{{DASHBOARDCONSTANTS.STATUSNONE}}</span></p>
+                                        <p class="sub-text">{{appointment.speciality}}</p>
+                                        <p class="sub-text" ng-if="appointment.appointmentTitle"><span class="sub-text" ng-if="appointment.appointmentTitle.length > 15">{{appointment.appointmentTitle | limitTo: 15}} <a class="pointer" ng-click="appointmentDetails(appointment)">{{DASHBOARDCONSTANTS.SHOWMORELABEL}}</a></span> <span class="sub-text" ng-if="appointment.appointmentTitle.length <= 15">{{appointment.appointmentTitle}}</span> </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row appointment-card">
+                                <div class="col no-padding">
+                                    <a title="Message" class="button button-clear text-primary icon ion-ios-email-outline absolute-center" ui-sref="app.composeMessage({'PhysicianId': appointment.uprovider_id})"></a>
+                                </div>
+                                <div class="col no-padding">
+                                    <a title="Cancel" class="button button-clear text-danger icon ion-android-cancel absolute-center" ng-click="cancelAppointment(appointment)"></a>
+                                </div>
+                                <div class="col no-padding">
+                                    <a title="Re-Shedule" class="button button-clear text-primary icon icon-re-schedule absolute-center" ng-click="resheduleAppointment(appointment)"> </a>
+                                </div>
+                                <div class="col no-padding" ng-if="appointment.pceventstatus!=3 && appointment.pceventstatus!=0 && !showNewDashboard">
+                                    <a title="Consent" class="button button-clear text-primary icon ion-ios-paper absolute-center" ui-sref="app.patientForms({appointment: appointment,type: 'Consent'})"></a>
+                                </div>
+                                <div class="col no-padding" ng-if="appointment.pceventstatus!=3 && appointment.pceventstatus!=0 &&!showNewDashboard">
+                                    <a title="Laboratory" class="button button-clear text-primary icon ion-beaker absolute-center" ui-sref="app.patientForms({appointment: appointment,type:'Laboratory'})"></a>
+                                </div>
+                            </div>
+                        </div>
+                    </ion-item>
+                </ion-list>
+            </div>
+            <!--Recently visited-->
+            <div class="card margin-md if-one">
+                <div class="item dashboard-header"> <a title="View All" class="button button-clear text-primary" ui-sref="app.visits({'viewAllStatus':true})" ng-show="myVisits.length>0">{{DASHBOARDCONSTANTS.VIEWALLLABEL}}</a>
+                    <h2><i class="icon ion-medkit"></i> {{DASHBOARDCONSTANTS.RECENTVISITLABLE}}</h2> </div>
+                <ion-list>
+                    <ion-item class="alert alert-info icon ion-information-circled" ng-show="myVisits.length<=0">&nbsp;&nbsp;{{DASHBOARDCONSTANTS.RECENTVISIT}}</ion-item>
+                    <ion-item class="no-padding bg-gray" ng-repeat="myVisit in myVisits" ng-show="$first">
+                        <div class="card ideal-card">
+                            <div class="item no-padding"> <a class="button button-clear visit-no text-primary" ui-sref="app.details({'visit': myVisit})">{{DASHBOARDCONSTANTS.VISITNOLABEL}} : {{myVisit.encounter}}</a>
+                                <div class="row no-padding min-height-60">
+                                    <div class="col col-15 no-padding text-center pointer" ui-sref="app.details({'visit': myVisit})">
+                                        <p class="text-primary">{{myVisit.date | date:'MMM'}}</p>
+                                        <p class="date text-primary">{{myVisit.date | date:'dd'}}</p>
+                                        <p class="text-primary">{{myVisit.date | date:'yyyy'}}</p>
+                                    </div>
+                                    <div class="col col-80 no-padding pointer">
+                                        <p class="pointer" ui-sref="app.physicianProfile({'physicianId': myVisit.provider_id})">{{myVisit.utitle | capitalize}} {{myVisit.firstname | capitalize}} {{myVisit.lastname | capitalize}}</p>
+                                        <p class="sub-text pointer" ui-sref="app.details({'visit': myVisit})">{{myVisit.specialty}}</p>
+                                        <p class="sub-text" ng-if="myVisit.reason"><span class="sub-text" ng-if="myVisit.reason.length > 15">{{myVisit.reason | limitTo: 15}} <a class="pointer" ng-click="visitdetails(myVisit)">{{DASHBOARDCONSTANTS.SHOWMORELABEL}}</a></span> <span class="sub-text" ng-if="myVisit.reason.length <= 15">{{myVisit.reason}}</span> </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row appointment-card">
+                                <div class="col col-25 no-padding">
+                                    <a title="Message" ui-sref="app.composeMessage({'PhysicianId': myVisit.provider_id})" class="button button-clear text-primary icon ion-ios-email-outline absolute-center"></a>
+                                </div>
+                                <div class="col col-25 no-padding">
+                                    <a title="Share" ng-click="shareVisitFile(myVisit)" class="button button-clear text-primary icon ion-android-share-alt absolute-center"></a>
+                                </div>
+                                <div class="col col-25 no-padding">
+                                    <a title="Download" ng-click="downloadAndOpenFile(myVisit)" class="button button-clear text-primary icon ion-ios-download absolute-center"></a>
+                                </div>
+                                <div class="col col-25 no-padding">
+                                    <a title="Request" ng-if="myVisit.isAppointmentRequested==1" ui-sref="app.addAppointment({'status':0,'physicianId': myVisit.provider_id })" class="button button-clear text-primary icon icon-calendar-plus absolute-center"> </a>
+                                    <a title="Schedule" ng-if="myVisit.isAppointmentRequested==0" ui-sref="app.addAppointment({'status':1,'physicianId': myVisit.provider_id })" class="button button-clear text-primary icon ion-android-time absolute-center"> </a>
+                                </div>
+                            </div>
+                        </div>
+                    </ion-item>
+                </ion-list>
+            </div>
+            <!--My Prescription-->
+            <div class="card margin-md">
+                <div class="item dashboard-header"> <a title="View All" class="button button-clear text-primary" ui-sref="app.prescriptions({'viewAllStatus':true})" ng-show="prescriptions.length>0">{{DASHBOARDCONSTANTS.VIEWALLLABEL}}</a>
+                    <h2>
+
+                        <i class="dashboard icon icon-prescriptions"></i>&nbsp;{{DASHBOARDCONSTANTS.MYPRESCRIPTIONLABEL}}</h2> </div>
+                <ion-list>
+                    <ion-item class="alert alert-info icon ion-information-circled" ng-show="prescriptions.length<=0">&nbsp;&nbsp;{{PRESCRIPTIONCONSTANTS.NOPRESCRIPTIONSFOUND}}</ion-item>
+                    <ion-item class="no-padding" ng-repeat="prescription in prescriptions | orderBy:'Start_date':true" ng-show="$first">
+                        <div class="card no-margin no-padding">
+                            <div class="row center no-padding min-height-60 pointer" ui-sref="app.prescriptionDetail({'prescriptionDetails': prescription})">
+                                <div ng-class="{'green-triangle-bg':prescription.Active==1, 'red-triangle-bg': prescription.Active == -1}"></div>
+                                <div class="col col-15 no-padding text-center">
+                                    <p class="text-primary">{{prescription.Start_date | date:'MMM'}}</p>
+                                    <p class="date text-primary">{{prescription.Start_date | date:'dd'}}</p>
+                                    <p class="text-primary">{{prescription.Start_date | date:'yyyy'}}</p>
+                                </div>
+                                <div class="col col-85 no-padding">
+                                    <p ng-if="prescription.Drug">{{prescription.Drug}}</p>
+                                    <p class="sub-text" ng-if="prescription.Dosage">{{DASHBOARDCONSTANTS.DOSAGELABEL}}: {{prescription.Dosage}}</p>
+                                    <p class="sub-text" ng-if="prescription.Provider_fname || prescription.Provider_lname">Dr Name:{{prescription.Provider_fname}}&nbsp;{{prescription.Provider_lname}}</p>
+                                    <p class="sub-text" ng-if="prescription.Note">Note: {{prescription.Note | limitTo: 30}} <a ng-show="prescription.Note.length > 30">{{prescription.Note.length < 30 ? '' : DASHBOARDCONSTANTS.SHOWMORELABEL}}</a></p>
+                                </div>
+                            </div>
+                        </div>
+                    </ion-item>
+                </ion-list>
+            </div>
+            <!--My Provider-->
+            <div class="card margin-md if-one">
+                <div class="item dashboard-header">
+                    <h2><i class="icon ion-ios-person"></i> {{DASHBOARDCONSTANTS.MYPROVIDERLABEL}}</h2> </div>
+                <ion-list>
+                    <ion-item class="alert alert-info icon ion-information-circled" ng-show="myProvider.length<=0">&nbsp;&nbsp;{{DASHBOARDCONSTANTS.NEWERRORMESSAGE}}</ion-item>
+                    <ion-item class="no-padding" ng-repeat="physician in myProvider">
+                        <div class="card ideal-card">
+                            <div class="item item-avatar item-icon-right item-button-right doc-thumbnail" ui-sref="app.physicianProfile({ 'physicianId': null, 'physician': physician})" ng-class="{'doc-offline':physician.isOnline=='0' , 'doc-online': physician.isOnline=='1'}"> <img class="doc-image pointer" src="img/ajax-loader.gif" ng-src="{{physician.profileimage?physician.profileimage:defaultUserImage}}" err-SRC="{{defaultUserImage}}" />
+                                <p class="pointer left">{{physician.title}} {{physician.firstname | capitalize}} {{physician.lastname | capitalize}}</p>
+                                <p class="pointer right rating-list-page" ng-show="physician.rating" ui-sref="app.physicianProfile({'physician': physician,'isProfile':false})"> <span><i ng-class="{'ion-ios-star':physician.rating>0,'ion-ios-star-outline':physician.rating<1}"></i></span> <span><i ng-class="{'ion-ios-star':physician.rating>1,'ion-ios-star-outline':physician.rating<2}"></i></span> <span><i ng-class="{'ion-ios-star':physician.rating>2,'ion-ios-star-outline':physician.rating<3}"></i></span> <span><i ng-class="{'ion-ios-star':physician.rating>3,'ion-ios-star-outline':physician.rating<4}"></i></span> <span><i ng-class="{'ion-ios-star':physician.rating>4,'ion-ios-star-outline':physician.rating<5}"></i></span></p>
+                                <div class="clearfix"></div>
+                                <p class="sub-text">{{physician.specialty}}</p>
+                                <p class="sub-text"><a class="pointer" ng-click="callPhysician(physician.mobile); $event.stopPropagation();">{{physician.mobile}}</a></p>
+                                <div class="text-ellipsis"> <span class="sub-text">{{physician.mainAddressLine1}}</span> <span class="sub-text" ng-if="physician.mainAddressLine1">, </span><span class="sub-text">{{physician.mainCity}}</span><span class="sub-text" ng-if="physician.mainCity">, </span><span class="sub-text">{{physician.mainState}}</span> </div>
+                            </div>
+                            <div class="row appointment-card">
+                                <div class="col col-25 no-padding">
+                                    <a title="Message" class="button button-clear text-primary icon ion-ios-email-outline absolute-center" ui-sref="app.composeMessage({ 'PhysicianId': physician.id})"></a>
+                                </div>
+                                <div class="col col-25 no-padding">
+                                    <a title="Map" class="button button-clear text-primary icon ion-ios-location-outline absolute-center" ui-sref="app.map({physician:physician})"></a>
+                                </div>
+                                <div class="col col-25 no-padding">
+                                    <a title="Schedule" class="button button-clear text-primary icon ion-android-time absolute-center" ng-if="physician.isAppointmentRequested==0" ui-sref="app.addAppointment({'status':1,'physician':physician})"></a>
+                                    <a title="Re-Request" class="button button-clear text-primary icon icon-calendar-plus absolute-center" ng-if="physician.isAppointmentRequested==1" ui-sref="app.addAppointment({status:0,'physician':physician})"> </a>
+                                </div>
+                                <div class="col col-25 no-padding">
+                                    <a title="Chat" ng-click="chatDetails(physician)" class="button button-clear text-primary icon ion-ios-chatboxes-outline list-chat absolute-center"></a>
+                                </div>
+                            </div>
+                        </div>
+                    </ion-item>
+                </ion-list>
+            </div>
+            <div class="card margin-md" ng-hide="Vitals.length<0">
+                <div class="item dashboard-header"> <a title="View All" class="button button-clear text-primary" ui-sref="app.medicalHistory({'viewAllStatus':true})" ng-show="Vitals.length>0">{{DASHBOARDCONSTANTS.VIEWALLLABEL}}</a>
+                    <h2><i class="icon ion-stats-bars"></i> {{DASHBOARDCONSTANTS.MYVITALSLABEL}}</h2> </div>
+                <div ng-show="Vitals.length>=2">
+                    <canvas id="bar" class="chart chart-line" data="graph.data" ng-show="Vitals.length>0" labels="graph.labels" series="graph.series"></canvas>
+                </div>
+                <div class="row graph-small-content text-center" ng-show="Vitals.length==1">
+                    <div class="col col-25 no-padding Weight-color">
+                        <p>{{DASHBOARDCONSTANTS.WEIGHTLABEL}}</p>
+                        <p class="content">{{graph.data[0]}}<span>{{DASHBOARDCONSTANTS.WEIGHTUNITLABEL}}</span></p>
+                    </div>
+                    <div class="col col-25 no-padding BP-color">
+                        <p>{{DASHBOARDCONSTANTS.HEIGHTLABEL}}</p>
+                        <p class="content">{{graph.data[1]}}<span>{{DASHBOARDCONSTANTS.HEIGHTUNITLABEL}}</span></p>
+                    </div>
+                    <div class="col col-25 no-padding BMI-color">
+                        <p>{{DASHBOARDCONSTANTS.BMILABEL}}</p>
+                        <p class="content">{{graph.data[2]}}</p>
+                    </div>
+                    <div class="col col-25 no-padding temp-color">
+                        <p>{{DASHBOARDCONSTANTS.TEMPRATURELABEL}}</p>
+                        <p class="content">{{graph.data[3]}}<span class="sup">&#8451;</span></p>
+                    </div>
+                </div>
+                <div ng-show="Vitals.length<=0" class="alert alert-info icon ion-information-circled">&nbsp;&nbsp;{{DASHBOARDCONSTANTS.NOVITALS}}</div>
+                <div class="graph-content bg-gray" ng-show="Vitals.length > 0"> <span class="icon ion-stop Weight-color"></span><span> {{DASHBOARDCONSTANTS.WEIGHTLABEL}}  ({{DASHBOARDCONSTANTS.WEIGHTUNITLABEL}})</span> <span class="icon ion-stop BP-color"></span> <span> {{DASHBOARDCONSTANTS.HEIGHTLABEL}}({{DASHBOARDCONSTANTS.HEIGHTUNITLABEL}})</span> <span class="icon ion-stop BMI-color"></span> <span> {{DASHBOARDCONSTANTS.BMILABEL}}</span> <span class="icon ion-stop temp-color"></span> <span> {{DASHBOARDCONSTANTS.TEMPRATURELABEL}}({{DASHBOARDCONSTANTS.TEMPRATUREUNITLABEL}})</span> </div>
+            </div>
+        </div>
+    </ion-content>
+    <!-- Footer tab Section-->
+    <div class="footer-bar bar" ng-if="showNewDashboard">
+        <div class="tabs tabs-icon-only bar-positive">
+            <a title="Prescriptions" class="tab-item" ui-sref="app.prescriptions"> <i class="button button-clear icon icon-fw icon-prescriptions"></i> </a>
+            <a title="Reports" class="tab-item" ui-sref="app.reports"> <i class="button button-clear icon icon-fw ion-clipboard"></i> </a>
+            <a title="Message" class="tab-item" ui-sref="app.Message"> <i class="button button-clear icon icon-fw ion-email"></i> </a>
+            <a title="Billing" class="tab-item" ui-sref="app.billing">
+                <!-- <i class="button button-clear icon icon-fw icon-nigeria-naira"></i>--><i class="button button-clear icon icon-fw ion-social-usd"></i> </a>
+        </div>
+    </div>
+</ion-view>

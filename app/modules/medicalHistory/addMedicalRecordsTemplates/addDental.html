@@ -1,0 +1,74 @@
+<ion-view title="{{MEDICALRECORDSCONSTANTS.DENTALTITLE}}">
+    <ion-nav-buttons side="left"> <span ng-click="myGoBack()"><button class="button button-clear icon ion-ios-arrow-back left-menu"></button></span> </ion-nav-buttons>
+    <ion-nav-buttons side="right">
+        <button title="Notifications" class="button button-clear ion-android-notifications notification" ui-sref="app.patientReminder"><span class="badge badge-assertive">{{Notification}}</span></button>
+        <button class="button button-clear ion-android-more-vertical right-menu" ng-click="popover.show($event)"> </button>
+    </ion-nav-buttons>
+    <form name="myForm" class="form-validate" novalidate>
+        <ion-content has-header="true" class="bottom-50">
+            <ion-list>
+                <ion-item class="padding">
+                    <p class="no-padding"><span class="required">{{MEDICALRECORDSCONSTANTS.DIAGNOSISCODELABEL}} :</span></p>
+                    <label class="item item-input item-md-label no-padding border-none">
+                        <input class="input md-input no-padding no-margin" name="weight" type="text" placeholder="{{MEDICALRECORDSCONSTANTS.DIAGNOSISCODELABEL}}" style="height: 30px;" ng-model="dental.Diagnosis" required>
+                        <div class="highlight highlight-calm"></div>
+                    </label>
+                </ion-item>
+                <ion-item class="padding">
+                    <p class="no-padding"><span class="required">{{MEDICALRECORDSCONSTANTS.TITLELABEL}} :</span></p>
+                    <label class="item item-input item-md-label no-padding border-none">
+                        <input class="input md-input no-padding no-margin" name="Title" type="text" placeholder="{{MEDICALRECORDSCONSTANTS.TITLELABEL}}" style="height: 30px;" ng-model="dental.Title" required>
+                        <div class="highlight highlight-calm"></div>
+                    </label>
+                </ion-item>
+                <ion-item class="padding">
+                    <p class="no-padding"><span class="required">{{MEDICALRECORDSCONSTANTS.BEGINDATELABEL}} : <i class="icon ion-calendar placeholder-icon"></i></span></p>
+                    <label class="item item-input item-md-label no-padding border-none">
+                        <input class="input md-input no-padding no-margin" name="Begdate" type="text" placeholder="{{MEDICALRECORDSCONSTANTS.BEGINDATELABEL}}" style="height: 30px;" ng-model="dental.Begdate" ng-click="openDatePicker()" required readonly>
+                        <div class="highlight highlight-calm"></div>
+                    </label>
+                </ion-item>
+                <ion-item class="padding">
+                    <p class="no-padding"><span class="">{{MEDICALRECORDSCONSTANTS.ENDDATELABEL}} : <i class="icon ion-calendar placeholder-icon"></i></span></p>
+                    <label class="item item-input item-md-label no-padding border-none">
+                        <input class="input md-input no-padding no-margin" name="enddate" type="text" placeholder="{{MEDICALRECORDSCONSTANTS.ENDDATELABEL}}" style="height: 30px;" ng-model="dental.Enddate" ng-click="openDatePickerEndDate()" readonly>
+                        <div class="highlight highlight-calm"></div>
+                    </label>
+                </ion-item>
+                <ion-item class="padding">
+                    <p class="no-padding"><span class="required">{{MEDICALRECORDSCONSTANTS.OCCURANCELABEL}} : </span></p>
+                    <label class="item item-input no-padding item-select insurance-select border-none">&nbsp;
+                        <select type="text" class="bg-opacity provider-select" ng-options="occList.occKey as occList.occName for occList in occuranceList" ng-model="dental.Occurrence" required>
+                            <option selected="selected" value="">{{MEDICALRECORDSCONSTANTS.SELECTOCCURANCELABEL}}</option>
+                        </select>
+                    </label>
+                </ion-item>
+                <ion-item class="padding">
+                    <p class="no-padding"><span>{{MEDICALRECORDSCONSTANTS.REFERREDBYLABEL}} :</span></p>
+                    <label class="item item-input item-md-label no-padding border-none">
+                        <input class="input md-input no-padding no-margin" name="referredBy" type="text" placeholder="{{MEDICALRECORDSCONSTANTS.REFERREDBYLABEL}}" style="height: 30px;" ng-model="dental.Referredby">
+                        <div class="highlight highlight-calm"></div>
+                    </label>
+                </ion-item>
+                <ion-item class="padding">
+                    <p class="no-padding"><span class="required">{{MEDICALRECORDSCONSTANTS.OUTCOMELABEL}} : </span></p>
+                    <label class="item item-input no-padding item-select insurance-select border-none">&nbsp;
+                        <select type="text" class="bg-opacity provider-select" ng-change="setEnddate(dental.Outcome)" ng-options="outList.outKey as outList.outName for outList in outcomeList" ng-model="dental.Outcome" required>
+                            <option selected="selected" value="">{{MEDICALRECORDSCONSTANTS.SELECTOUTCOMELABEL}}</option>
+                        </select>
+                    </label>
+                </ion-item>
+                <ion-item class="padding">
+                    <p class="no-padding"><span>{{MEDICALRECORDSCONSTANTS.DESTINATIONLABEL}} :</span></p>
+                    <label class="item item-input item-md-label no-padding border-none">
+                        <input class="input md-input no-padding no-margin" name="Destination" type="text" placeholder="{{MEDICALRECORDSCONSTANTS.DESTINATIONLABEL}}" style="height: 30px;" ng-model="dental.Destination">
+                        <div class="highlight highlight-calm"></div>
+                    </label>
+                </ion-item>
+            </ion-list>
+        </ion-content>
+        <div class="tabs ng-scope tabs-icon-top tabs-positive">
+            <button title="Save" style="background-color: transparent; border: none;" class="tab-item bottom-icon" ng-click="addDental(dental,myForm)"> <i class="icon ion-checkmark-circled"></i><span>{{MEDICALRECORDSCONSTANTS.SAVEBUTTON}}</span></button>
+            <a title="Cancel" class="tab-item bottom-icon" ng-click="myGoBack()"><i class="icon ion-android-cancel"></i><span>{{MEDICALRECORDSCONSTANTS.CANCELBUTTON}}</span></a> </div>
+    </form>
+</ion-view>

@@ -1,0 +1,64 @@
+<ion-view title="{{APPOINTMENTSCONSTANTS.PHYSICIANSTITLE}}">
+    <ion-nav-buttons side="left"> <span ng-click="myGoBack()"><button class="button button-clear icon ion-ios-arrow-back left-menu"></button></span>
+        <div class="app-logo"> <img class="title-image" src="img/ajax-loader.gif" ng-src="{{orgLogoURL?orgLogoURL:defaultLogoURL}}" err-SRC="{{errorLogoURL}}" height="25" /> </div>
+    </ion-nav-buttons>
+    <ion-nav-buttons side="right">
+        <button title="Notifications" class="button button-clear ion-android-notifications notification" ui-sref="app.patientReminder"><span class="badge badge-assertive">{{Notification}}</span></button>
+        <button class="button button-clear ion-android-more-vertical right-menu" ng-click="popover.show($event)"> </button>
+    </ion-nav-buttons>
+    <button title="Load More" class="button button-clear button-float" ng-show="!isLoadComplete && isOnline" ng-click="loadMore();"> <i class="icon ion-android-more-horizontal"></i> </button>
+    <div class="data-loading bottom-0" ng-show="isLoadMore && isOnline">{{APPOINTMENTSCONSTANTS.LOADINGLABEL}}
+        <ion-spinner icon="lines"></ion-spinner>
+    </div>
+    <form name="myForm" class="form-validate" novalidate>
+        <ion-content has-header="true" class="body-grey">
+            <div class="search-box">
+                <div class="item-input-wrapper no-padding">
+                    <label class="item-input item-md-label no-padding no-margin full-width">
+                        <input type="text" class="input md-input" placeholder="{{APPOINTMENTSCONSTANTS.PHYSICIANSEARCHPLACEHOLDER}}" ng-model="$parent.searchString" ng-change="searchPhysicians()" ng-model-options="{ debounce: 500 }" />
+                        <div class="highlight highlight-calm"></div>
+                    </label>
+                    <button title="Search" class="button button-positive go-btn search-btn" ng-click="searchPhysicians()"><i class="icon ion-ios-search placeholder-icon text-white"></i></button>
+                </div>
+            </div>
+            <div class="row no-padding sorting-items">
+                <div class="col col-33 no-padding" align="left">
+                    <button class="button button-clear sort-btn" ng-click="setFilter('firstname')" ng-class="{'sort-active':selected}"> <i class="icon arrow-icon" ng-class="{'ion-arrow-down-b': reverse, 'ion-arrow-up-b': !reverse}"></i> {{DASHBOARDCONSTANTS.FIRSTNAMELABEL}} </button>
+                </div>
+                <div class="col col-33 no-padding" align="center">
+                    <button class="button button-clear sort-btn" ng-click="setFilter('lastname')" ng-class="{'sort-active':selected}"> <i class="icon arrow-icon" ng-class="{'ion-arrow-down-b': reverse1, 'ion-arrow-up-b': !reverse1}"></i> {{DASHBOARDCONSTANTS.LASTNAMELABEL}}</button>
+                </div>
+                <div class="col col-33 no-padding" align="right">
+                    <button class="button button-clear sort-btn" ng-click="setFilter('rating')" ng-class="{'sort-active':selected}"> <i class="icon arrow-icon" ng-class="{'ion-arrow-down-b': reverse2, 'ion-arrow-up-b': !reverse2}"></i> {{DASHBOARDCONSTANTS.RATINGLABEL}} </button>
+                </div>
+            </div>
+            <ion-list>
+                <div class="no-data-center" ng-show="(PhysiciansData.length<=0) && isPhysicianData">
+                    <div class="row alert-padding">
+                        <div class="col no-data"> <i class="icon ion-information-circled"> </i>
+                            <h5 class="item-text-wrap">{{APPOINTMENTSCONSTANTS.NEWERRORMESSAGE}} </h5> </div>
+                    </div>
+                </div>
+                <div ng-repeat="physician in PhysiciansData |orderBy:$parent.sortModel">
+                    <div class="card portal-card">
+                        <div class="item item-thumbnail-left item-icon-right item-button-right doc-thumbnail" ng-class="{'doc-offline':physician.isOnline=='0' , 'doc-online': physician.isOnline=='1'}"> <img class="doc-image pointer" src="img/ajax-loader.gif" ng-src="{{physician.profileimage?physician.profileimage:defaultUserImage}}" err-SRC="{{defaultUserImage}}" />
+                            <p class="pointer left" ui-sref="app.physicianProfile({'physician': physician,'isProfile':true})">{{physician.title}} {{physician.firstname | capitalize}} {{physician.lastname | capitalize}}</p>
+                            <p class="pointer right rating-list-page" ng-show="physician.rating" ui-sref="app.physicianProfile({'physician': physician,'isProfile':false})"> <span><i ng-class="{'ion-ios-star':physician.rating>0,'ion-ios-star-outline':physician.rating<1}"></i></span> <span><i ng-class="{'ion-ios-star':physician.rating>1,'ion-ios-star-outline':physician.rating<2}"></i></span> <span><i ng-class="{'ion-ios-star':physician.rating>2,'ion-ios-star-outline':physician.rating<3}"></i></span> <span><i ng-class="{'ion-ios-star':physician.rating>3,'ion-ios-star-outline':physician.rating<4}"></i></span> <span><i ng-class="{'ion-ios-star':physician.rating>4,'ion-ios-star-outline':physician.rating<5}"></i></span></p>
+                            <div class="clearfix"></div>
+                            <!--<p class="sub-text left" ng-if="physician.facility">{{physician.facility}}</p>-->
+                            <label class="checkbox right no-padding provider-checkbox">
+                                <input type="checkbox" ng-model="selectedphysician[physician.id]"> </label>
+                            <div class="clearfix"></div>
+                            <p class="sub-text" ng-if="physician.specialty" style="width: 80%;">{{physician.specialty}}</p>
+                            <p class="sub-text" ng-if="physician.mobile"><a class="pointer" ng-click="callPhysician(physician.mobile)">{{physician.mobile}}</a></p>
+                            <!--<p class="sub-text" ng-if="physician.homePhone"><a class="pointer" ng-click="callPhysician(physician.homePhone)">{{physician.homePhone}}</a></p>-->
+                            <div class="text-ellipsis"> <span class="sub-text">{{physician.mainAddressLine1}}</span> <span class="sub-text" ng-if="physician.mainAddressLine1">, </span><span class="sub-text">{{physician.mainCity}}</span><span ng-if="physician.mainCity">, </span><span class="sub-text">{{physician.mainState}}</span> </div>
+                        </div>
+                    </div>
+                </div>
+            </ion-list>
+        </ion-content>
+    </form>
+    <div class="tabs ng-scope tabs-icon-top tabs-positive">
+        <button title="Save" style="background-color: transparent; border: none;" class="tab-item bottom-icon no-padding" ng-click="providerSelected()"> <i class="icon ion-checkmark-circled" style="margin-top: 1px;"></i><span>{{MEDICALRECORDSCONSTANTS.SAVEBUTTON}}</span></button> <a title="Cancel" class="tab-item bottom-icon" ng-click="myGoBack()"><i class="icon ion-android-cancel"></i><span>{{MEDICALRECORDSCONSTANTS.CANCELBUTTON}}</span></a> </div>
+</ion-view>

@@ -1,0 +1,15 @@
+<ion-view title="{{APPCONSTANTS.FACILITIESTITLE}}">
+    <ion-nav-buttons side="left">
+        <button menu-toggle="left" class="button button-clear icon ion-navicon left-menu"></button>
+        <div class="app-logo"> <img class="title-image" src="img/ajax-loader.gif" ng-src="{{orgLogoURL?orgLogoURL:defaultLogoURL}}" err-SRC="{{errorLogoURL}}" height="25" /> </div>
+    </ion-nav-buttons>
+    <ion-nav-buttons side="right">
+        <button title="Notifications" class="button button-clear ion-android-notifications notification" ui-sref="app.patientReminder"><span class="badge badge-assertive">{{Notification}}</span></button>
+        <button class="button button-clear ion-android-more-vertical right-menu" ng-click="popover.show($event)"></button>
+    </ion-nav-buttons>
+    <ion-content has-header="true" class="body-grey">
+        <div class="list bottom-margin-md" ng-repeat="facilityobj in facilities" ng-click="changeFacility(facilityobj)">
+            <button class="button button-small button-full button-light"> {{facilityobj.orgName | capitalize}} </button>
+        </div>
+    </ion-content>
+</ion-view>

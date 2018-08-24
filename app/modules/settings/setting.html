@@ -1,0 +1,63 @@
+<ion-view title="{{SETTINGSCONSTANTS.SETTINGSTILTE}}">
+    <ion-nav-buttons side="left">
+        <button menu-toggle="left" class="button button-clear icon ion-navicon left-menu"></button>
+        <div class="app-logo"><img class="title-image" src="img/ajax-loader.gif" ng-src="{{orgLogoURL?orgLogoURL:defaultLogoURL}}" err-SRC="{{errorLogoURL}}" height="25" /></div>
+    </ion-nav-buttons>
+    <ion-nav-buttons side="right">
+        <button class="button button-clear ion-android-notifications notification" ui-sref="app.patientReminder"><span class="badge badge-assertive">{{Notification}}</span></button>
+        <button class="button button-clear ion-android-more-vertical right-menu" ng-click="popover.show($event)"> </button>
+    </ion-nav-buttons>
+    <ion-content has-header="true" ng-class="{isBrowserView : isbrowser== true}">
+        <form name="myForm" class="form-validate" novalidate>
+            <div class="list">
+                <div class="item item-divider setting-divider"> 
+                  <span>User Settings</span>
+                </div>
+                <label class="item item-input item-select setting-label">
+                    <div class="input-label"> <span> Change Language </span> </div>
+                    <select ng-model="SelectedLanguage" ng-options="lang.languageName for lang in languages" ng-change="changeLanguage(SelectedLanguage)"> </select>
+                </label>
+                <ul class="top-border-xs">
+                    <li class="item item-toggle padding-10"><span ng-if="patientInfo.isChatallow==0" style="color:red;">Chat Deactive</span><span ng-if="patientInfo.isChatallow==1" style="color:green;">Chat Active</span>
+                        <label class="toggle toggle-small">
+                            <input type="checkbox" ng-model="patientInfo.isChatallow" ng-true-value="'1'" ng-false-value="'0'" ng-click="changePatientSettings()" prevent-bubbling>
+                            <div class="track">
+                                <div class="handle"></div>
+                            </div>
+                        </label>
+                    </li>
+                </ul>
+                <ul class="top-border-xs">
+                    <li class="item item-toggle padding-10"><span ng-if="patientInfo.isEmailallow==0" style="color:red;">Email Deactive</span><span ng-if="patientInfo.isEmailallow==1" style="color:green;">Email Active</span>
+                        <label class="toggle toggle-small">
+                            <input type="checkbox" ng-model="patientInfo.isEmailallow" ng-true-value="'1'" ng-false-value="'0'" ng-click="changePatientSettings()" prevent-bubbling>
+                            <div class="track">
+                                <div class="handle"></div>
+                            </div>
+                        </label>
+                    </li>
+                </ul>
+                <ul class="top-border-xs bottom-border-xs">
+                    <li class="item item-toggle padding-10"><span ng-if="patientInfo.isSMSallow==0" style="color:red;">SMS Deactive</span><span ng-if="patientInfo.isSMSallow==1" style="color:green;">SMS Active</span>
+                        <label class="toggle toggle-small">
+                            <input type="checkbox" ng-model="patientInfo.isSMSallow" ng-true-value="'1'" ng-false-value="'0'" ng-click="changePatientSettings()" prevent-bubbling>
+                            <div class="track">
+                                <div class="handle"></div>
+                            </div>
+                        </label>
+                    </li>
+                </ul>
+                <div class="bottom-border-xs" ng-if="isApplicationDataUpdate=='0'">
+                    <div class="item item-button-right" style="padding: 15px 10px 18px 10px;"> <span>Update Configuration</span>
+                        <button class="button button-positive" ng-click="updateApplicationConfiguration()"> <i class="icon ion-loop"></i> </button>
+                    </div>
+                </div>
+                <div class="bottom-border-xs" ng-if="isLanguageUpdate=='0'">
+                    <div class="item item-button-right" style="padding: 15px 10px 18px 10px;"> <span>Update Language</span>
+                        <button class="button button-positive" ng-click="changeLanguage(SelectedLanguage)"> <i class="icon ion-loop"></i> </button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </ion-content>
+</ion-view>

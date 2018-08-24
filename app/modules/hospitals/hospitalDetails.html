@@ -1,0 +1,43 @@
+<ion-view title="Hospital Details">
+    <div class="bar-positive nav-title-slide-ios bar bar-header">
+        <div class="buttons buttons-left"><span class="left-buttons"> <span ui-sref="hospitals"><button class="button button-clear icon ion-ios-arrow-back left-menu"></button></span> </span>
+        </div>
+    </div>
+    <ion-content has-header="true">
+        <div id="hospital-bg"></div>
+        <div class="profile-hospital">
+            <div id="hospital-info">
+                <!--                <img height="40" src="img/patientConnect360.svg" ng-src="data:{{HospitalData.OrgDetails.OrgLogo.mimeType}};base64,{{HospitalData.OrgDetails.OrgLogo.imagedata?HospitalData.OrgDetails.OrgLogo.imagedata:img/patientConnect360.svg}}" err-SRC="img/patientConnect360.svg"/>--><img height="40" class="hospital-image" src="img/patientConnect360.svg">
+                <h3 class="hospital-profile"><span class="text-primary">{{HospitalData.OrgName}}</span></h3>
+                <p class="doc-sub-text">{{HospitalData.Orgcode}}</p>
+            </div>
+        </div>
+        <ion-item class="profile-item border-none">
+            <div class="list profile-list top-margin-sm">
+                <div class="row" ng-if="HospitalData.OrgDetails.email">
+                    <p class="col col-25"><i class="icon icon-fw ion-ios-email"></i>&nbsp;<span>Email :</span></p>
+                    <div class="col col-75 item-text-wrap"><a ng-click="composeEmail(HospitalData.OrgDetails.email)">{{HospitalData.OrgDetails.email}}</a></div>
+                </div>
+                <div class="row" ng-if="HospitalData.OrgDetails.contactno">
+                    <p class="col col-25"><i class="icon icon-fw ion-ios-telephone"></i>&nbsp;<span>Contact :</span></p>
+                    <div class="col col-75 item-text-wrap"> <a class="pointer" ng-click="callNumber(HospitalData.OrgDetails.contactno)">{{HospitalData.OrgDetails.contactno}}</a></div>
+                </div>
+                <div class="row" ng-if="HospitalData.createdDate">
+                    <p class="col col-25"><i class="icon icon-fw icon ion-android-time"></i>&nbsp;<span>Created Date :</span></p>
+                    <div class="col col-75 item-text-wrap text-primary">{{HospitalData.createdDate | date:'MMM dd yyyy'}}</div>
+                </div>
+                <div class="row" ng-if="HospitalData.OrgDetails.address">
+                    <p class="col col-25"><i class="icon icon-fw ion-location"></i>&nbsp;<span>Address :</span></p>
+                    <div class="col col-75 item-text-wrap text-primary">{{HospitalData.OrgDetails.address}}</div>
+                </div>
+                <div class="row" ng-if="HospitalData.OrgDetails.aboutus">
+                    <p class="col col-25"><i class="icon icon-fw ion-information-circled"></i>&nbsp;<span>About :</span></p>
+                    <div class="col col-75 item-text-wrap text-primary"> {{HospitalData.OrgDetails.aboutus}} </div>
+                </div>
+            </div>
+        </ion-item>
+    </ion-content>
+    <div class="tabs ng-scope tabs-icon-top tabs-positive">
+        <a class="tab-item bottom-icon button button-clear bottom-btn" title="Login" icon-on="ion-ios-filing" icon-off="ion-ios-filing-outline" ng-click="GotoHospital(HospitalData,false)"> <i class="icon ion-log-in"></i><span class="tab-title ng-binding"></span><span>Login</span></a>
+    </div>
+</ion-view>

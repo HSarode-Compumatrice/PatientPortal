@@ -1,0 +1,123 @@
+<ion-view title="{{BILLINGCONSTANTS.BILLINGDETAILSTITLE}}">
+    <ion-nav-buttons side="left">
+        <button ng-click="myGoBack()" class="button button-clear icon ion-ios-arrow-back left-menu"></button>
+        <div class="app-logo"> <img class="title-image" src="img/ajax-loader.gif" ng-src="{{orgLogoURL?orgLogoURL:defaultLogoURL}}" err-SRC="{{errorLogoURL}}" height="25" /> </div>
+    </ion-nav-buttons>
+    <ion-nav-buttons side="right">
+        <button title="Notifications" class="button button-clear ion-android-notifications notification" ui-sref="app.patientReminder"><span class="badge badge-assertive">{{Notification}}</span></button>
+        <button class="button button-clear ion-android-more-vertical right-menu" ng-click="popover.show($event)"> </button>
+    </ion-nav-buttons>
+    <ion-content has-header="true" class="billing-detail">
+        <div class="total-amount" ng-if="isMakePayment && !isPaymentDone">
+            <div class="row no-padding">
+                <div class="col no-padding">
+                    <h5 class="billing-margin text-center text-white">{{BILLINGCONSTANTS.TOTALAMOUNT}}</h5>
+                </div>
+            </div>
+            <div class="row no-padding">
+                <div class="col no-padding">
+                    <h4 class="no-margin font-light text-center text-white amount">{{currencySign}}{{totalAmount}}</h4>
+                </div>
+            </div>
+        </div>
+        <form method="post" id="paymentForm" name="paypalPro" class="form-validate" novalidate ng-if="isMakePayment && !isPaymentDone">
+            <input type="hidden" name="amount" ng-value="amount" />
+            <input type="hidden" name="facilityId" ng-value="facilityId" />
+            <input type="hidden" name="patientId" ng-value="patientDetails.Pid" />
+            <input type="hidden" name="zip" ng-value="patientDetails.postalcode" />
+            <input type="hidden" name="city" ng-value="patientDetails.City" />
+            <input type="hidden" name="country" ng-value="patientDetails.CountryName" />
+            <div class="card margin-md">
+                <div class="row row billing-padding" align="center">
+                    <div class="col col-20"> <img class="ion-img-responsive" src="img/cards/ae.png" /> </div>
+                    <div class="col col-20"> <img class="ion-img-responsive detect" src="img/cards/ds.png" /> </div>
+                    <div class="col col-20"> <img class="ion-img-responsive" src="img/cards/mc.png" /> </div>
+                    <div class="col col-20"> <img class="ion-img-responsive" src="img/cards/pp.png" /> </div>
+                    <div class="col col-20"> <img class="ion-img-responsive" src="img/cards/visa.png" /> </div>
+                </div>
+                <div class="billing-padding">
+                    <p class="no-margin"><span class="required">{{BILLINGCONSTANTS.CARDNUMBERLABEL}}</span></p>
+                    <label class="item item-input item-md-label no-padding border-none">
+                        <input class="input md-input no-margin" type="number" string-to-number placeholder="{{BILLINGCONSTANTS.CARDNUMBERPLACEHOLDER}}" ng-model="number" name="card_number" autofocus required>
+                        <div class="highlight highlight-calm"></div>
+                    </label>
+                </div>
+                <div class="row billing-padding">
+                    <div class="col col-33 padding-LR-5">
+                        <p class="no-margin"><span class="required">{{BILLINGCONSTANTS.EXPIRYMONTHLABEL}}</span></p>
+                        <label class="item item-input item-md-label no-padding border-none cvv-width">
+                            <input class="input md-input no-margin" type="number" string-to-number placeholder="{{BILLINGCONSTANTS.EXPIRYMONTHPLACEHOLDER}}" ng-model="expiry_month" name="expiry_month" maxlength="2" required>
+                            <div class="highlight highlight-calm"></div>
+                        </label>
+                    </div>
+                    <div class="col col-40 padding-LR-5">
+                        <p class="no-margin"><span class="required">{{BILLINGCONSTANTS.EXPIRYYEARLABEL}}</span></p>
+                        <label class="item item-input item-md-label no-padding border-none">
+                            <input class="input md-input no-margin" type="number" string-to-number placeholder="{{BILLINGCONSTANTS.EXPIRYYEARPLACEHOLDER}}" ng-model="expiry_year" name="expiry_year" maxlength="4" required>
+                            <div class="highlight highlight-calm"></div>
+                        </label>
+                    </div>
+                    <div class="col col-30 padding-LR-5">
+                        <p class="no-margin"><span class="required">{{BILLINGCONSTANTS.CVVLABEL}}</span></p>
+                        <label class="item item-input item-md-label no-padding border-none cvv-width">
+                            <input class="input md-input no-margin" type="number" string-to-number placeholder="{{BILLINGCONSTANTS.CVVPLACEHOLDER}}" ng-model="cvv" name="cvv" maxlength="3" required>
+                            <div class="highlight highlight-calm"></div>
+                        </label>
+                    </div>
+                </div>
+                <div class="row billing-padding">
+                    <div class="col">
+                        <p class="no-margin"><span class="required">{{BILLINGCONSTANTS.NAMEONCARDLABEL}}</span></p>
+                        <label class="item item-input item-md-label no-padding border-none">
+                            <input class="input md-input no-margin" type="text" placeholder="{{BILLINGCONSTANTS.NAMEONCARDLABEL}}" ng-model="name_on_card" name="name_on_card" required>
+                            <div class="highlight highlight-calm"></div>
+                        </label>
+                    </div>
+                </div>
+                <div class="billing-padding text-center">
+                    <button class="button button-small button-full button-positive no-margin" id="cardSubmitBtn" ng-click="creditCardPayment(paypalPro)">{{BILLINGCONSTANTS.PROCEEDLABEL}} <i class="icon ion-play"></i></button>
+                </div>
+            </div>
+        </form>
+        <div ng-if="!isMakePayment && isPaymentDone" style="background-color: #fff;padding: 0;border: 1px solid #cfcece;">
+            <table align="center" style="padding: 0; border-collapse: collapse;margin: 0 auto;">
+                <tr>
+                    <td colspan="2" valign="top">
+                        <h4 style="text-align: center;color: #008000;padding: 0;text-transform: uppercase;">{{BILLINGCONSTANTS.THANKYOUMESSAGE}}</h4>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" valign="center" align="center" style="width: 50%;"> <img style="width: 100px;padding: 5%;" src="img/successful-icon.png"> </td>
+                </tr>
+                <tr>
+                    <td colspan="2" valign="top">
+                        <h4 style="font-size: 15px;color: #008000;margin-bottom: 0;text-align: center;line-height: 1.6;">&quot;{{BILLINGCONSTANTS.PAYMENTSUCCESSMESSAGE}}&quot;</h4>
+                    </td>
+                </tr>
+            </table>
+            <div class="padding text-center">
+                <button ui-sref="app.billing({'billingStatus':1})" class="button button-positive button-small border-radius-1"><i class="icon ion-ios-arrow-back"></i> {{BILLINGCONSTANTS.GOBACKLABEL}} </button>
+            </div>
+        </div>
+        <div ng-if="!isMakePayment && !isPaymentDone" style="background-color: #fff;padding: 0;border: 1px solid #cfcece;">
+            <table align="center" style="padding: 0; border-collapse: collapse;margin: 0 auto;">
+                <tr>
+                    <td colspan="2" valign="top">
+                        <h4 style="text-align: center;color: #8c0104;padding: 0;text-transform: uppercase;">{{BILLINGCONSTANTS.PAYMENTFAILEDMESSAGE}}</h4>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" valign="center" align="center" style="width: 50%;"> <img style="width: 100px;padding: 5%;" src="img/cancelled-icon.jpg"> </td>
+                </tr>
+                <tr>
+                    <td colspan="2" valign="top">
+                        <h4 style="font-size: 15px;color: #8c0104;margin-bottom: 0;text-align: center;line-height: 1.6;">&quot;{{BILLINGCONSTANTS.PAYMENTCANCELMESSAGE}}&quot;</h4>
+                    </td>
+                </tr>
+            </table>
+            <div class="padding text-center">
+                <button ui-sref="app.billing({'billingStatus':1})" class="button button-positive button-small border-radius-1"><i class="icon ion-ios-arrow-back"></i> {{BILLINGCONSTANTS.GOBACKLABEL}}</button>
+            </div>
+        </div>
+    </ion-content>
+</ion-view>

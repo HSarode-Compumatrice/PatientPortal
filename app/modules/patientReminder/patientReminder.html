@@ -1,0 +1,54 @@
+<ion-view title="{{NOTIFICATIONCONSTANTS.NOTIFICATIONSTITLE}}">
+    <ion-nav-buttons side="left"> <span ng-click="myGoBack()">
+    <button class="button button-clear icon ion-ios-arrow-back left-menu"></button>
+    </span>
+        <div class="app-logo"> <img class="title-image" src="img/ajax-loader.gif" ng-src="{{orgLogoURL?orgLogoURL:defaultLogoURL}}" err-SRC="{{errorLogoURL}}" height="25" /> </div>
+    </ion-nav-buttons>
+    <ion-nav-buttons side="right">
+        <button title="Notifications" class="button button-clear ion-android-notifications notification" ui-sref="app.patientReminder"><span class="badge badge-assertive">{{Notification}}</span></button>
+        <button class="button button-clear ion-android-more-vertical right-menu" ng-click="popover.show($event)"> </button>
+    </ion-nav-buttons>
+    <button title="Load More" class="button button-clear button-float" ng-show="!isLoadComplete && isOnline" ng-click="loadMore();"> <i class="icon ion-android-more-horizontal"></i> </button>
+    <div class="data-loading" ng-show="isLoadMore && isOnline">{{NOTIFICATIONCONSTANTS.LOADINGLABEL}}
+        <ion-spinner icon="lines"></ion-spinner>
+    </div>
+    <ion-content has-header="true" class="bottom-50">
+        <div class="search-box" ng-show="patientReminders.length>0">
+            <div class="item-input-wrapper no-padding">
+                <label class="item-input item-md-label no-padding no-margin full-width">
+                    <input type="text" class="input md-input" ng-model="searchstring" placeholder="{{NOTIFICATIONCONSTANTS.SEARCHNOTIFICATIONLABEL}}" />
+                    <div class="highlight highlight-calm"></div>
+                </label>
+                <button title="Search" class="button button-positive go-btn search-btn"><i class="icon ion-ios-search placeholder-icon text-white"></i></button>
+            </div>
+        </div>
+        <ion-list show-delete="showDelete" show-reorder="showReorder">
+            <div class="no-data-center" ng-show="patientReminders.length<=0||filteredItems.length<=0">
+                <div class="row alert-padding">
+                    <div class="col no-data"> <i class="icon ion-information-circled"> </i>
+                        <h5 class="item-text-wrap">{{NOTIFICATIONCONSTANTS.NONOTIFICATIONSFOUND}}</h5> </div>
+                </div>
+            </div>
+            <ion-item ng-repeat="patientReminder in patientReminders  | filter:searchstring | orderBy:['isRead','-dr_message_sent_date','-dr_id'] as filteredItems " item="patientReminder" class="item-remove-animate reminder-border reminder item-icon-left" ng-click="reminderDetails(patientReminder)" ng-class="{'msg-read':patientReminder.isRead == 1, 'unread': patientReminder.isRead == 0}"> <i class="icon ion-android-notifications icon-type"></i>
+                <div class="row no-padding">
+                    <div class="col col-60 padding-LR-10">
+                        <p class="main-title">{{patientReminder.username | capitalize}}</p>
+                    </div>
+                    <div class="col col-40 padding-LR-10">
+                        <p class="text-primary no-spacing right"><small>{{patientReminder.dr_message_sent_date| ParseDateFilter | date:'MMM dd yyyy hh : mm a'}} </small></p>
+                    </div>
+                </div>
+                <div class="row no-padding">
+                    <div class="col padding-LR-10">
+                        <p class="sub-text" limit="50">{{patientReminder.dr_message_text}}</p>
+                    </div>
+                </div>
+                <ion-option-button class="button-assertive absolute-center min-width-40" ng-click="delete(patientReminder)"> <i class="icon ion-trash-b text-white"></i> </ion-option-button>
+                <ion-reorder-button class="ion-navicon" on-reorder="moveItem(item, $fromIndex, $toIndex)"></ion-reorder-button>
+            </ion-item>
+        </ion-list>
+    </ion-content>
+    <div class="tabs tabs-icon-top tabs-positive">
+        <a class="tab-item reminder-icon button button-clear bottom-btn" title="Dashboard" ui-sref="app.dashboard" ng-click="rightMenuOff()" nav-clear> <i class="icon ion-ios-home-outline"></i><span>{{NOTIFICATIONCONSTANTS.DASHBOARDLABEL}}</span></a>
+        <a class="tab-item reminder-icon button button-clear bottom-btn" title="Messages" ui-sref="app.Message"> <i class="icon ion-ios-email-outline"></i><span>{{NOTIFICATIONCONSTANTS.MESSAGESLABEL}}</span></a> <a ng-show="patientReminders.length>0" title="Clear All" class="tab-item reminder-icon button button-clear bottom-btn" title="Messages" ng-click="deleteAll()"><i class="icon ion-trash-b"></i><span>{{NOTIFICATIONCONSTANTS.CLEARALLLABEL}}</span></a> </div>
+</ion-view>

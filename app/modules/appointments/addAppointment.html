@@ -1,0 +1,116 @@
+<ion-view title="{{appointmenttype}}">
+    <ion-nav-buttons side="left"> <span ng-click="myGoBack()"><button class="button button-clear icon ion-ios-arrow-back left-menu"></button></span>
+        <div class="app-logo"> <img class="title-image" src="img/ajax-loader.gif" ng-src="{{orgLogoURL?orgLogoURL:defaultLogoURL}}" err-SRC="{{errorLogoURL}}" height="25" /> </div>
+    </ion-nav-buttons>
+    <ion-nav-buttons side="right">
+        <button title="Notifications" class="button button-clear ion-android-notifications notification" ui-sref="app.patientReminder"><span class="badge badge-assertive">{{Notification}}</span></button>
+        <button class="button button-clear ion-android-more-vertical right-menu" ng-click="popover.show($event)"> </button>
+    </ion-nav-buttons>
+    <ion-content has-header="true">
+        <ion-list ng-if="isDirectRequest" class="no-padding physician-list">
+            <!--<h5 class="padding-LR-5">{{APPOINTMENTSCONSTANTS.PHYSICIANCHOOSELABEL}}</h5>-->
+            <button title="Load More" class="button button-clear button-float bottom-20" ng-show="!isLoadComplete" ng-click="loadMore();"> <i class="icon ion-android-more-horizontal"></i> </button>
+            <div class="search-box">
+                <div class="item-input-wrapper no-padding">
+                    <label class="item-input item-md-label no-padding no-margin full-width">
+                        <input type="text" class="input md-input" placeholder="{{APPOINTMENTSCONSTANTS.PHYSICIANSEARCHPLACEHOLDER}}" ng-model="searchData.searchString" ng-change="searchPhysicians()" ng-model-options="{ debounce: 500 }" />
+                        <div class="highlight highlight-calm"></div>
+                    </label>
+                    <button title="Search" class="button button-positive go-btn search-btn" ng-click="searchPhysicians()"><i class="icon ion-ios-search placeholder-icon text-white"></i></button>
+                </div>
+            </div>
+            <div class="list border-bottom padding-10" ng-repeat="physician in requestPhysiciansData" ng-click="selectRequestPhysician(physician)">
+                <div class="item item-avatar-left app-physician-list"> <img src="img/ajax-loader.gif" ng-src="{{physician.profileimage?physician.profileimage:defaultUserImage}}" err-SRC="{{defaultUserImage}}">
+                    <p class="no-margin">{{physician.title | capitalize}} {{physician.firstname | capitalize}} {{physician.lastname | capitalize}}</p>
+                    <p class="no-margin sub-text">{{physician.specialty}}</p>
+                </div>
+            </div>
+        </ion-list>
+        <div class="no-data-center" ng-show="(requestPhysiciansData.length<=0) && isDirectRequest">
+            <div class="row alert-padding">
+                <div class="col no-data"> <i class="icon ion-information-circled"> </i>
+                    <h5 class="item-text-wrap">{{APPOINTMENTSCONSTANTS.NEWERRORMESSAGE}} </h5> </div>
+            </div>
+        </div>
+        <ion-list class="no-padding" ng-if="!isDirectRequest">
+            <label ng-if="isShowPhysiciandropdown && requestPhysiciansData.length>1" class="item item-input item-select reason-item">
+                <select class="full-width" ng-model="provider" ng-change="providerSwitch(provider)" required>
+                    <option selected="selected" value="">{{APPOINTMENTSCONSTANTS.SELECTPROVIDERLABEL}}</option>
+                    <option class="full-width" value="{{physician.id}}" ng-repeat="physician in requestPhysiciansData">{{physician.title | capitalize}} {{physician.firstname | capitalize}} {{physician.lastname | capitalize}}</option>
+                </select>
+            </label>
+            <form class="form-validate" name="myForm" novalidate>
+                <div class="item item-thumbnail-left book-doc-thumbnail"> <img class="book-doc-image pointer" ui-sref="app.physicianProfile({'physician': physician})" src="img/ajax-loader.gif" ng-src="{{physician.profileimage?physician.profileimage:defaultUserImage}}" err-SRC="{{defaultUserImage}}">
+                    <p class="text-white main-title pointer" ui-sref="app.physicianProfile({'physician': physician})">{{physician.title}} {{physician.firstname}} {{physician.lastname}}</p>
+                    <p class="book-sub-text">{{physician.specialty}}</p>
+                    <p class="book-sub-text line-height-1"> <span class="book-sub-text">{{physician.mainAddressLine1}}</span> <span class="book-sub-text" ng-if="physician.mainAddressLine1">, </span> <span class="book-sub-text">{{physician.mainCity}}</span> <span class="book-sub-text" ng-if="physician.mainCity">, </span> <span class="book-sub-text">{{physician.mainState}}</span>
+                        <a ui-sref="app.map({physician:physician})" ng-if="physician.distance>-1 && physician.distance>0"> <span class="map-msg">{{physician.distance|number:0}} km</span> <i class="ion ion-location map-msg"></i> </a>
+                    </p>
+                </div>
+                <ion-item class="padding-TB-md" style="padding: 0px !important;">
+                    <label class="item item-input item-select reason-item">
+                        <select class="full-width" ng-model="appointmentData.appointmentcategory" required>
+                            <option selected="selected" value="">{{APPOINTMENTSCONSTANTS.SELECTAPPOINTMENTLABEL}}</option>
+                            <option class="full-width" value="{{type.title}}" ng-repeat="type in AppointmentTypes | orderBy : 'title'">{{type.title}}</option>
+                        </select>
+                    </label>
+                </ion-item>
+                <ion-item class="no-padding">
+                    <!-- <div ng-if="shedulesArray.length<=0" class="alert alert-info">No schedules available</div>-->
+                    <div class="row no-padding">
+                        <div align="center" class="time-slot-head bg-gray" style="width:100%;padding: 10px 0;">
+                            <a class="button button-small button-positive button-ion icon ion-chevron-left left-arrow no-shadow top-margin-a-xs" ng-click="showBackCalendar()"></a> <a class="button button-small button-outline button-positive button-date" ng-click="openDatePicker()" required><span class="step"><i class="icon icon-calendar-plus"></i></span>&nbsp;&nbsp;{{appointmentDate| date:'MMM dd yyyy'}}</a>
+                            <a class="button button-small button-positive button-ion icon ion-chevron-right right-arrow no-shadow top-margin-a-xs" ng-click="showNextCalendar()"></a>
+                        </div>
+                    </div>
+                    <div id="errorMsgid" ng-if="shedulesArray.length<=0" class="alert alert-info icon ion-information-circled">&nbsp;&nbsp;{{APPOINTMENTSCONSTANTS.NOSCHEDULES}}</div>
+                    <div class="row no-padding">
+                        <ion-slide-box on-swipe-left="slideshowNextCalendar()" on-swipe-right="slideshowBackCalendar()" show-pager="false" does-continue="false" style="width:100%;">
+                            <ion-slide align="center" ng-repeat="dayShedule in shedulesArray">
+                                <div class="col time-slots no-padding">
+                                    <div class="col col-25 left padding-xxs" ng-repeat="timeObj in dayShedule.shedules">
+                                        <div class="time-slot" ng-class="{active: selectedAppointmentDate==appointmentDate && timeObj==selectedTime }" ng-click="setAppointmentTime(appointmentDate,timeObj)" ng-if="timeObj"> {{timeObj}}</div>
+                                    </div>
+                                </div>
+                            </ion-slide>
+                        </ion-slide-box>
+                    </div>
+                    <!--
+                    <ion-item class="padding-TB-md">
+                        <label class="item item-input item-select reason-item">
+                            <select class="full-width" id="appointmentTitle" ng-model="appointmentTitle" required>
+                                <option selected="selected" value="">- Select Appointment Type -</option>
+                                <option class="full-width" value="{{type.title}}" ng-repeat="type in AppointmentTypes">{{type.title}}</option>
+                            </select>
+                        </label>
+                    </ion-item>
+-->
+                    <!--<div class="no-padding">
+                        <textarea class="textarea" id="appointmentreason" ng-model="reason" placeholder="{{APPOINTMENTSCONSTANTS.REASONPLACEHOLDER}}" required></textarea>
+                    </div>-->
+                    <div class="no-padding">
+                        <textarea class="textarea" ng-model="appointmentData.reason" placeholder="{{APPOINTMENTSCONSTANTS.REASONPLACEHOLDER}}"></textarea>
+                    </div>
+                    <div class="text-center fa-green" ng-show="selectedAppointmentDate"> <span>{{APPOINTMENTSCONSTANTS.YOUHAVESELECTEDLABEL}} {{selectedAppointmentDate | date:'MMM dd yyyy'}}, {{APPOINTMENTSCONSTANTS.ATLABEL}}  {{selectedTime}}</span> </div>
+<!--
+                   <div>
+    <button class="button button-positive button-full no-margin" ng-click="addAppointmentMediaData('VIDEO')">Video </button>
+    <button class="button button-positive button-full no-margin" ng-click="addAppointmentMediaData('AUDIO')">Audio </button>
+    <button class="button button-positive button-full no-margin" ng-click="addAppointmentMediaData('IMAGE')">Image </button>
+</div>
+<div id="videoArea"></div>
+<div id="audioArea"></div>
+<div id="imgArea"></div>
+-->
+                    <div class="padding text-center" ng-show="errorMsg">
+                        <p class="text-danger">{{errorMsg}}</p>
+                    </div>
+                    <div class="padding">
+                        <button class="button button-positive button-full no-margin" ng-click="addUpdateAppointment(myForm)"><span class="step"><i class="icon icon-fw" ng-class="{'icon-calendar-plus shedule-icon':appointmenttype=='Request','ion-android-time':appointmenttype=='Schedule'}"></i>    
+                        </span> {{appointmenttype}} </button>
+                    </div>
+                </ion-item>
+            </form>
+        </ion-list>
+    </ion-content>
+</ion-view>

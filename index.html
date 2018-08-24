@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+    <meta name="viewport"  content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=320, height=device-height, target-densitydpi=medium-dpi"  />
+    <meta name="viewport"  content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=100%, height=device-height, target-densitydpi=medium-dpi"  />
+    <title></title>
+    <link rel="apple-touch-icon-precomposed" sizes="57x57" href="{{APPCONSTANTS.IMGURL}}/img/favicomatic/apple-touch-icon-57x57.png" />
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="{{APPCONSTANTS.IMGURL}}/img/favicomatic/apple-touch-icon-114x114.png" />
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="{{APPCONSTANTS.IMGURL}}/img/favicomatic/apple-touch-icon-72x72.png" />
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="{{APPCONSTANTS.IMGURL}}/img/favicomatic/apple-touch-icon-144x144.png" />
+    <link rel="apple-touch-icon-precomposed" sizes="60x60" href="{{APPCONSTANTS.IMGURL}}/img/favicomatic/apple-touch-icon-60x60.png" />
+    <link rel="apple-touch-icon-precomposed" sizes="120x120" href="{{APPCONSTANTS.IMGURL}}/img/favicomatic/apple-touch-icon-120x120.png" />
+    <link rel="apple-touch-icon-precomposed" sizes="76x76" href="{{APPCONSTANTS.IMGURL}}/img/favicomatic/apple-touch-icon-76x76.png" />
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="{{APPCONSTANTS.IMGURL}}/img/favicomatic/apple-touch-icon-152x152.png" />
+    <link rel="icon" type="image/png" href="{{APPCONSTANTS.IMGURL}}/img/favicomatic/favicon-196x196.png" sizes="196x196" />
+    <link rel="icon" type="image/png" href="{{APPCONSTANTS.IMGURL}}/img/favicomatic/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/png" href="{{APPCONSTANTS.IMGURL}}/img/favicomatic/favicon-32x32.png" sizes="32x32" />
+    <link rel="icon" type="image/png" href="{{APPCONSTANTS.IMGURL}}/img/favicomatic/favicon-16x16.png" sizes="16x16" />
+    <link rel="icon" type="image/png" href="{{APPCONSTANTS.IMGURL}}/img/favicomatic/favicon-128.png" sizes="128x128" />
+    <meta name="application-name" content="&nbsp;" />
+    <meta name="msapplication-TileColor" content="#FFFFFF" />
+    <meta name="msapplication-TileImage" content="{{APPCONSTANTS.IMGURL}}/img/favicomatic/mstile-144x144.png" />
+    <meta name="msapplication-square70x70logo" content="{{APPCONSTANTS.IMGURL}}/img/favicomatic/mstile-70x70.png" />
+    <meta name="msapplication-square150x150logo" content="{{APPCONSTANTS.IMGURL}}/img/favicomatic/mstile-150x150.png" />
+    <meta name="msapplication-wide310x150logo" content="{{APPCONSTANTS.IMGURL}}/img/favicomatic/mstile-310x150.png" />
+    <meta name="msapplication-square310x310logo" content="{{APPCONSTANTS.IMGURL}}/img/favicomatic/mstile-310x310.png" />
+    <link rel="shortcut icon" type="image/x-icon" href="{{APPCONSTANTS.IMGURL}}/img/favicomatic/favicon.ico">
+    <!--All external css-->
+    <!--<link href="lib/ion-md-input/css/ion-md-input.min.css" rel="stylesheet">-->
+    <link href="lib/ionic-material/dist/ionic.material.min.css" rel="stylesheet">
+    <link href="lib/ionic/css/ionic.css" rel="stylesheet">
+    <link href="lib/ion-floating-menu/ion-floating-menu.min.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+    <!--    <link rel="stylesheet" type="text/css" id="theme" href="newtheme/css/theme-default.css" />-->
+    <link href="css/demo.css" rel="stylesheet" type="text/css">
+    <!--All external js-->
+    <script src="https://maps.google.com/maps/api/js?key=AIzaSyDPOEBWHO7gA4KILnE3YhaBe8RzUFSgADU&sensor=true"></script>
+    <script src="cordova.js"></script>
+    <script src="lib/jquery-2.1.4.min.js"></script>
+    <script src="lib/jquery.signalR-2.0.3.min.js"></script>
+    <script src="lib/connectionManager.js"></script>
+    <script src="lib/adapter.js"></script>
+    <script src="lib/ionic/js/ionic.bundle.js"></script>
+    <script src="lib/ionic-material/dist/ionic.material.min.js"></script>
+    <script src="lib/toaster.min.js"></script>
+    <script src="lib/ionic-datepicker.bundle.min.js"></script>
+    <script src="lib/ionic-timepicker.bundle.min.js"></script>
+    <script src="lib/ionic-toast/ionic-toast.bundle.min.js"></script>
+    <script src="lib/ng-cordova.min.js"></script>
+    <script src="lib/SocialSharing.js"></script>
+    <script src="lib/Chart.min.js"></script>
+    <script src="lib/Chart.min-1.js"></script>
+    <script src="lib/ng-file-upload.min.js"></script>
+    <script src="lib/Toast.js"></script>
+    <script src="lib/ngTouch.min.js"></script>
+    <script src="lib/ion-floating-menu/ion-floating-menu.min.js"></script>
+    <script src="lib/signature_pad.min.js"></script>
+    <script src="lib/ionic-rating/ionic-rating.min.js"></script>
+    <!--<script src="dist/js/app.min.js"></script>-->
+    <!-- your app's js -->
+    <script src="app/app.js"></script>
+    <script src="app/appConstants.js"></script>
+    <script src="app/modules/dashboard/index.js"></script>
+    <script src="app/modules/physicians/index.js"></script>
+    <script src="app/modules/appointments/index.js"></script>
+    <script src="app/modules/medicalHistory/index.js"></script>
+    <script src="app/modules/profilesetting/index.js"></script>
+    <script src="app/modules/myDevices/index.js"></script>
+    <script src="app/modules/insuranceHistory/index.js"></script>
+    <script src="app/modules/secureMessaging/index.js"></script>
+    <script src="app/modules/billing/index.js"></script>
+    <script src="app/modules/documents/index.js"></script>
+    <script src="app/modules/patientReminder/index.js"></script>
+    <script src="app/modules/errorMessage/index.js"></script>
+    <script src="app/modules/visits/index.js"></script>
+    <script src="app/modules/physicianprofile/index.js"></script>
+    <script src="app/modules/reports/index.js"></script>
+    <script src="app/services/factory.js"></script>
+    <script src="app/services/dataService.js"></script>
+    <script src="app/services/sharedService.js"></script>
+    <script src="app/modules/map/index.js"></script>
+    <script src="app/modules/prescription/index.js"></script>
+    <script src="app/modules/prescription1/index.js"></script>
+    <script src="app/modules/chat/index.js"></script>
+    <script src="app/modules/patientForms/index.js"></script>
+    <script src="app/modules/patientForms/signature.js"></script>
+    <script src="app/modules/help/index.js"></script>
+    <script src="app/modules/hospitals/index.js"></script>
+    <script src="app/modules/facilities/index.js"></script>
+    <script src="app/modules/medicalPassport/index.js"></script>
+   	<script src="app/modules/settings/index.js"></script>
+ 
+ 
+ <script src="https://static.opentok.com/v2/js/opentok.min.js"></script>
+
+ </head>
+
+
+<body>
+    <!-- ALL VIEW STATES LOADED IN HERE -->
+    <ion-nav-view></ion-nav-view>
+</body>
+<script id="templates/rightMenu.html" type="text/ng-template">
+    <ion-popover-view>
+        <ion-content has-header="false" padding="false" scroll="false">
+            <ul class="list right-menu-list">
+                <li> <a ui-sref="app.dashboard" ng-click="rightMenuOff()" nav-clear class="item"><span class="step"><i class="icon ion-ios-home-outline icon-fw"></i></span>&nbsp;&nbsp;{{MENUCONSTANTS.DASHBOARDRIGHTMENU}}</a> </li>
+                <li> <a ui-sref="app.profileSetting" ng-click="rightMenuOff()" nav-clear class="item"><span class="step"><i class="icon ion-person icon-fw"></i></span>&nbsp;&nbsp;{{MENUCONSTANTS.MYPROFILERIGHTMENU}}</a> </li>
+                <li> <a ui-sref="app.changepassword" ng-click="rightMenuOff()" nav-clear class="item"><span class="step"><i class="icon ion-android-unlock icon-fw"></i></span>&nbsp;&nbsp;{{MENUCONSTANTS.CHANGEPASSWORDRIGHTMENU}}</a> </li>
+                <li> <a ng-click="rightMenuOff();shareThisApp();" nav-clear class="item"><span class="step"><i class="icon ion-android-share-alt icon-fw"></i></span>&nbsp;&nbsp;{{MENUCONSTANTS.SHARERIGHTMENU}}</a> </li>
+                <li> <a ui-sref="app.setting" ng-click="rightMenuOff()" nav-clear class="item"><span class="step"><i class="icon ion-gear-b icon-fw"></i></span>&nbsp;&nbsp;{{MENUCONSTANTS.SETTINGTITLE}}</a> </li>
+                <!--{{MENUCONSTANTS.SHARERIGHTMENU}}-->
+                <li> <a ui-sref="app.help" ng-click="rightMenuOff()" nav-clear class="item"><span class="step"><i class="icon ion-help icon-fw"></i></span>&nbsp;&nbsp;{{MENUCONSTANTS.HELPRIGHTMENU}}</a> </li>
+                <!---->
+                <li> <a ui-sref="app.feedback" ng-click="rightMenuOff()" nav-clear class="item"><span class="step"><i class="icon ion-thumbsup icon-fw"></i></span>&nbsp;&nbsp;{{MENUCONSTANTS.FEEDBACKRIGHTMENU}}</a> </li>
+                <!--{{MENUCONSTANTS.FEEDBACKRIGHTMENU}}-->
+                <li> <a ui-sref="app.facilitylist" ng-if="!showNewDashboard" ng-click="rightMenuOff()" nav-clear class="item"><span class="step"><i class="icon ion-shuffle icon-fw"></i></span>&nbsp;&nbsp;{{MENUCONSTANTS.CHANGEFACILITYRIGHTMENU}}</a> </li>
+                <!--{{MENUCONSTANTS.CHANGEFACILITYRIGHTMENU}}-->
+                <li><a ui-sref="app.medicalpassport" ng-if="showNewDashboard" ng-click="rightMenuOff()" nav-clear class="item"><span class="step"><i class="icon ion-ios-barcode-outline icon-fw" aria-hidden="true"></i></span>&nbsp;&nbsp;{{MENUCONSTANTS.MEDICALPASSPORTRIGHTMENU}}</a></li>
+                <li> <a href="" ng-click="rightMenuOff(); logout();" nav-clear class="item"><span class="step"><i class="icon ion-log-out icon-fw"></i></span>&nbsp;&nbsp;{{MENUCONSTANTS.LOGOUTRIGHTMENU}}</a> </li>
+            </ul>
+        </ion-content>
+    </ion-popover-view>
+</script>
+<div id="applicationloaderid" style="position:absolute;top:50%;left:50%;padding:15px;-ms-transform: translateX(-50%) translateY(-50%);-webkit-transform: translate(-50%,-50%);transform: translate(-50%,-50%);"> <img src="img/logo.png"> </div>
+
+</html>
+<script src="lib/dashboard/roundProgress.js"></script>
+<script src="lib/dashboard/horizontal-scroll.js"></script>
+<script>
+    function loadjscssfile(filename) {
+        var s = document.createElement("script");
+        s.type = "text/javascript";
+        s.src = filename;
+        // Use any selector
+        $("head").append(s);
+        //        var fileref = document.createElement('script')
+        //        fileref.setAttribute("type", "text/javascript")
+        //        fileref.setAttribute("src", filename)
+        //        if (typeof fileref != "undefined") document.getElementsByTagName("head")[0].appendChild(fileref)
+    }
+    document.addEventListener("deviceready", function () {
+        angular.bootstrap(document, ['PatientPortalApp']);
+        window.setTimeout(function () {
+            $("#applicationloaderid").hide();
+        }, 200);
+    });
+</script>

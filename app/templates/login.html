@@ -1,0 +1,80 @@
+<ion-view title="{{APPCONSTANTS.LOGINTITLE}}">
+    <ion-content class="bg-image" has-header="false" padding="false">
+        <form name="myForm" class="form-validate bottom-large-margin" novalidate>
+            <ion-list>
+                <div class="login-responsive">
+                    <div class="hospital-dropdown" ng-if="hospitals.length>1"> <span class="pointer" ui-sref="hospitals">{{APPCONSTANTS.CHANGEHOSPITALLABEL}}</span> </div>
+                    <div class="logo"> <img height="40" src="img/patientConnect360.svg" />
+                        <p class="font-italic">{{APPCONSTANTS.SLOGANLABEL}}</p>
+                    </div>
+                    <div class="login-section">
+                        <label class="item item-input item-floating-label login-label item-md-label top-padding-1 label-select bg-transparent"> <i class="icon ion-ios-world placeholder-icon login-label"></i>
+                            <select class="form-control bg-opacity provider-select login-input login-select label-select border-none" ng-options="language.languageName for language in languageData" ng-model="language" ng-change="changeLanguage(language)">
+                                <option selected="selected" value="">-{{APPCONSTANTS.SELECTLANGUAGEOPTION}}-</option>
+                            </select>
+                            <div class="highlight highlight-calm"></div>
+                        </label>
+                        <label class="item item-input item-floating-label login-label item-md-label top-padding-1 bg-transparent" ng-if="isshowFacility">
+                            <select ng-options="org.orgName for org in orgFacilities track by org.orgId" class="form-control bg-opacity provider-select login-input login-select" ng-model="org" ng-change="switchFacility(org);" required>
+                                <option selected="selected" value="">-{{APPCONSTANTS.SELECTFACILITY}}-</option>
+                            </select>
+                        </label>
+                        <label class="item item-input item-floating-label login-label item-md-label bg-transparent"> <i class="icon ion-ios-email placeholder-icon login-label"></i>
+                            <input type="text" class="input login-input md-input item-list" placeholder="{{APPCONSTANTS.EMAILPLACEHLDER}}" ng-model="$parent.username" required/>
+                            <div class="highlight highlight-calm"></div>
+                        </label>
+                        <div class="item item-input item-floating-label login-label item-md-label"> <i class="icon ion-locked placeholder-icon login-label"></i>
+                            <input type="{{inputType}}" class="input login-input md-input top-margin-1 bottom-input" ng-model="$parent.password" placeholder="{{APPCONSTANTS.PASSWORDPLACEHLDER}}" required /> <i class="icon pointer" ng-class="show? 'ion-eye-disabled eye-icon login-label' : 'ion-eye eye-icon login-label'" ng-click="showPassword()"></i>
+                            <div class="highlight highlight-calm"></div>
+                        </div>
+                    </div>
+                    <!-- <div class="padding">
+                        <button ng-click="$parent.patientlogin(myForm)" class="button button-full button-positive ink icon ion-log-in">&nbsp;&nbsp;LOGIN</button> <span ng-show="showButton"><a ui-sref="signup" class="button button-full button-light ink icon ion-edit signupbutton">&nbsp;&nbsp;SIGN-UP</a></span> </div>
+                    <div class="padding-LR-10" align="center"> <a class="forgot-button button button-clear text-primary" ng-click="gotoforgotpassword(hospital)"><u>Forgot password?</u></a> </div>
+                    <div class="form-error" align="center"><span>{{forgeterror}}</span></div>
+                    <div class="form-error" align="center"><span>{{loginerror}}</span></div>
+                    <div class="padding-md" align="center">
+                        <div class="item-avatar" ng-click="loginWithFacebok()"> -->
+                    <!-- <img ng-src="img/Userm.jpg"> -->
+                    <!--<img src="img/ajax-loader.gif" width="100%" height="100%" /> </div>
+                    </div>-->
+                    <div class="padding">
+                        <div class="padding-LR-10"> <a class="forgot-button button button-clear text-primary" ng-click="gotoforgotpassword()"><u>{{APPCONSTANTS.FORGOTPASSWORD}}</u></a> </div>
+                        <button title="Login" ng-click="$parent.patientlogin(myForm)" class="button button-full button-positive ink icon ion-log-in">&nbsp;&nbsp;{{APPCONSTANTS.LOGINLABEL}}</button>
+                        <!--<span ng-show="showButton"><a ui-sref="signup" class="button button-full button-light ink icon ion-edit signupbutton">&nbsp;&nbsp;SIGN-UP</a></span>--></div>
+                    <div class="padding">
+                        <button title="Login" class="button button-full button-stable ink icon ion-key">&nbsp;&nbsp;Two Factor Authentication</button></div>
+                    <!-- <div class="padding-LR-10" align="center"> <a class="forgot-button button button-clear text-primary" ng-click="gotoforgotpassword(hospital)"><u>Forgot password?</u></a> </div> -->
+                    <div class="form-error" align="center"><span>{{forgeterror}}</span></div>
+                    <div class="form-error" align="center"><span>{{loginerror}}</span></div>
+<!--
+                    <div class="padding-md" align="center" ng-if="!isBrowser">
+                        <p class="login-with">{{APPCONSTANTS.LOGINWITHLABEL}}</p>
+                        <div class="row social-icons">
+                            <div class="col"> <img id="fbLogin" class="margin-LR-md button" src="img/social-icons/fb-icon.png" width="55px" height="55px" ng-click="loginWithFacebok()" /> <img id="gPlusLogin" class="margin-LR-md button" src="img/social-icons/gplus-icon.png" width="55px" height="55px" ng-click="loginWithGmail()" /> </div>
+                        </div>
+                    </div>
+-->
+                    <div class="padding-md" align="center"> <span ng-show="showButton">
+                                <p class="no-margin">{{APPCONSTANTS.DONTHAVEACMSG}}</p>
+                                <h4 class="no-margin"><a ui-sref="signup" class="text-primary"><u>{{APPCONSTANTS.SIGNUPBUTTON}}</u></a></h4>
+                            </span> </div>
+                </div>
+                <div class="padding" align="center" ng-if="isBrowser">
+                    <p class="no-margin">{{APPCONSTANTS.APPLICATIONAVAILABILITY}}</p>
+                    <div class="row">
+                        <div class="col"> <a class="pointer" href="{{APPCONSTANTS.APKURL}}/PatientPortal.apk" target="_self"><i class="icon ion-social-android icon-lg"></i> </a>
+                            <p>{{APPCONSTANTS.AVAILABLELABEL}}</p>
+                        </div>
+                        <div class="col"> <a href="" target="_self"><i class="icon ion-social-apple icon-lg"></i> </a>
+                            <p>{{APPCONSTANTS.COMINGSOONLABEL}}</p>
+                        </div>
+                    </div>
+                </div>
+            </ion-list>
+        </form>
+    </ion-content>
+    <div class="tabs copyright-tab">
+        <p><small>&copy; {{APPCONSTANTS.YEARLABEL}} <a href="http://patientconnect360.com/" target="_blank">{{APPCONSTANTS.APPNAMELABEL}}</a> {{APPCONSTANTS.ALLRIGHTSRSERVEDLABEL}}</small></p>
+    </div>
+</ion-view>

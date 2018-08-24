@@ -1,0 +1,46 @@
+<ion-view title="Location">
+    <ion-nav-buttons side="left"> <span ng-click="myGoBack()"><button class="button button-clear icon ion-ios-arrow-back left-menu"></button></span>
+        <div class="app-logo"> <img class="title-image" src="img/ajax-loader.gif" ng-src="{{orgLogoURL?orgLogoURL:defaultLogoURL}}" err-SRC="{{errorLogoURL}}" height="25" /> </div>
+    </ion-nav-buttons>
+    <ion-nav-buttons side="right">
+        <button title="Notifications" class="button button-clear ion-android-notifications notification" ui-sref="app.patientReminder"><span class="badge badge-assertive">{{Notification}}</span></button>
+        <button class="button button-clear ion-android-more-vertical right-menu" ng-click="popover.show($event)"> </button>
+    </ion-nav-buttons>
+    <!--<ion-content>
+        <div ng-show="isMylocationFound" id="map" style="height:700px;" data-tap-disabled="true"></div>
+        <div> {{errorMessage}}</div>
+        <div ng-hide="isMylocationFound">
+            <div class="no-data-center">
+                <div class="row alert-padding">
+                    <div class="col no-data"> <i class="icon ion-information-circled"> </i>
+                        <h5 class="item-text-wrap">{{MAPCONSTANTS.LOCATIONNOTFOUNDMESSAGE}} </br> {{MAPCONSTANTS.ENABLELOCSERVICE}}  <div class="text-center"><br/>
+                        <button ng-click="tryAgain()" class="button button-positive">Try Again</button>
+                    </div> </div>
+                </div>
+            </div>
+        </div>
+    </ion-content>-->
+    <ion-content has-header="true" class="top-16 body-grey">
+        <div ng-show="isShowMap">
+            <p> {{errorMessage}}</p>
+            <div class="no-data-center" ng-hide="isMylocationFound">
+                <div class="row alert-padding">
+                    <div class="col no-data"> <i class="icon ion-information-circled"> </i>
+                        <h5 class="item-text-wrap">{{MAPCONSTANTS.LOCATIONNOTFOUNDMESSAGE}} {{MAPCONSTANTS.ENABLELOCSERVICE}}</h5>
+                        <div class="text-center">
+                            <button ng-click="tryAgain()" class="button button-positive">{{MAPCONSTANTS.TRYAGAINLABEL}}</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div ng-show="isMylocationFound" id="map" data-tap-disabled="true"></div>
+        </div>
+        <div ng-show="!isShowMap">
+            <div id="directionsPanel"></div>
+        </div>
+    </ion-content>
+    <div class="tabs tabs-icon-top tabs-positive" ng-init="isShowMap=true">
+        <a ng-click="isShowMap=true" class="tab-item disable-user-behavior bottom-icon" ng-class="{'active':isShowMap, 'inactive':!isShowMap}" title="Map"> <i class="icon ion-ios-location-outline"></i><span class="tab-title"></span><span>Map</span></a>
+        <a ng-click="isShowMap=false" class="tab-item disable-user-behavior bottom-icon" ng-class="{'active':!isShowMap, 'inactive':isShowMap}" title="Route"> <i class="icon ion-map"></i><span class="tab-title">Route</span></a>
+    </div>
+</ion-view>

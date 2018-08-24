@@ -1,0 +1,70 @@
+<ion-view title="Fitbit">
+    <ion-nav-buttons side="left">
+        <button menu-toggle="left" class="button button-clear icon ion-navicon"></button>
+    </ion-nav-buttons>
+    <view title="navTitle" hide-back-button="true" left-buttons="leftButtons" right-buttons="rightButtons" hide-back-button="true">
+        <ion-nav-buttons side="left">
+            <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
+        </ion-nav-buttons>
+        <ion-nav-buttons side="right"> <a href="" class="text-white notificationIcon"><i class="icon ion-android-notifications icon-md"></i><span class="badge badge-assertive">{{Notification.TotalBadge}}</span></a>
+            <button class="button button-icon ion-android-more-vertical rightMenuCustomCss" ng-click="popover.show($event)"> </button>
+        </ion-nav-buttons>
+        <ion-content has-header="true" class="bg-image">
+            <div class="card no-margin">
+                <content class="bottom-border-black">
+                    <div class="list custom-list">
+                        <div class="item item-thumbnail-left custom-item"> <img class="custom-img" src="/img/icon1.png">
+                            <div class="item-heading">
+                                <h2 class="fitbit-heading">12,125 </h2><span>steps</span></div>
+                            <div class="bottom-line">
+                                <div class="custom-bar bar-color1 slide-in1"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="list custom-list">
+                        <div class="item item-thumbnail-left custom-item"> <img class="custom-img" src="/img/icon4.png">
+                            <div class="item-heading">
+                                <h2 class="fitbit-heading">10.89 </h2><span>miles</span></div>
+                            <div class="bottom-line">
+                                <div class="custom-bar bar-color2 slide-in3"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="list custom-list">
+                        <div class="item item-thumbnail-left custom-item"> <img class="custom-img" src="/img/icon5.png">
+                            <div class="item-heading">
+                                <h2 class="fitbit-heading">4.4 </h2><span>lbs to go</span>
+                                <p>184.4 lbs</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="list custom-list">
+                        <div class="item item-thumbnail-left custom-item"> <img class="custom-img" src="/img/icon2.png">
+                            <div class="item-heading">
+                                <h2 class="fitbit-heading">20 </h2><span>miles</span></div>
+                            <div class="bottom-line">
+                                <div class="custom-bar bar-color2 slide-in2"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="list custom-list">
+                        <div class="item item-thumbnail-left custom-item"> <img class="custom-img" src="/img/icon6.png">
+                            <div class="item-heading">
+                                <h2 class="fitbit-heading">6 </h2><span> hr </span>
+                                <p>Ox Awake / 6x Restiess</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="list custom-list">
+                        <div class="item item-thumbnail-left custom-item"> <img class="custom-img" src="/img/icon3.png">
+                            <div class="item-heading">
+                                <h2 class="fitbit-heading">30 </h2><span>mins Elliptical</span></div>
+                            <div class="bottom-line">
+                                <div class="custom-bar bar-color3 slide-in3"></div>
+                            </div>
+                        </div>
+                    </div>
+                </content>
+            </div>
+        </ion-content>
+</ion-view>

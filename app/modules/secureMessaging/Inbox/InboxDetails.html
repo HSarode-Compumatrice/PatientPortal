@@ -1,0 +1,38 @@
+<ion-view title="{{SECUREMESSAGECONSTANTS.INBOXTITLE}}">
+    <ion-nav-buttons side="left"> <span ng-click="myGoBack()"><button class="button button-clear icon ion-ios-arrow-back left-menu"></button></span>
+        <div class="app-logo">
+            <!--            <img class="title-image" src="{{orgLogoURL}}" height="25" />-->
+            <img class="title-image" src="img/ajax-loader.gif" ng-src="{{orgLogoURL?orgLogoURL:defaultLogoURL}}" err-SRC="{{errorLogoURL}}" height="25" />
+        </div>
+    </ion-nav-buttons>
+    <ion-nav-buttons side="right">
+        <button title="Notifications" class="button button-clear ion-android-notifications notification" ui-sref="app.patientReminder"><span class="badge badge-assertive">{{Notification}}</span></button>
+        <button class="button button-clear ion-android-more-vertical right-menu" ng-click="popover.show($event)"> </button>
+    </ion-nav-buttons>
+    <ion-content has-header="true">
+        <div class="list">
+            <ion-item class="no-padding item-text-wrap">
+                <ul class="list light-border-bottom">
+                    <div class="row no-padding">
+                        <div class="col">
+                            <p class="text-primary"><b>{{MessageData.fromTitle  | capitalize}} {{MessageData.fromFirstName  | capitalize}} {{MessageData.fromLastName  | capitalize}}</b></p>
+                        </div>
+                        <div class="col" align="right">
+                            <p align="right">{{MessageData.Date | date:'MMM dd yyyy'}}</p>
+                        </div>
+                    </div>
+                    <div class="row no-padding">
+                        <div class="col">
+                            <p class="sub-title">{{MessageData.Body}}</p>
+                        </div>
+                    </div>
+                </ul>
+            </ion-item>
+        </div>
+    </ion-content>
+    <div class="tabs ng-scope tabs-icon-top tabs-positive">
+        <a class="tab-item disable-user-behavior bottom-icon" ui-sref="app.composeMessage({'Body': MessageData.Body})"> <i class="icon ion-forward"></i><span>{{SECUREMESSAGECONSTANTS.FORWARDLABEL}}</span></a>
+        <a class="tab-item disable-user-behavior bottom-icon" ui-sref="app.composeMessage({'Body': MessageData.Body,'MessageData':MessageData})"> <i class="icon ion-reply"></i><span>{{SECUREMESSAGECONSTANTS.REPLYBUTTONLABEL}}</span></a>
+        <a class="tab-item disable-user-behavior bottom-icon" ng-click="deleteMessage(MessageData)"> <i class="icon ion-trash-b"></i><span>{{SECUREMESSAGECONSTANTS.DELETELABEL}}</span></a>
+    </div>
+</ion-view>

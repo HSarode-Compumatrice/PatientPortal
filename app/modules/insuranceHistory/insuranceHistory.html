@@ -1,0 +1,55 @@
+<ion-view title="{{INSURANCESCONSTANTS.INSURANCESTITLE}}">
+    <ion-nav-buttons side="left">
+        <button menu-toggle="left" class="button button-clear icon ion-navicon left-menu"></button>
+        <div class="app-logo"> <img class="title-image" src="img/ajax-loader.gif" ng-src="{{orgLogoURL?orgLogoURL:defaultLogoURL}}" err-SRC="{{errorLogoURL}}" height="25" /> </div>
+    </ion-nav-buttons>
+    <ion-nav-buttons side="right">
+        <button title="Notifications" class="button button-clear ion-android-notifications notification" ui-sref="app.patientReminder"><span class="badge badge-assertive">{{Notification}}</span></button>
+        <button class="button button-clear ion-android-more-vertical right-menu" ng-click="popover.show($event)"> </button>
+    </ion-nav-buttons>
+    <button title="Add Insurance" ui-sref="app.updateInsurance({isaddStatus:true})" class="button button-clear button-float" ng-show="InsuranceData.length < 3"> <i class="icon ion-plus"></i> </button>
+    <ion-content has-header="true" class="body-grey">
+        <div class="no-data-center" ng-if="InsuranceData.length <= 0">
+            <div class="row alert-padding">
+                <div class="col no-data"> <i class="icon ion-information-circled"> </i>
+                    <h5 class="item-text-wrap">{{INSURANCESCONSTANTS.NOINSURANCEFOUND}}</h5> </div>
+            </div>
+        </div>
+        <div class="card margin-md" ng-repeat="insurance in InsuranceData" ng-if="insurance.insuranceProvider">
+            <div class="list">
+                <div class="item insurance-header">
+                    <div class="row">
+                        <div ng-class="{'green-triangle-bg':insurance.insuranceApprovalStatus =='TRUE', 'red-triangle-bg': insurance.insuranceApprovalStatus =='FALSE','yellow-triangle-bg':insurance.insuranceApprovalStatus=='0'}"></div>
+                        <div class="col col-80">
+                            <h3 class="text-primary">{{insurance.insuranceProvider}}&nbsp;({{insurance.insuranceType | capitalize}})</h3></div>
+                        <div class="col col-10 absolute-center">
+                            <a title="Edit" class="button button-clear text-primary icon ion-edit" ui-sref="app.updateInsurance({insurance:insurance})"></a>
+                        </div>
+                        <div class="col col-10 absolute-center">
+                            <a title="Cancel" href class="button button-clear text-danger icon ion-android-cancel" ng-click="deleteInsurance(insurance)"></a>&nbsp;&nbsp;</div>                        
+                    </div>
+                </div>
+                <ion-list>
+                    <ion-item class="no-padding insurance-body">
+                        <div class="card no-padding no-margin">
+                            <div class="row no-padding">
+                                <div class="col">
+                                    <p ng-if="insurance.insuranceHolderFirstName && insurance.insuranceHolderLastName"><span>{{INSURANCESCONSTANTS.NAMELABEL}} : </span><span class="font-medium">{{insurance.insuranceHolderFirstName | capitalize}} {{insurance.insuranceHolderMiddleName | capitalize}} {{insurance.insuranceHolderLastName | capitalize}}</span></p>
+                                    <p ng-if="insurance.insurancePolicyNumber"><span>{{INSURANCESCONSTANTS.IDLABEL}} # : </span><span class="font-medium">{{insurance.insurancePolicyNumber}}</span></p>
+                                    <p ng-if="insurance.insuranceHolder"><span>{{INSURANCESCONSTANTS.RELATIONSHIPLABEL}} : </span><span class="font-medium">{{insurance.insuranceHolder | capitalize}}</span></p>
+                                    <p ng-if="insurance.insuranceHolderDateOfBirth"><span>{{INSURANCESCONSTANTS.DOBLABEL}} : </span><span class="font-medium">{{insurance.insuranceHolderDateOfBirth | date:'MMM dd yyyy'}}</span></p>
+                                </div>
+                                <div class="col">
+                                    <p ng-if="insurance.insuranceGroupNumber"><span>{{INSURANCESCONSTANTS.GROUPLABEL}} # : </span><span class="font-medium">{{insurance.insuranceGroupNumber}}</span></p>
+                                    <p ng-if="insurance.insuranceEffectiveDate"><span>{{INSURANCESCONSTANTS.EFFECTIVEDATELABEL}} : </span><span class="font-medium">{{insurance.insuranceEffectiveDate| date:'MMM dd yyyy'}}</span></p>
+                                    <p ng-if="insurance.insurancePlanName"><span>{{INSURANCESCONSTANTS.PLANNAMELABEL}} # : </span><span class="font-medium">{{insurance.insurancePlanName}}</span></p>
+                                    <p ng-if="insurance.insuranceHolderCellNumber"><span>{{INSURANCESCONSTANTS.CONTACTLABEL}} # : </span><span class="font-medium">{{insurance.insuranceHolderCellNumber}}</span></p>
+                                </div>
+                            </div>
+                        </div>
+                    </ion-item>
+                </ion-list>
+            </div>
+        </div>
+    </ion-content>
+</ion-view>

@@ -1,0 +1,35 @@
+<ion-view view-title="" align-title="left">
+    <ion-nav-buttons side="left">
+        <button ng-click="myGoBack()" class="button button-clear icon ion-ios-arrow-back"></button>
+        <div class="app-logo"><img class="title-image" src="img/ajax-loader.gif" ng-src="{{orgLogoURL?orgLogoURL:defaultLogoURL}}" err-SRC="{{errorLogoURL}}" height="25" /> </div>
+    </ion-nav-buttons>
+    <ion-nav-buttons side="right">
+        <button title="Notifications" class="button button-clear ion-android-notifications notification" ui-sref="app.patientReminder"><span class="badge badge-assertive">{{Notification}}</span></button>
+        <button class="button button-clear ion-android-more-vertical right-menu" ng-click="popover.show($event)"> </button>
+    </ion-nav-buttons>
+    <button class="button button-assertive button-fab button-fab-bottom-right end-call-btn" ng-click="endCall()"> <i class="icon ion-ios-telephone"></i> </button>
+    <ion-content class="has-header-bar chat-section top-27">
+        <div class="biography no-padding" id="callingvideotagid">
+            <div class="item-profile">
+                <div class="item-avatar">
+                    <img src="img/ajax-loader.gif" width="100%" height="100%" />
+                </div>
+                <div class="row no-padding min-height-60 bio-info">
+                    <div class="col col-60 pointer">
+                        <h4>{{patientName}}</h4>
+                        <h5  class="animate-flicker">{{CHATCONSTANTS.CALLINGLABEL}}</h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="wrapper">
+                <video id="partnervideoId" class="video partner cool-background" style="display:none;" autoplay="autoplay"></video>
+                <video id="minevideoId" class="video mine cool-background" autoplay="autoplay"></video>
+        </div>
+    </ion-content>
+    <div class="tabs tabs-icon-only tabs-positive">
+        <a class="tab-item" ng-click="reverseCamera()"> <i class="icon ion-ios-reverse-camera"></i> </a>
+        <a class="tab-item"> <i class="icon icon ion-chatbox"></i> </a>
+        <a class="tab-item" ng-click="muteunmuteaudio()"> <i ng-class="isAudioOn ? 'icon ion-ios-mic':'icon ion-ios-mic-off'"></i></a>
+    </div>
+</ion-view>

@@ -1,0 +1,40 @@
+<ion-view title="My Devices">
+    <ion-nav-buttons side="left">
+        <button menu-toggle="left" class="button button-clear icon ion-navicon"></button>
+    </ion-nav-buttons>
+    <ion-nav-buttons side="right"> <a href="" class="text-white notificationIcon"><i class="icon ion-android-notifications icon-md"></i><span class="badge badge-assertive">{{Notification}}</span></a>
+        <button class="button button-icon ion-android-more-vertical rightMenuCustomCss" ng-click="popover.show($event)"> </button>
+    </ion-nav-buttons>
+    <ion-content has-header="true" class="bg-image">
+        <div class="card">
+            <div ui-sref="app.fitbitdetails">
+                <button class="button MydeviceBtn"> <img class="button-clear margin-auto" src="/img/fitbit_logo.png" /> </button>
+            </div>
+        </div>
+        <div class="card">
+            <div ui-sref="app.googlefitdetails">
+                <button class="button MydeviceBtn"> <img class="button-clear margin-auto" src="/img/google_fit_logo.png" /> </button>
+            </div>
+        </div>
+        <div class="card">
+            <div ui-sref="app.jawbonedetails">
+                <button class="button MydeviceBtn"> <img class="button-clear margin-auto" src="/img/jawbone_logo.png" /> </button>
+            </div>
+        </div>
+        <div class="card">
+            <div ui-sref="app.misfitdetails">
+                <button class="button MydeviceBtn"> <img class="button-clear margin-auto" src="/img/misfit_logo.png" /> </button>
+            </div>
+        </div>
+        <div class="card">
+            <div ui-sref="app.runkeeperdetails">
+                <button class="button MydeviceBtn"> <img class="button-clear margin-auto" src="/img/runkeeper_logo.png" /> </button>
+            </div>
+        </div>
+        <div class="card">
+            <div ui-sref="app.withingsdetails">
+                <button class="button MydeviceBtn"> <img class="button-clear margin-auto" src="/img/withings_logo.png" /> </button>
+            </div>
+        </div>
+    </ion-content>
+</ion-view>

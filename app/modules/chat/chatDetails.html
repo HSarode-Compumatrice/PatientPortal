@@ -1,0 +1,51 @@
+<ion-view title={{physicianName}}>
+    <ion-nav-buttons side="left">
+        <button ng-click="myGoBack()" class="button button-clear icon ion-ios-arrow-back"></button>
+        <div class="app-logo"><img class="title-image" src="img/ajax-loader.gif" ng-src="{{orgLogoURL?orgLogoURL:defaultLogoURL}}" err-SRC="{{errorLogoURL}}" height="25" /> </div>
+    </ion-nav-buttons>
+    <ion-nav-buttons side="right">
+        <button title="Notifications" class="button button-clear ion-android-notifications notification" ui-sref="app.patientReminder"><span class="badge badge-assertive">{{Notification}}</span></button>
+        <button class="button button-clear ion-android-more-vertical right-menu" ng-click="popover.show($event)"> </button>
+    </ion-nav-buttons>
+    <div style="position: fixed;z-index: 9;right: 22px;bottom: 80px;">
+        <chatautoscroll></chatautoscroll>
+    </div>
+    <button class="button button-clear button-float" ui-sref="app.chatHistory({'physicianId': physicianId})"> <i class="icon ion-ios-clock-outline"></i> </button>
+    <!--    ng-if="patinetInfo.isChatallow!=0"-->
+    <ion-content has-header="true" class="bg-gray">
+        <section class="chats">
+            <div class="row alert-padding" ng-show="IsHistoryPresent">
+                <div class="col no-data"> <i class="icon ion-information-circled"> </i>
+                    <h5 class="item-text-wrap">{{CHATCONSTANTS.HistoryErrorMessage}}</h5> </div>
+            </div>
+            <div class="messages cust-messages d-block">
+                <div class="chat-date"><span class="col col-center">{{CHATCONSTANTS.TODAYLABEL}}</span></div>
+            </div>
+            <div ng-repeat="message in chatMessages  | orderBy: 'messageId'" ng-class="{other: message.userId == myUserId}" class="messages cust-messages">
+                <div class="message cust-message notification" ng-show="!message.chatobj.isHTML && !message.chatobj.isfile"><span>{{message.chatobj.message}}<sub>{{message.chattime}}</sub></span></div>
+                <div class="message cust-message notification" ng-show="message.chatobj.isfile"><span> 
+                   <a ng-click="fileDownload(message)"><div class="item item-avatar document-thumbnail" ng-switch="message.chatobj.fileType"><img ng-switch-when="docx" class="document-image" src="img/document/word.png" /><img ng-switch-when="doc" class="document-image" src="img/document/word.png" /><img ng-switch-when="jpg" class="document-image" src="img/document/jpeg.png" /><img ng-switch-when="jpeg" class="document-image" src="img/document/jpeg.png" /><img ng-switch-when="gif" class="document-image" src="img/document/jpeg.png" /><img ng-switch-when="png" class="document-image" src="img/document/png.png" /><img ng-switch-when="txt" class="document-image" src="img/document/txt.png" /><img ng-switch-when="pdf" class="document-image" src="img/document/pdf.png" /><img ng-switch-when="ppt" class="document-image" src="img/document/ppt.png" /><p>{{message.chatobj.fileName}}</p><p class="clearfix"></div></a><sub>{{message.chattime}}</sub></span> </div>
+            </div>
+            <!--
+           <div ng-if="patinetInfo.isChatallow!=1">
+    <div class="card">
+        <div class="item item-text-wrap"> Oops..!Sorry you have to purchase this if you want to chat with physician....!!!!!!!!!!!!!!! </div>
+        <div>
+            <button class="tab-item bottom-icon" style="margin-left: 150px;width: 150px;color: green;"> <i class="icon ion-checkmark-circled"></i><span>Buy Now</span></button>
+        </div>
+    </div>
+</div>
+-->
+        </section>
+    </ion-content>
+    <ion-footer-bar keyboard-attach class="bar-dark item-input-inset chats-footer">
+        <label class="item-input-wrapper msg-label">
+            <input type="text" placeholder={{offlineMessage}} ng-readonly="isPhysicianOnline=='0'" ng-enter="sendChatMessage()" ng-model="message" /> </label>
+        <input type="file" file-model="myFile" id="chatfilePicker" style="display: none" />
+        <button class="button  button-clear" ui-sref="app.videochat({'physicianId':physicianId,'callfromme':true,'physicianName':physicianName})"><i class="ion-ios-videocam-outline"></i></button>
+		        <button class="button  button-clear"  ui-sref="app.tokbox({'physicianId':physicianId,'callfromme':true,'physicianName':physicianName})"><i class="ion-arrow-left-c"></i></button>
+
+        <button style="display: none;" class="button button-clear attach-btn" title="Attchment" ng-click="selectDocument();"><i class="icon ion-android-attach"></i></button>
+        <button class="button button-small send-btn" title="Send Message" ng-click="sendChatMessage()" ng-disabled="!message"><i class="icon ion-paper-airplane"></i> </button>
+    </ion-footer-bar>
+</ion-view>

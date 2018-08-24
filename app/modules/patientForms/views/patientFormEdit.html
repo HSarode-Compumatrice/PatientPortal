@@ -1,0 +1,469 @@
+<ion-view title="{{formCategoryName}} : {{formtemplate.formTemplate.formName}}">
+    <ion-nav-buttons side="left"> <span ng-click="myGoBack()">
+        <button class="button button-clear icon ion-ios-arrow-back left-menu"></button>
+        </span>
+        <div class="app-logo"> <img class="title-image" src="img/ajax-loader.gif" ng-src="{{orgLogoURL?orgLogoURL:defaultLogoURL}}" err-SRC="{{errorLogoURL}}" height="25" /> </div>
+    </ion-nav-buttons>
+    <ion-nav-buttons side="right">
+        <button title="Notifications" class="button button-clear ion-android-notifications notification" ui-sref="app.patientReminder"><span class="badge badge-assertive">{{Notification}}</span></button>
+        <button class="button button-clear ion-android-more-vertical right-menu" ng-click="popover.show($event)"> </button>
+    </ion-nav-buttons>
+    <form class="form-validate" name="myForm" novalidate>
+        <ion-content has-header="true" class="bottom-50">
+            <ion-list>
+                <ion-item class="no-padding custom-form" ng-repeat="formComponent in formtemplate.formTemplate.components" ng-switch on="formComponent.type">
+                    <div ng-switch-when="textfield">
+                        <ion-item class="padding">
+                            <p class="no-padding item-text-wrap" ng-class="{'required':formComponent.validate.required}">{{formComponent.label}}</p>
+                            <label class="item item-input item-md-label no-padding border-none">
+                                <input class="input md-input no-padding no-margin" name="{{formComponent.key}}" type="text" placeholder="{{formComponent.placeholder}}" style="height: 30px;" ng-model="formData[formComponent.key]" ng-required="formComponent.validate.required">
+                                <div class="highlight highlight-calm"></div>
+                            </label>
+                        </ion-item>
+                    </div>
+                    <div ng-switch-when="textarea">
+                        <ion-item class="padding">
+                            <p class="no-padding item-text-wrap" ng-class="{'required':formComponent.validate.required}">{{formComponent.label}}</p>
+                            <label class="item item-input no-padding border-none">
+                                <textarea class="textarea" name="{{formComponent.key}}" type="text" placeholder="{{formComponent.placeholder}}" ng-model="formData[formComponent.key]" ng-required="formComponent.validate.required"></textarea>
+                            </label>
+                        </ion-item>
+                    </div>
+                    <div ng-switch-when="checkbox">
+                        <ul class="list margin-TB-md">
+                            <li class="item item-checkbox item-checkbox-right form-checkbox"> <span ng-class="{'required':formComponent.validate.required}">{{formComponent.label}}</span>
+                                <label class="checkbox small-checkbox">
+                                    <input type="checkbox" name="{{formComponent.key}}" ng-model="formData[formComponent.key]" checked="" ng-required="formComponent.validate.required"> </label>
+                            </li>
+                        </ul>
+                    </div>
+                    <div ng-switch-when="radio">
+                        <p class="item form-divider item-text-wrap" ng-class="{'required':formComponent.validate.required}">{{formComponent.label}}</p>
+                        <div class="row">
+                            <div class="col no-padding">
+                                <div class="col col-33 left" ng-repeat="option in formComponent.values">
+                                    <label class="item item-icon-left item-radio border-none">
+                                        <input type="radio" name="{{formComponent.key}}" ng-model="formData[formComponent.key]" ng-value="option.value" ng-required="formComponent.validate.required">
+                                        <div class="item-content"><span class="item-text-wrap">{{option.label}}</span></div> <i class="radio-icon ion-checkmark"></i> </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div ng-switch-when="selectboxes">
+                        <p class="item form-divider item-text-wrap" ng-class="{'required':formComponent.validate.required}">{{formComponent.label}}</p>
+                        <ul class="bottom-border-xs">
+                            <li class="item item-checkbox form-checkbox checkbox-inline" ng-repeat=" option in formComponent.values">
+                                <label class="checkbox small-checkbox">
+                                    <input type="checkbox" ng-value="option.value" ng-model="formData[formComponent.key][option.value]" ng-required="formComponent.validate.required"> </label> <span class="font-medium">{{option.label}}</span> </li>
+                        </ul>
+                    </div>
+                    <div ng-switch-when="select">
+                        <ion-item class="padding">
+                            <p class="no-padding item-text-wrap"><span class="required " ng-class="{'required':formComponent.validate.required}">{{formComponent.label}}</span></p>
+                            <label class="item item-input no-padding item-select insurance-select border-none">&nbsp;
+                                <select type="text" class="bg-opacity provider-select no-padding" ng-model="formData[formComponent.key]" ng-required="formComponent.validate.required">
+                                    <option value="">{{formComponent.label}}</option>
+                                    <option ng-repeat="option in formComponent.data.values" value="{{option.value}}">{{option.label}}</option>
+                                </select>
+                            </label>
+                        </ion-item>
+                    </div>
+                    <div ng-switch-when="phoneNumber">
+                        <ion-item class="padding">
+                            <p class="no-padding item-text-wrap" ng-class="{'required':formComponent.validate.required}">{{formComponent.label}}</p>
+                            <label class="item item-input item-md-label no-padding border-none">
+                                <input class="input md-input no-padding no-margin" name="{{formComponent.key}}" type="number" ng-keypress="limitKeypress($event,formData[formComponent.key],10)" placeholder="{{formComponent.placeholder}}" style="height: 30px;" ng-model="formData[formComponent.key]" ng-required="formComponent.validate.required">
+                                <div class="highlight highlight-calm"></div>
+                            </label>
+                        </ion-item>
+                    </div>
+                    <div ng-switch-when="number">
+                        <ion-item class="padding">
+                            <p class="no-padding item-text-wrap" ng-class="{'required':formComponent.validate.required}">{{formComponent.label}}</p>
+                            <label class="item item-input item-md-label no-padding border-none">
+                                <input class="input md-input no-padding no-margin" name="{{formComponent.key}}" type="number" ng-keypress="limitKeypress($event,formData[formComponent.key],10)" placeholder="{{formComponent.placeholder}}" style="height: 30px;" ng-model="formData[formComponent.key]" ng-required="formComponent.validate.required">
+                                <div class="highlight highlight-calm"></div>
+                            </label>
+                        </ion-item>
+                    </div>
+                    <div ng-switch-when="currency">
+                        <ion-item class="padding">
+                            <p class="no-padding item-text-wrap" ng-class="{'required':formComponent.validate.required}">{{formComponent.label}}</p>
+                            <label class="item item-input item-md-label no-padding border-none">
+                                <input class="input md-input no-padding no-margin" name="{{formComponent.key}}" type="text" placeholder="{{formComponent.placeholder}}" style="height: 30px;" ng-model="formData[formComponent.key]" ng-required="formComponent.validate.required">
+                                <div class="highlight highlight-calm"></div>
+                            </label>
+                        </ion-item>
+                    </div>
+                    <div ng-switch-when="address">
+                        <ion-item class="padding">
+                            <p class="no-padding item-text-wrap" ng-class="{'required':formComponent.validate.required}">{{formComponent.label}}</p>
+                            <label class="item item-input no-padding border-none">
+                                <textarea class="textarea" name="{{formComponent.key}}" type="text" placeholder="{{formComponent.placeholder}}" ng-model="formData[formComponent.key]" ng-required="formComponent.validate.required"></textarea>
+                            </label>
+                        </ion-item>
+                    </div>
+                    <div ng-switch-when="password">
+                        <ion-item class="padding">
+                            <p class="no-padding item-text-wrap" ng-class="{'required':formComponent.validate.required}">{{formComponent.label}}</p>
+                            <label class="item item-input item-md-label no-padding border-none">
+                                <input class="input md-input no-padding no-margin" name="{{formComponent.key}}" type="password" placeholder="{{formComponent.placeholder}}" style="height: 30px;" ng-model="formData[formComponent.key]" ng-required="formComponent.validate.required">
+                                <div class="highlight highlight-calm"></div>
+                            </label>
+                        </ion-item>
+                    </div>
+                    <div ng-switch-when="email">
+                        <ion-item class="padding">
+                            <p class="no-padding item-text-wrap" ng-class="{'required':formComponent.validate.required}">{{formComponent.label}}</p>
+                            <label class="item item-input item-md-label no-padding border-none">
+                                <input class="input md-input no-padding no-margin" name="{{formComponent.key}}" type="text" placeholder="{{formComponent.placeholder}}" style="height: 30px;" ng-model="formData[formComponent.key]" ng-required="formComponent.validate.required">
+                                <div class="highlight highlight-calm"></div>
+                            </label>
+                        </ion-item>
+                    </div>
+                    <div ng-switch-when="datetime">
+                        <ion-item class="padding">
+                            <p class="no-padding item-text-wrap" ng-class="{'required':formComponent.validate.required}">{{formComponent.label}}</p>
+                            <label class="item item-input item-md-label no-padding border-none">
+                                <input class="input md-input no-padding no-margin" name="{{formComponent.key}}" type="text" placeholder="{{formComponent.placeholder}}" style="height: 30px;" ng-model="formData[formComponent.key]" ng-click="openDatePicker(formComponent.key)" ng-required="formComponent.validate.required" readonly>
+                                <div class="highlight highlight-calm"></div>
+                            </label>
+                        </ion-item>
+                    </div>
+                    <div ng-switch-when="survey">
+                        <p class="item form-divider item-text-wrap">{{formComponent.label}}</p>
+                        <ul class="list no-margin top-border-xs bottom-border-xs">
+                            <li class="item item-toggle top-border-xs bottom-border-xs" ng-repeat="option in formComponent.questions"> <span class="font-medium" style="margin-left:2px !important;">{{option.label}}</span>
+                                <label class="toggle toggle-positive">
+                                    <input type="checkbox" ng-model="formData[formComponent.key][option.value]" ng-required="formComponent.validate.required">
+                                    <div class="track">
+                                        <div class="handle"></div>
+                                    </div>
+                                </label>
+                            </li>
+                        </ul>
+                    </div>
+                    <ion-item class="no-padding custom-form" style="display: none;">
+                        <div ng-switch-when="panel">
+                            <div class="row no-padding">
+                                <div class="col bottom-padding-0">
+                                    <div class="card MD-card panel-default no-margin">
+                                        <div class="item item-divider panel-header">
+                                            <!--                                           <pre>{{panelComponents}}</pre>--></div>
+                                        <div class="item item-text-wrap" ng-repeat="panelComponents in formComponent.components" ng-switch on="panelComponents.type">
+                                            <div ng-switch-when="textfield">
+                                                <ion-item class="padding">
+                                                    <p class="no-padding item-text-wrap" ng-class="{'required':panelComponents.validate.required}">{{panelComponents.label}}</p>
+                                                    <label class="item item-input item-md-label no-padding border-none">
+                                                        <input class="input md-input no-padding no-margin" name="{{panelComponents.key}}" type="text" placeholder="{{panelComponents.placeholder}}" style="height: 30px;" ng-model="formData[panelComponents.key]" ng-required="panelComponents.validate.required">
+                                                        <div class="highlight highlight-calm"></div>
+                                                    </label>
+                                                </ion-item>
+                                            </div>
+                                            <div ng-switch-when="textarea">
+                                                <ion-item class="padding">
+                                                    <p class="no-padding item-text-wrap" ng-class="{'required':panelComponents.validate.required}">{{panelComponents.label}}</p>
+                                                    <label class="item item-input no-padding border-none">
+                                                        <textarea class="textarea" name="{{panelComponents.key}}" type="text" placeholder="{{panelComponents.placeholder}}" ng-model="formData[panelComponents.key]" ng-required="panelComponents.validate.required"></textarea>
+                                                    </label>
+                                                </ion-item>
+                                            </div>
+                                            <div ng-switch-when="checkbox">
+                                                <ul class="list margin-TB-md">
+                                                    <li class="item item-checkbox item-checkbox-right form-checkbox"> <span ng-class="{'required':panelComponents.validate.required}">{{panelComponents.label}}</span>
+                                                        <label class="checkbox small-checkbox">
+                                                            <input type="checkbox" name="{{panelComponents.key}}" ng-model="formData[panelComponents.key]" checked="" ng-required="panelComponents.validate.required"> </label>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                            <div ng-switch-when="radio">
+                                                <p class="item form-divider" ng-class="{'required':panelComponents.validate.required}">{{panelComponents.label}}</p>
+                                                <div class="row">
+                                                    <div class="col no-padding">
+                                                        <div class="col col-33 left" ng-repeat="option in panelComponents.values">
+                                                            <label class="item item-icon-left item-radio border-none">
+                                                                <input type="radio" name="{{panelComponents.key}}" ng-model="formData[panelComponents.key]" ng-value="option.value" ng-required="panelComponents.validate.required">
+                                                                <div class="item-content"><span class="item-text-wrap">{{option.label}}</span></div> <i class="radio-icon ion-checkmark"></i> </label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div ng-switch-when="selectboxes">
+                                                <p class="item form-divider" ng-class="{'required':panelComponents.validate.required}">{{panelComponents.label}}</p>
+                                                <ul class="bottom-border-xs">
+                                                    <li class="item item-checkbox form-checkbox checkbox-inline" ng-repeat=" option in panelComponents.values">
+                                                        <label class="checkbox small-checkbox">
+                                                            <input type="checkbox" ng-value="option.value" ng-model="formData[panelComponents.key][option.value]" ng-required="panelComponents.validate.required"> </label> <span class="font-medium">{{option.label}}</span> </li>
+                                                </ul>
+                                            </div>
+                                            <div ng-switch-when="select">
+                                                <ion-item class="padding">
+                                                    <p class="no-padding"><span class="required" ng-class="{'required':panelComponents.validate.required}">{{panelComponents.label}}</span></p>
+                                                    <label class="item item-input no-padding item-select insurance-select border-none">&nbsp;
+                                                        <select type="text" class="bg-opacity provider-select no-padding" ng-model="formData[panelComponents.key]" ng-required="panelComponents.validate.required">
+                                                            <option value="">{{panelComponents.label}}</option>
+                                                            <option ng-repeat="option in panelComponents.data.values" value="{{option.value}}">{{option.label}}</option>
+                                                        </select>
+                                                    </label>
+                                                </ion-item>
+                                            </div>
+                                            <div ng-switch-when="phoneNumber">
+                                                <ion-item class="padding">
+                                                    <p class="no-padding item-text-wrap" ng-class="{'required':panelComponents.validate.required}">{{panelComponents.label}}</p>
+                                                    <label class="item item-input item-md-label no-padding border-none">
+                                                        <input class="input md-input no-padding no-margin" name="{{panelComponents.key}}" type="text" ng-keypress="limitKeypress($event,formData[panelComponents.key],10)" placeholder="{{panelComponents.placeholder}}" style="height: 30px;" ng-model="formData[panelComponents.key]" ng-required="panelComponents.validate.required">
+                                                        <div class="highlight highlight-calm"></div>
+                                                    </label>
+                                                </ion-item>
+                                            </div>
+                                            <div ng-switch-when="number">
+                                                <ion-item class="padding">
+                                                    <p class="no-padding item-text-wrap" ng-class="{'required':panelComponents.validate.required}">{{panelComponents.label}}</p>
+                                                    <label class="item item-input item-md-label no-padding border-none">
+                                                        <input class="input md-input no-padding no-margin" name="{{panelComponents.key}}" type="text" placeholder="{{panelComponents.placeholder}}" style="height: 30px;" ng-model="formData[panelComponents.key]" ng-required="panelComponents.validate.required">
+                                                        <div class="highlight highlight-calm"></div>
+                                                    </label>
+                                                </ion-item>
+                                            </div>
+                                            <div ng-switch-when="currency">
+                                                <ion-item class="padding">
+                                                    <p class="no-padding item-text-wrap" ng-class="{'required':panelComponents.validate.required}">{{panelComponents.label}}</p>
+                                                    <label class="item item-input item-md-label no-padding border-none">
+                                                        <input class="input md-input no-padding no-margin" name="{{panelComponents.key}}" type="text" placeholder="{{panelComponents.placeholder}}" style="height: 30px;" ng-model="formData[panelComponents.key]" ng-required="panelComponents.validate.required">
+                                                        <div class="highlight highlight-calm"></div>
+                                                    </label>
+                                                </ion-item>
+                                            </div>
+                                            <div ng-switch-when="address">
+                                                <ion-item class="padding">
+                                                    <p class="no-padding item-text-wrap" ng-class="{'required':panelComponents.validate.required}">{{panelComponents.label}}</p>
+                                                    <label class="item item-input no-padding border-none">
+                                                        <textarea class="textarea" name="{{panelComponents.key}}" type="text" placeholder="{{panelComponents.placeholder}}" ng-model="formData[panelComponents.key]" ng-required="panelComponents.validate.required"></textarea>
+                                                    </label>
+                                                </ion-item>
+                                            </div>
+                                            <div ng-switch-when="password">
+                                                <ion-item class="padding">
+                                                    <p class="no-padding item-text-wrap" ng-class="{'required':panelComponents.validate.required}">{{panelComponents.label}}</p>
+                                                    <label class="item item-input item-md-label no-padding border-none">
+                                                        <input class="input md-input no-padding no-margin" name="{{panelComponents.key}}" type="password" placeholder="{{panelComponents.placeholder}}" style="height: 30px;" ng-model="formData[panelComponents.key]" ng-required="panelComponents.validate.required">
+                                                        <div class="highlight highlight-calm"></div>
+                                                    </label>
+                                                </ion-item>
+                                            </div>
+                                            <div ng-switch-when="email">
+                                                <ion-item class="padding">
+                                                    <p class="no-padding item-text-wrap" ng-class="{'required':panelComponents.validate.required}">{{panelComponents.label}}</p>
+                                                    <label class="item item-input item-md-label no-padding border-none">
+                                                        <input class="input md-input no-padding no-margin" name="{{panelComponents.key}}" type="text" placeholder="{{panelComponents.placeholder}}" style="height: 30px;" ng-model="formData[panelComponents.key]" ng-required="panelComponents.validate.required">
+                                                        <div class="highlight highlight-calm"></div>
+                                                    </label>
+                                                </ion-item>
+                                            </div>
+                                            <div ng-switch-when="datetime">
+                                                <ion-item class="padding">
+                                                    <p class="no-padding item-text-wrap" ng-class="{'required':panelComponents.validate.required}">{{panelComponents.label}}</p>
+                                                    <label class="item item-input item-md-label no-padding border-none">
+                                                        <input class="input md-input no-padding no-margin" name="{{panelComponents.key}}" type="text" placeholder="{{panelComponents.placeholder}}" style="height: 30px;" ng-model="formData[panelComponents.key]" ng-click="openDatePicker(panelComponents.key)" ng-required="panelComponents.validate.required" readonly>
+                                                        <div class="highlight highlight-calm"></div>
+                                                    </label>
+                                                </ion-item>
+                                            </div>
+                                            <div ng-switch-when="survey">
+                                                <p class="item form-divider item-text-wrap">{{panelComponents.label}}</p>
+                                                <ul class="list no-margin top-border-xs bottom-border-xs">
+                                                    <li class="item item-toggle top-border-xs bottom-border-xs" ng-repeat="option in panelComponents.questions"> <span class="font-medium" style="margin-left:2px !important;">{{option.label}}</span>
+                                                        <label class="toggle toggle-positive">
+                                                            <input type="checkbox" ng-model="formData[panelComponents.key][option.value]" ng-required="panelComponents.validate.required">
+                                                            <div class="track">
+                                                                <div class="handle"></div>
+                                                            </div>
+                                                        </label>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </ion-item>
+                    <div ng-switch-when="htmlelement">
+                        <div class="row no-padding" ng-switch on="formComponent.tag">
+                            <div class="col" ng-switch-when="h1">
+                                <h1 class="item-text-wrap">{{formComponent.content}}</h1> </div>
+                            <div class="col" ng-switch-when="h2">
+                                <h2 class="item-text-wrap">{{formComponent.content}}</h2> </div>
+                            <div class="col" ng-switch-when="h3">
+                                <h3 class="item-text-wrap">{{formComponent.content}}</h3> </div>
+                            <div class="col" ng-switch-when="h4">
+                                <h4 class="item-text-wrap">{{formComponent.content}}</h4> </div>
+                            <div class="col" ng-switch-when="h5">
+                                <h5 class="item-text-wrap">{{formComponent.content}}</h5> </div>
+                            <div class="col" ng-switch-when="h6">
+                                <h6 class="item-text-wrap">{{formComponent.content}}</h6> </div>
+                            <div class="col" ng-switch-when="span"> <span class="item-text-wrap">{{formComponent.content}}</span> </div>
+                            <div class="col" ng-switch-when="p">
+                                <p class="item-text-wrap">{{formComponent.content}}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div ng-switch-when="signature">
+                        <div class="row no-padding" ng-switch on="formComponent.key">
+                            <div class="col" ng-switch-when="signature1" ng-init="editformCtrl.signKey=formComponent.key">
+                                <p class="item form-divider">{{formComponent.label}}</p>
+                                <ion-item class="padding">
+                                    <button class="button button-small button-positive" ng-click="editformCtrl.clear()">{{PATIENTFORMCONSTANTS.CLEARBUTTON}}</button>
+                                </ion-item>
+                                <ion-item class="padding">
+                                    <signature-pad accept="editformCtrl.accept" clear="editformCtrl.clear" height="220" width="568" dataurl="dataurl"></signature-pad>
+                                </ion-item>
+                            </div>
+                            <div class="col" ng-switch-when="signature1">
+                                <p class="item form-divider">{{formComponent.label}}</p> <img class="padding" width="100%" style="max-width: 500px" ng-src="{{formData[formComponent.key]}}" /> </div>
+                            <div class="col" ng-switch-when="signature2" ng-init="editformCtrl.signKey1=formComponent.key">
+                                <p class="item form-divider">{{formComponent.label}}</p>
+                                <ion-item class="padding">
+                                    <button class="button button-small button-positive" ng-click="editformCtrl.clear()">{{PATIENTFORMCONSTANTS.CLEARBUTTON}}</button>
+                                </ion-item>
+                                <ion-item class="padding">
+                                    <signature-pad accept="editformCtrl.accept1" clear="editformCtrl.clear1" height="220" width="568" dataurl="dataurl1"></signature-pad>
+                                </ion-item>
+                            </div>
+                            <div class="col" ng-switch-when="signature2">
+                                <p class="item form-divider">{{formComponent.label}}</p> <img class="padding" width="100%" style="max-width: 500px" ng-src="{{formData[formComponent.key]}}" /> </div>
+                        </div>
+                    </div>
+                    <div ng-switch-when="table">
+                        <!--<p class="item form-divider">{{PATIENTFORMCONSTANTS.TABELHEADERLABEL}}</p>-->
+                        <div class="card MD-card" ng-repeat="row in formComponent.rows">
+                            <div class="row striped" ng-repeat="n in range(formComponent.numCols)">
+                                <div ng-repeat="element in row[n].components" ng-switch on="element.type" style="width:100%;">
+                                    <div ng-switch-when="textfield">
+                                        <ion-item class="padding">
+                                            <p class="no-padding item-text-wrap" ng-class="{'required':element.validate.required}">{{element.label}}</p>
+                                            <label class="item item-input item-md-label no-padding border-none">
+                                                <input class="input md-input no-padding no-margin" name="{{element.key}}" type="text" placeholder="{{element.placeholder}}" style="height: 30px;" ng-model="formData[formComponent.key][element.key]" ng-required="element.validate.required">
+                                                <div class="highlight highlight-calm"></div>
+                                            </label>
+                                        </ion-item>
+                                    </div>
+                                    <div ng-switch-when="textarea">
+                                        <ion-item class="padding">
+                                            <p class="no-padding item-text-wrap" ng-class="{'required':element.validate.required}">{{element.label}}</p>
+                                            <label class="item item-input no-padding border-none">
+                                                <textarea class="textarea" name="{{element.key}}" type="text" placeholder="{{element.placeholder}}" ng-model="formData[formComponent.key][element.key]" ng-required="element.validate.required"></textarea>
+                                            </label>
+                                        </ion-item>
+                                    </div>
+                                    <div ng-switch-when="checkbox">
+                                        <ul class="list margin-TB-md">
+                                            <li class="item item-checkbox item-checkbox-right form-checkbox"> <span ng-class="{'required':element.validate.required}">{{element.label}}</span>
+                                                <label class="checkbox small-checkbox">
+                                                    <input type="checkbox" name="{{element.key}}" ng-model="formData[formComponent.key][element.key]" checked="" ng-required="element.validate.required"> </label>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div ng-switch-when="radio">
+                                        <p class="item form-divider" ng-class="{'required':element.validate.required}">{{element.label}}</p>
+                                        <div class="row">
+                                            <div class="col no-padding">
+                                                <div class="col col-33 left" ng-repeat="option in element.values">
+                                                    <label class="item item-icon-left item-radio border-none">
+                                                        <input type="radio" name="{{element.key}}" ng-model="formData[formComponent.key][element.key]" ng-value="option.value" ng-required="element.validate.required">
+                                                        <div class="item-content"><span class="item-text-wrap">{{option.label}}</span></div> <i class="radio-icon ion-checkmark"></i> </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div ng-switch-when="selectboxes">
+                                        <p class="item form-divider item-text-wrap" ng-class="{'required':element.validate.required}">{{element.label}}</p>
+                                        <ul class="bottom-border-xs">
+                                            <li class="item item-checkbox form-checkbox checkbox-inline" ng-repeat=" option in element.values">
+                                                <label class="checkbox small-checkbox">
+                                                    <input type="checkbox" ng-value="option.value" ng-model="formData[formComponent.key][element.key][option.value]" ng-required="element.validate.required"> </label> <span class="font-medium">{{option.label}}</span> </li>
+                                        </ul>
+                                    </div>
+                                    <div ng-switch-when="select">
+                                        <ion-item class="padding">
+                                            <p class="no-padding item-text-wrap"><span class="required" ng-class="{'required':element.validate.required}">{{element.label}}</span></p>
+                                            <label class="item item-input no-padding item-select insurance-select border-none">&nbsp;
+                                                <select type="text" class="bg-opacity provider-select no-padding" ng-model="formData[formComponent.key][element.key]" ng-required="element.validate.required">
+                                                    <option value="">{{element.label}}</option>
+                                                    <option ng-repeat="option in element.data.values" value="{{option.value}}">{{option.label}}</option>
+                                                </select>
+                                            </label>
+                                        </ion-item>
+                                    </div>
+                                    <div ng-switch-when="phoneNumber">
+                                        <ion-item class="padding">
+                                            <p class="no-element item-text-wrap" ng-class="{'required':element.validate.required}">{{element.label}}</p>
+                                            <label class="item item-input item-md-label no-padding border-none">
+                                                <input class="input md-input no-padding no-margin" name="{{element.key}}" type="text" ng-keypress="limitKeypress($event,formData[element.key],10)" placeholder="{{element.placeholder}}" style="height: 30px;" ng-model="formData[formComponent.key][element.key]" ng-required="element.validate.required">
+                                                <div class="highlight highlight-calm"></div>
+                                            </label>
+                                        </ion-item>
+                                    </div>
+                                    <div ng-switch-when="number">
+                                        <ion-item class="padding">
+                                            <p class="no-padding item-text-wrap" ng-class="{'required':element.validate.required}">{{element.label}}</p>
+                                            <label class="item item-input item-md-label no-padding border-none">
+                                                <input class="input md-input no-padding no-margin" name="{{element.key}}" type="text" placeholder="{{element.placeholder}}" style="height: 30px;" ng-model="formData[formComponent.key][element.key]" ng-required="element.validate.required">
+                                                <div class="highlight highlight-calm"></div>
+                                            </label>
+                                        </ion-item>
+                                    </div>
+                                    <div ng-switch-when="email">
+                                        <ion-item class="padding">
+                                            <p class="no-padding item-text-wrap" ng-class="{'required':element.validate.required}">{{element.label}}</p>
+                                            <label class="item item-input item-md-label no-padding border-none">
+                                                <input class="input md-input no-padding no-margin" name="{{element.key}}" type="text" placeholder="{{element.placeholder}}" style="height: 30px;" ng-model="formData[formComponent.key][element.key]" ng-required="element.validate.required">
+                                                <div class="highlight highlight-calm"></div>
+                                            </label>
+                                        </ion-item>
+                                    </div>
+                                    <div ng-switch-when="datetime">
+                                        <ion-item class="padding">
+                                            <p class="no-padding item-text-wrap" ng-class="{'required':element.validate.required}">{{element.label}}</p>
+                                            <label class="item item-input item-md-label no-padding border-none">
+                                                <input class="input md-input no-padding no-margin" name="{{element.key}}" type="text" placeholder="{{element.placeholder}}" style="height: 30px;" ng-model="formData[formComponent.key][element.key]" ng-click="openDatePicker(element.key)" ng-required="element.validate.required" readonly>
+                                                <div class="highlight highlight-calm"></div>
+                                            </label>
+                                        </ion-item>
+                                    </div>
+                                    <!--
+                                    <div ng-switch-when="htmlelement">
+                                        <p class="item-text-wrap">{{element.content}}</p>
+                                    </div>
+-->
+                                    <div ng-switch-when="htmlelement">
+                                        <div class="row no-padding" ng-switch on="element.tag">
+                                            <div class="col" ng-switch-when="h1">
+                                                <h1 class="item-text-wrap">{{element.content}}</h1> </div>
+                                            <div class="col" ng-switch-when="h2">
+                                                <h2 class="item-text-wrap">{{element.content}}</h2> </div>
+                                            <div class="col" ng-switch-when="h3">
+                                                <h3 class="item-text-wrap">{{element.content}}</h3> </div>
+                                            <div class="col" ng-switch-when="h4">
+                                                <h4 class="item-text-wrap">{{element.content}}</h4> </div>
+                                            <div class="col" ng-switch-when="h5">
+                                                <h5 class="item-text-wrap">{{element.content}}</h5> </div>
+                                            <div class="col" ng-switch-when="h6">
+                                                <h6 class="item-text-wrap">{{element.content}}</h6> </div>
+                                            <div class="col" ng-switch-when="span"> <span class="item-text-wrap">{{element.content}}</span> </div>
+                                            <div class="col" ng-switch-when="p">
+                                                <p class="item-text-wrap">{{element.content}}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </ion-item>
+            </ion-list>
+        </ion-content>
+        <div class="tabs ng-scope tabs-icon-top tabs-positive">
+            <button style="background-color: transparent;border: none;" class="tab-item disable-user-behavior bottom-icon" ng-click="submitFormData(myForm,formData,signKey,signKey1)"><i class="icon ion-checkmark-circled"></i><span>{{PATIENTFORMCONSTANTS.SAVEBUTTON}}</span></button> <a class="tab-item disable-user-behavior bottom-icon" ng-click="myGoBack()"><i class="icon ion-android-cancel"></i><span>{{PATIENTFORMCONSTANTS.CANCELRBUTTON}}</span></a> </div>
+    </form>
+</ion-view>

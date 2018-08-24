@@ -1,0 +1,31 @@
+<ion-view title="{{NOTIFICATIONCONSTANTS.NOTIFICATIONDETAILTITLE}}">
+    <ion-nav-buttons side="left"> <span ng-click="myGoBack()"><button class="button button-clear icon ion-ios-arrow-back left-menu"></button></span>
+        <div class="app-logo">
+            <!--            <img class="title-image" ng-src="{{orgLogoURL}}" height="25" />--><img class="title-image" src="img/ajax-loader.gif" ng-src="{{orgLogoURL?orgLogoURL:defaultLogoURL}}" err-SRC="{{errorLogoURL}}" height="25" /> </div>
+    </ion-nav-buttons>
+    <ion-nav-buttons side="right">
+        <button title="Notifications" class="button button-clear ion-android-notifications notification" ui-sref="app.patientReminder"><span class="badge badge-assertive">{{Notification}}</span></button>
+        <button class="button button-clear ion-android-more-vertical right-menu" ng-click="popover.show($event)"> </button>
+    </ion-nav-buttons>
+    <ion-content has-header="true" class="top-38">
+        <ion-list show-delete="showDelete" show-reorder="showReorder">
+            <ion-item>
+                <div class="row no-padding">
+                    <div class="col padding-LR-10"> <span class="text-primary no-spacing">{{reminder.dr_message_sent_date | ParseDateFilter | date:'MMM dd yyyy'}}</span> <span class="text-primary no-spacing right">{{reminder.dr_message_sent_date| ParseDateFilter | date:'hh : mm a'}} </span></div>
+                </div>
+                <div class="row no-padding">
+                    <div class="col padding-LR-10">
+                        <p class="pointer"><strong>{{reminder.username | capitalize}}</strong></p>
+                    </div>
+                </div>
+                <div class="row no-padding">
+                    <div class="col padding-LR-10"> <span class="item-text-wrap"> {{reminder.dr_message_text}} </span> </div>
+                </div>
+                <!--<ion-option-button class="button-assertive absolute-center min-width-40" ng-click="delete(patientReminder)"> <i class="icon ion-trash-b text-white"></i> </ion-option-button>
+                <ion-reorder-button class="ion-navicon" on-reorder="moveItem(item, $fromIndex, $toIndex)"></ion-reorder-button>--></ion-item>
+        </ion-list>
+    </ion-content>
+    <div class="tabs ng-scope tabs-icon-top tabs-positive">
+        <a class="tab-item disable-user-behavior reminder-icon" ng-click="delete(reminder)"> <i class="icon ion-trash-a"></i><span>{{NOTIFICATIONCONSTANTS.DELETEBUTTON}}</span></a>
+    </div>
+</ion-view>

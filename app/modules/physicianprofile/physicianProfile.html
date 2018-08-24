@@ -1,0 +1,137 @@
+<ion-view title="{{PHYSICIANPROFILECONSTANTS.PHYSICIANPROFILETITLE}}">
+    <ion-nav-buttons side="left"> <span ng-click="myGoBack()"><button class="button button-clear icon ion-ios-arrow-back left-menu"></button></span>
+        <div class="app-logo"> <img class="title-image" src="img/ajax-loader.gif" ng-src="{{orgLogoURL?orgLogoURL:defaultLogoURL}}" err-SRC="{{errorLogoURL}}" height="25" /> </div>
+    </ion-nav-buttons>
+    <ion-nav-buttons side="right">
+        <button title="Notifications" class="button button-clear ion-android-notifications notification" ui-sref="app.patientReminder"><span class="badge badge-assertive">{{Notification}}</span></button>
+        <button class="button button-clear ion-android-more-vertical right-menu" ng-click="popover.show($event)"> </button>
+    </ion-nav-buttons>
+    <button title="Load More" class="button button-clear button-float bottom-20" style="bottom:55px;" ng-show="!isLoadComplete && isReview" ng-click="loadMore();"> <i class="icon ion-android-more-horizontal"></i> </button>
+    <div class="data-loading bottom-0" ng-show="isLoadMore">{{PHYSICIANPROFILECONSTANTS.LOADINGLABEL}}
+        <ion-spinner icon="lines"></ion-spinner>
+    </div>
+    <button ng-click="showAddReview()" class="button button-clear button-float" style="bottom:110px;" ng-show="!isProfileShow  && !isAddReview"> <i class="icon ion-plus"></i> </button>
+    <ion-content has-header="true" class="bottom-50">
+        <div id="profile-bg"></div>
+        <div id="content" class="profile-physician">
+            <div id="profile-info"> <img id="profile-image" ui-sref="app.physicianProfile({'physician': physician})" src="img/ajax-loader.gif" ng-src="{{physician.profileimage?physician.profileimage:defaultUserImage}}" err-SRC="{{defaultUserImage}}" />
+                 <a class="button button-clear camera-icon" ng-if="physician.isChatallow==1" ng-click="chatDetails(physician)"><i class="icon ion-ios-chatboxes-outline"></i></a>
+                <a class="button button-clear camera-icon" ng-if="physician.isChatallow==0" ng-disabled="physician.isChatallow==0" ng-click="chatDetails(physician)"><i class="icon ion-ios-chatboxes-outline"></i></a>
+                <h3 id="profile-name" class="doc-profile" style="top:12px;"><span ng-if="physician.title">{{physician.title | capitalize}}</span>&nbsp;<span ng-if="physician.lastname">{{physician.firstname | capitalize}} {{physician.lastname | capitalize}}</span></h3>
+                <p class="doc-sub-text" ng-show="!showNewDashboard">{{physician.facility}}</p>
+                <p class="physician-star"> <span><i ng-class="{'ion-ios-star':physician.rating>0,'ion-ios-star-outline':physician.rating<1}"></i></span> <span><i ng-class="{'ion-ios-star':physician.rating>1,'ion-ios-star-outline':physician.rating<2}"></i></span> <span><i ng-class="{'ion-ios-star':physician.rating>2,'ion-ios-star-outline':physician.rating<3}"></i></span> <span><i ng-class="{'ion-ios-star':physician.rating>3,'ion-ios-star-outline':physician.rating<4}"></i></span> <span><i ng-class="{'ion-ios-star':physician.rating>4,'ion-ios-star-outline':physician.rating<5}"></i></span></p>
+            </div>
+        </div>
+        <ion-item ng-show="isProfileShow && !isAddReview" class="profile-item border-none">
+            <div class="list profile-list no-margin">
+                <div class="row" ng-if="physician.email">
+                    <p class="col col-30"><i class="icon icon-fw ion-ios-email"></i>&nbsp;<span>{{PHYSICIANPROFILECONSTANTS.EMAILLABEL}} :</span></p>
+                    <div class="col col-70 item-text-wrap"><a ng-click="composeEmail(physician)">{{physician.email | lowercase}}</a></div>
+                </div>
+                 <div class="row" ng-if="physician.degree && showNewDashboard">
+                    <p class="col col-30"><i class="icon icon-fw ion-university"></i>&nbsp;<span>{{PHYSICIANPROFILECONSTANTS.DEGREE}}  :</span></p>
+                    <div class="col col-70 item-text-wrap"><span class="physician-info">{{physician.degree}}</span></div>
+                </div>
+                 <div class="row" ng-if="physician.registrationno && showNewDashboard">
+                    <p class="col col-30"><i class="icon icon-fw ion-ios-book"></i>&nbsp;<span>{{PHYSICIANPROFILECONSTANTS.REGISTRATIONNO}}  :</span></p>
+                    <div class="col col-70 item-text-wrap"><span class="physician-info">{{physician.registrationno}}</span></div>
+                </div>
+                 <div class="row" ng-if="physician.consultantfee && showNewDashboard">
+                    <p class="col col-30"><i class="icon icon-fw ion-cash"></i>&nbsp;<span>{{PHYSICIANPROFILECONSTANTS.CONSULTANTFEE}}  :</span></p>
+                    <div class="col col-70 item-text-wrap"><span class="physician-info"> INR {{physician.consultantfee}}</span></div>
+                </div>
+                <div class="row" ng-if="physician.doctorLicensenumber">
+                    <p class="col col-30"><i class="icon icon-fw ion-ios-checkmark"></i>&nbsp;<span>{{PHYSICIANPROFILECONSTANTS.DOCTORLICENSENUMBER}} :</span></p>
+                    <div class="col col-70 item-text-wrap text-primary">{{physician.doctorLicensenumber}}</div>
+                </div>
+                <div class="row" ng-if="physician.workPhone">
+                    <p class="col col-30"><i class="icon icon-fw ion-ios-telephone"></i>&nbsp;<span>{{PHYSICIANPROFILECONSTANTS.WORKLABEL}} :</span></p>
+                    <div class="col col-70 item-text-wrap"> <a class="pointer" ng-click="callNumber(physician.workPhone)">{{physician.workPhone}}</a></div>
+                </div>
+                <div class="row" ng-if="physician.homePhone">
+                    <p class="col col-30"><i class="icon icon-fw ion-ios-telephone"></i>&nbsp;<span>{{PHYSICIANPROFILECONSTANTS.HOMELABEL}} :</span></p>
+                    <div class="col col-70 item-text-wrap"> <a class="pointer" ng-click="callNumber(physician.homePhone)">{{physician.homePhone}}</a></div>
+                </div>
+                <div class="row" ng-if="physician.mobile">
+                    <p class="col col-30"><i class="icon icon-fw ion-android-phone-portrait"></i>&nbsp;<span>{{PHYSICIANPROFILECONSTANTS.MOBILELABEL}} :</span></p>
+                    <div class="col col-70 item-text-wrap"> <a class="pointer" ng-click="callNumber(physician.mobile)">{{physician.mobile}}</a></div>
+                </div>
+                <div class="row" ng-if="physician.mainAddressLine1 || physician.mainAddressLine2 || physician.mainCity || physician.mainState || physician.mainZip">
+                    <p class="col col-30"><i class="icon icon-fw ion-location"></i>&nbsp;<span>{{PHYSICIANPROFILECONSTANTS.ADDRESSLABEL}} :</span></p>
+                    <div class="col col-70 item-text-wrap"><a ui-sref="app.map({physician:physician})"><span ng-if="physician.mainAddressLine1"> {{physician.mainAddressLine1}},</span> <span ng-if="physician.mainAddressLine2"> {{physician.mainAddressLine2}},</span> <span ng-if="physician.mainCity"> {{physician.mainCity}},</span> <span ng-if="physician.mainState"> {{physician.mainState}},</span> <span ng-if="physician.mainZip"> {{physician.mainZip}}.</span></a></div>
+                </div>
+                <div class="row" ng-if="physician.specialty">
+                    <p class="col col-30"><i class="icon icon-fw ion-ribbon-a"></i>&nbsp;<span>{{PHYSICIANPROFILECONSTANTS.SPECIALITYLABEL}}  :</span></p>
+                    <div class="col col-70 item-text-wrap"><span class="physician-info">{{physician.specialty}}</span></div>
+                </div>
+                <div class="row" ng-if="physician.distance>0">
+                    <p class="col col-30"><i class="icon icon-fw ion-location"></i>&nbsp;<span>Distance :</span></p>
+                    <div class="col col-70 item-text-wrap"><span class="physician-info">{{physician.distance | number:0}} {{APPOINTMENTSCONSTANTS.DISTANCETITLE}}</span></div>
+                </div>
+                <!--<div class="row" ng-hide="physician.Notes == 'SCHEDULE' || physician.Notes == 'REQUEST'">-->
+                <div class="row" ng-if="physician.Notes">
+                    <p class="col col-30"><i class="icon icon-fw ion-information-circled"></i>&nbsp;<span>{{PHYSICIANPROFILECONSTANTS.ABOUTMELABEL}}:</span></p>
+                    <div class="col col-70 item-text-wrap"><span class="physician-info">
+                        <!--{{physician.Notes.split('#')[1]}}-->
+                    {{physician.Notes}}
+                    </span></div>
+                </div>
+            </div>
+            <div class="padding" style="display:none;">
+                <button ng-if="physician.isAppointmentRequested==0" ui-sref="app.addAppointment({'status':1,'physician': physician})" class="button button-full button-positive ink"><i class="button-full-icon"></i> {{PHYSICIANPROFILECONSTANTS.SCHEDULEAPTBUTTON}}</button>
+                <button ng-if="physician.isAppointmentRequested==1" ui-sref="app.addAppointment({ status:0,'physician': physician})" class="button button-full button-positive ink"><i class="button-full-icon"></i> {{PHYSICIANPROFILECONSTANTS.REQUESTAPTBUTTON}}</button>
+            </div>
+        </ion-item>
+        <div ng-show="!isProfileShow && !isAddReview" class="physician-review padding body-grey">
+            <ion-card class="card no-margin">
+                <div class="item alert alert-info icon ion-information-circled" ng-if="patientRatingData.length <= 0">&nbsp;&nbsp;{{PHYSICIANPROFILECONSTANTS.NOREVIEWSFOUNDMESSAGE}}</div>
+                <div class="patient-comments" ng-repeat="rating in patientRatingData">
+                    <ion-item class="item item-block">
+                        <ion-avatar>
+                            <!--<img class="comment-user-image left no-margin margin-right-xs" src="img/ajax-loader.gif" ng-src="{{rating.patientprofileimage?rating.patientprofileimage:defaultUserImage}}" err-SRC="{{defaultUserImage}}" />--><img class="comment-user-image left no-margin margin-right-xs" src="img/ajax-loader.gif" ng-src="{{patientProfileImageUrl+rating.pid}}" err-SRC="{{defaultUserImage}}" /></ion-avatar>
+                        <div class="item-inner">
+                            <div class="input-wrapper">
+                                <div class="label no-padding">
+                                    <h3>{{rating.patientfname}} {{rating.patientlname}}</h3>
+                                    <p> <span class="left"><span class="rating-list no-padding"> <rating ng-model="rating.ratings" max="rat.starLimit"  readonly="readOnly"></rating></span></span> <span class="comment-date sub-text text-grey">{{rating.date | ParseDateFilter | date:'longDate'}}</span></p>
+                                </div>
+                            </div>
+                        </div>
+                    </ion-item>
+                    <!--
+                    <ion-row class="row top-padding-0 bottom-padding-0">
+                        <ion-col class="col rating-list no-padding"> <rating ng-model="rating.ratings" max="starLimit"  readonly="readOnly"></rating></ion-col>
+                        <ion-col class="col text-right no-padding">
+                            <ion-note class="note sub-text text-grey">{{rating.date | ParseDateFilter | date:'shortTime'}}</ion-note>
+                        </ion-col>
+                    </ion-row>{{rating.comments}}
+-->
+                    <div class="row top-padding-0 bottom-padding-0"><span>
+                    <show-more text="rating.comments" limit="Limitsize"> </show-more></span> </div>
+                    <hr class="bottom-margin-xs"> </div>
+            </ion-card>
+        </div>
+        <div ng-show="!isProfileShow && isAddReview && !isReview" class="padding">
+            <ion-card class="card no-margin">
+                <form name="commentForm" class="form-validate" novalidate>
+                    <rating ng-model="rat.patientRating" max="rat.starLimit"></rating>
+                    <ion-list>
+                        <ion-item class="compose-padding">
+                            <textarea class="textarea" id="comment" name="comment" placeholder="{{PHYSICIANPROFILECONSTANTS.COMMENTPLACEHOLDER}}" ng-model="patientComment" required></textarea>
+                        </ion-item>
+                        <div class="padding-LR-10">
+                            <button class="button button-full button-positive ink top-margin-0" ng-click="addFeedBack(commentForm)">{{PHYSICIANPROFILECONSTANTS.ADDREVIEWBUTTON}}</button>
+                        </div>
+                    </ion-list>
+                </form>
+            </ion-card>
+        </div>
+    </ion-content>
+    <div class="tabs ng-scope tabs-icon-top tabs-positive">
+        <a class="tab-item bottom-icon button button-clear bottom-btn" ng-click="showProfile()" title="Profile" icon-on="ion-ios-filing" icon-off="ion-ios-filing-outline"> <i class="icon ion-person"></i><span class="tab-title ng-binding"></span><span>{{PHYSICIANPROFILECONSTANTS.PROFILEBUTTON}}</span></a>
+        <a class="tab-item bottom-icon button button-clear bottom-btn" ng-click="showReviews()" title="Reviews" icon-on="ion-ios-filing" icon-off="ion-ios-filing-outline"> <i class="icon ion-star"></i><span class="tab-title ng-binding"></span><span>{{PHYSICIANPROFILECONSTANTS.REVIEWSBUTTON}}</span></a>
+        <a class="tab-item bottom-icon button button-clear bottom-btn" ui-sref="app.composeMessage({'PhysicianId': physician.id})" title="Message"> <i class="icon ion-ios-email-outline"></i><span class="tab-title ng-binding"></span><span>{{PHYSICIANPROFILECONSTANTS.MESSAGEBUTTON}}</span></a>
+        <a class="tab-item bottom-icon button button-clear bottom-btn" ng-if="physician.isAppointmentRequested==1" ui-sref="app.addAppointment({'status':0,'physician': physician})" title="Request" icon-on="ion-ios-filing" icon-off="ion-ios-filing-outline"> <i class="icon icon-calendar-plus absolute-center"></i><span class="tab-title"></span><span>{{PHYSICIANPROFILECONSTANTS.REQUESTBUTTON}}</span></a>
+        <a class="tab-item bottom-icon button button-clear bottom-btn" ng-if="physician.isAppointmentRequested==0" ui-sref="app.addAppointment({'status':1,'physician': physician})" title="Schedule" icon-on="ion-ios-filing" icon-off="ion-ios-filing-outline"> <i class="icon ion-android-time"></i><span class="tab-title"></span><span>{{PHYSICIANPROFILECONSTANTS.SCHEDULEBUTTON}}</span></a>
+    </div>
+</ion-view>

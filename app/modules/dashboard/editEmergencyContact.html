@@ -1,0 +1,66 @@
+<ion-view title="{{DASHBOARDCONSTANTS.EMERGENCYCONTACTSLABEL}}">
+    <ion-nav-buttons side="left"> <span ng-click="myGoBack()">
+            <button class="button button-clear icon ion-ios-arrow-back left-menu"></button>
+            </span> </ion-nav-buttons>
+    <ion-nav-buttons side="right">
+        <button title="Notifications" class="button button-clear ion-android-notifications notification" ui-sref="app.patientReminder"><span class="badge badge-assertive">{{Notification}}</span></button>
+        <button class="button button-clear ion-android-more-vertical right-menu" ng-click="popover.show($event)"> </button>
+    </ion-nav-buttons>
+    <form name="editEmergencyContact" class="form-validate" novalidate>
+        <ion-content has-header="true" class="bottom-50 top-39 body-grey">
+            <div class="no-data-center" ng-show="contactsArray.length<=0">
+                <div class="row alert-padding">
+                    <div class="col no-data"> <i class="icon ion-information-circled"> </i>
+                        <h5 class="item-text-wrap">{{PATIENTPROFILECONSTANTS.EMERGENCYERRORMESSAGE}}</h5> </div>
+                </div>
+            </div>
+            <div data-ng-repeat="contact in contactsArray track by $index">
+                <!--<ion-item class="no-padding border-none no-margin">
+                    <div class="row no-padding">
+                    <div class="col no-padding" style="flex: 0 0 60px; max-width: 60px;">
+                        <label class="item item-input item-md-label no-padding border-none" style="display: inline-grid; height: 100%; min-height: 100%;">
+                            <select class="input" ng-model="selectedCountry"  ng-init="selectedCountry=selectedLen" style="height: 100%; border: 1px solid #ddd; border-top: none; border-left: none;">
+                                <option ng-repeat="country in APPCONSTANTS.INTERNATIONALNOARRAY" ng-selected="{{country.DEFAULT == true}}" value="{{country.MAXLENGTHFORPHONE}}">{{country.PHONECODE}}</option>
+                            </select>
+                        </label>
+                    </div>
+                    <div class="col no-padding">
+                        <label class="item item-input item-md-label no-padding border-none">
+                            <input type="number" class="input login-input md-input" name="hphone" type="number" placeholder="Emergency Contact {{contact.id}}" string-to-number ng-model="contact.EmergencyContact"ng-maxlength="{{selectedCountry}}"  ng-pattern="/^[0-9]/" ng-minlength="{{selectedCountry}}" required />
+                            <div class="highlight highlight-calm"></div>
+                        </label>
+                    </div>
+                    <div class="col no-padding" style="max-width:20px; margin-top: 10px; font-size:17pt;"><i class="icon ion-trash-b" ng-click="removeNewContact(contact.id)"></i>
+                    </div>
+                </div>
+                </ion-item>-->
+                <div class="row no-padding" style="position: relative; top: -5px;">
+                    <!-- <select-country-code></select-country-code> -->
+                    <div class='col no-padding' style='flex: 0 0 70px; max-width: 70px;'>
+                        <label class='item item-input item-md-label no-padding border-none' style='display: inline-grid; height: 100%; min-height: 100%;'>
+                            <select class='input' ng-model='contact.countryPhoneCode' ng-change='onCountryCodeSelect(contact.countryPhoneCode,contact.id)' ng-options='country.PHONECODE as country.PHONECODE for country in APPCONSTANTS.INTERNATIONALNOARRAY' class='input' style='padding: 0; margin: 1px 0 0 0; height: 43px; border: 0px; border-bottom: 1px solid #ddd;border-radius: 0;'> </select>
+                        </label>
+                    </div>
+                    <div class="col no-padding">
+                        <label class="item item-input item-md-label no-padding border-none">
+                            <input type="text" id="emergencyContactNo{{contact.id}}" ng-model="contact.EmergencyContact" ng-keyup="limitKeypress('emergencyContactNo'+contact.id,contact.phoneMaxLength)" class="input login-input md-input" style="margin: 0; height: 43px;" name="hphone" string-to-number ng-maxlength="{{contact.phoneMaxLength}}" ng-pattern="/^[0-9]/" ng-minlength="{{contact.phoneMaxLength}}" placeholder="{{DASHBOARDCONSTANTS.EMERGENCYCONTACTLABEL}} {{contact.id}}" string-to-number required/>
+                            <div class="highlight highlight-calm"></div>
+                        </label>
+                    </div>
+                    <div title="Delete" class="col no-padding" style="max-width:20px; margin-top: 10px; margin-left: 10px; font-size:17pt;"><i class="icon ion-trash-b fa-red" ng-click="removeNewContact(contact.id)"></i> </div>
+                </div>
+                <!-- <div class="row no-padding" style="position: relative; top: -5px;" ng-if="phoneMaxLength">
+                        <select-country-code></select-country-code>
+                         <div class="col no-padding">
+                             <label class="item item-input item-md-label no-padding border-none">
+                                 <input type="number"  class="input login-input md-input"  ng-keypress="limitKeypress($event,DemographicsData.PhoneCell,phoneMaxLength)" style="margin: 0; height: 43px;" name="hphone" type="number" placeholder="{{PATIENTPROFILECONSTANTS.CELLPHONELABEL}}" string-to-number ng-model="DemographicsData.PhoneCell" ng-maxlength="{{phoneMaxLength}}"  ng-pattern="/^[0-9]/" ng-minlength="{{phoneMaxLength}}" required/>
+                         <div class="highlight highlight-calm"></div>
+                     </label>
+                         </div>
+                     </div> --></div>
+        </ion-content>
+        <button title="Add" class="button button-clear button-float bottom-120" ng-disabled="contactLength==4" ng-click="addNewContact()"> <i class="icon ion-plus"></i> </button>
+        <div class="tabs ng-scope tabs-icon-top tabs-positive">
+            <button title="Save" style="background-color: transparent; border: none;" class="tab-item bottom-icon" ng-click="saveEmergencyContacts(contactsArray,editEmergencyContact)"> <i class="icon ion-checkmark-circled"></i><span>{{PATIENTPROFILECONSTANTS.SAVEBUTTON}}</span></button> <a title="Cancel" class="tab-item bottom-icon" ng-click="myGoBack()"><i class="icon ion-android-cancel"></i><span>{{PATIENTPROFILECONSTANTS.CANCELBUTTON}}</span></a> </div>
+    </form>
+</ion-view>

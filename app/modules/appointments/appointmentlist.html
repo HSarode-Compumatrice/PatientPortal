@@ -1,0 +1,87 @@
+<ion-view title="{{appointmentlistTitle}}">
+    <ion-nav-buttons side="left">
+        <button menu-toggle="left" ng-hide="isReturnToDashboard" class="button button-clear icon ion-navicon left-menu"></button>
+        <button ng-click="myGoBack()" ng-show="isReturnToDashboard" class="button button-clear icon ion-ios-arrow-back left-menu"></button>
+        <div class="app-logo"><img class="title-image" src="img/ajax-loader.gif" ng-src="{{orgLogoURL?orgLogoURL:defaultLogoURL}}" err-SRC="{{errorLogoURL}}" height="25" /> </div>
+    </ion-nav-buttons>
+    <ion-nav-buttons side="right">
+        <button title="Notifications" class="button button-clear ion-android-notifications notification" ui-sref="app.patientReminder"><span class="badge badge-assertive">{{Notification}}</span></button>
+        <button class="button button-clear ion-android-more-vertical right-menu" ng-click="popover.show($event)"> </button>
+    </ion-nav-buttons>
+    <button title="Load More" class="button button-clear button-float" ng-show="!isLoadComplete" ng-click="loadMore();"> <i class="icon ion-android-more-horizontal"></i> </button>
+    <div class="data-loading" ng-show="isLoadMore">{{APPOINTMENTSCONSTANTS.LOADINGLABEL}}
+        <ion-spinner icon="lines"></ion-spinner>
+    </div>
+    <ion-content has-header="true" class="bottom-50 body-grey">
+        <div class="search-box">
+            <div class="item-input-wrapper no-padding">
+                <label class="item-input item-md-label no-padding no-margin full-width">
+                    <input type="text" class="input md-input" ng-model="$parent.searchString" placeholder="{{APPOINTMENTSCONSTANTS.SEARCHAPPPLACEHOLDER}}" ng-change="appointmentSearch()" ng-model-options="{ debounce: 500 }" />
+                    <div class="highlight highlight-calm"></div>
+                </label>
+                <button title="Search" class="button button-positive go-btn search-btn" ng-click="appointmentSearch()"><i class="icon ion-ios-search placeholder-icon text-white"></i></button>
+            </div>
+        </div>
+        <div class="content-top">
+            <div class="no-data-center" ng-show="Appointments.length<=0">
+                <div class="row alert-padding">
+                    <div class="col no-data"> <i class="icon ion-information-circled"> </i>
+                        <h5 class="item-text-wrap" ng-if="status==1">{{APPOINTMENTSCONSTANTS.SCHEDULEDERRORMESSAGE}} </h5>
+                        <h5 class="item-text-wrap" ng-if="status==0">{{APPOINTMENTSCONSTANTS.REQUESTEDERRORMESSAGE}} </h5>
+                        <h5 class="item-text-wrap" ng-if="status==5">{{APPOINTMENTSCONSTANTS.HISTORYERRORMESSAGE}} </h5> </div>
+                </div>
+            </div>
+        </div>
+        <ion-list>
+            <ion-item class="no-padding body-grey" ng-repeat="appointment in Appointments ">
+                <div class="card portal-card">
+                    <div class="pointer" ng-click="appointmentDetails(appointment)">
+                        <div class="row no-padding min-height-65">
+                            <div class="col col-15 no-padding text-center">
+                                <p class="text-primary">{{appointment.eventDate|date:'MMM'}}</p>
+                                <p class="date text-primary">{{appointment.eventDate| date:'dd'}}</p>
+                                <p class="text-primary">{{appointment.eventDate|date:'yyyy'}}</p>
+                            </div>
+                            <div class="col col-85 no-padding">
+                                <p class="text-primary no-spacing right right-margin-10">{{appointment.appointmentStartTime}}</p>
+                                <p>{{appointment.title | capitalize}} {{appointment.userFirstName | capitalize}} {{appointment.userLastName | capitalize}}</p>
+                                <p class="text-primary right right-margin-10 app-status" ng-switch="appointment.pc_apptstatus" ng-if="appointment.pceventstatus!=3"> <span ng-switch-when="-">{{APPOINTMENTSCONSTANTS.STATUSNONE}}</span><span ng-switch-when="*">{{APPOINTMENTSCONSTANTS.STATUSREMDONE}}</span><span ng-switch-when="+">{{APPOINTMENTSCONSTANTS.STATUSCHARTPULLED}}</span><span ng-switch-when="x">{{APPOINTMENTSCONSTANTS.STATUSCANCELED}}</span><span ng-switch-when="?">{{APPOINTMENTSCONSTANTS.STATUSNOSHOW}}</span><span ng-switch-when="@">{{APPOINTMENTSCONSTANTS.STATUSARRIVED}}</span><span ng-switch-when="~">{{APPOINTMENTSCONSTANTS.STATUSARRIVEDLATE}}</span><span ng-switch-when="!">{{APPOINTMENTSCONSTANTS.STATUSLEFTWOVISIT}}</span><span ng-switch-when="#">{{APPOINTMENTSCONSTANTS.STATUSINSISSUE}}</span><span ng-switch-when="&lt;">{{APPOINTMENTSCONSTANTS.STATUSINEXAM}}</span><span ng-switch-when="&gt;">{{APPOINTMENTSCONSTANTS.STATUSCHECKEDOUT}}</span><span ng-switch-when="$">{{APPOINTMENTSCONSTANTS.STATUSCODINGDONE}}</span><span ng-switch-when="%">{{APPOINTMENTSCONSTANTS.STATUSCANCELED24}}</span><span ng-switch-default>{{APPOINTMENTSCONSTANTS.STATUSNONE}}</span></p>
+                                <p class="text-primary right right-margin-10 app-status" ng-if="appointment.pceventstatus==3">&nbsp;<span class="icon ion-android-alert font-13 fa-red"> {{APPOINTMENTSCONSTANTS.STATUSDENIED}}</span></p>
+                                <p class="font-11">{{appointment.speciality}}</p>
+                                <p class="right clear right-margin-10 text-primary font-11">{{APPOINTMENTSCONSTANTS.IDLABEL}}: {{appointment.pc_eid}}</p>
+                                <p class="right clear right-margin-10 text-primary font-11" ng-if="status == 5 && appointment.pceventstatus == 0">{{APPOINTMENTSCONSTANTS.REQUESTLABEL}}</p>
+                                <p class="right clear right-margin-10 text-primary font-11" ng-if="status == 5 && appointment.pceventstatus == 1">{{APPOINTMENTSCONSTANTS.SCHEDULELABEL}}</p>
+                                <p class="font-11" ng-if="appointment.appointmentTitle">{{appointment.appointmentTitle | limitTo: 20}} <a class="pointer">{{appointment.appointmentTitle.length < 20 ? '' : APPOINTMENTSCONSTANTS.SHOWMORELABEL}}</a> </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row appointment-card">
+                        <div class="col no-padding">
+                            <a class="button button-clear text-primary icon ion-ios-email-outline absolute-center" ui-sref="app.composeMessage({'PhysicianId': appointment.uprovider_id})" title="Message"></a>
+                        </div>
+                        <div class="col no-padding" ng-if="appointment.pc_apptstatus!='@'">
+                            <a class="button button-clear text-danger icon ion-android-cancel absolute-center" ng-click="cancelAppointment(appointment)" title="Cancel"></a>
+                        </div>
+                        <div class="col no-padding" ng-if="status != 5 && appointment.pc_apptstatus!='@'">
+                            <a class="button button-clear text-primary icon icon-re-schedule absolute-center" ng-show="appointment.appointment_type==0" ng-click="resheduleAppointment(appointment)" title="Reschedule"> </a>
+                            <a class="button button-clear text-primary icon icon-re-schedule absolute-center" ng-show="appointment.appointment_type==1" ng-click="reRequestAppointment(appointment)" title="Rerequest"> </a>
+                        </div>
+    <div class="col no-padding" ng-if="status!=0 && appointment.pceventstatus!=0 ">
+    <a class="button button-clear text-primary icon ion-ios-paper absolute-center" ui-sref="app.patientForms({appointment: appointment,type: 'Consent',Status:status})" title="Consent"> </a>
+</div>
+<!--
+                        <div class="col no-padding" ng-if="status!=0 && appointment.pceventstatus!=0 ">
+                            <a class="button button-clear text-primary icon ion-beaker absolute-center" ui-sref="app.patientForms({appointment: appointment,type:'Consent',Status:status})" title="Laboratory"> </a>
+                        </div>
+-->
+                    </div>
+                </div>
+            </ion-item>
+        </ion-list>
+    </ion-content>
+    <div class="tabs tabs-icon-top tabs-positive">
+        <a class="tab-item disable-user-behavior bottom-icon" ng-class="{'active':status==1, 'inactive':status!=1}" title="Scheduled" ng-click="getAppointments(1)"> <i class="icon ion-android-time"></i><span class="tab-title ng-binding"></span><span>{{APPOINTMENTSCONSTANTS.SCHEDULEDTITLE}}</span></a>
+        <a ng-click="getAppointments(0)" class="tab-item disable-user-behavior bottom-icon" ng-class="{'active':status==0, 'inactive':status!=0}" title="Requested"> <i class="icon icon-calendar-plus"></i><span class="tab-title ng-binding">{{APPOINTMENTSCONSTANTS.REQUESTEDTITLE}}</span></a>
+        <a ng-click="getAppointments(5)" class="tab-item disable-user-behavior bottom-icon" title="History" ng-class="{'active':status==5, 'inactive':status!=5}"> <i class="icon ion-ios-clock-outline"></i><span class="tab-title ng-binding">{{APPOINTMENTSCONSTANTS.HISTORYTITLE}}</span></a>
+    </div>
+</ion-view>

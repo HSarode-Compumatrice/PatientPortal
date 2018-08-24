@@ -1,0 +1,336 @@
+<!--
+
+<ion-view ng-if="!ISNEWADDVITAL" title="{{MEDICALRECORDSCONSTANTS.VITALSTITLE}}">
+    <ion-nav-buttons side="left"> <span ng-click="myGoBack()">
+        <button class="button button-clear icon ion-ios-arrow-back left-menu"></button>
+        </span> </ion-nav-buttons>
+    <ion-nav-buttons side="right">
+        <button title="Notifications" class="button button-clear ion-android-notifications notification" ui-sref="app.patientReminder"><span class="badge badge-assertive">{{Notification}}</span></button>
+        <button class="button button-clear ion-android-more-vertical right-menu" ng-click="popover.show($event)"> </button>
+    </ion-nav-buttons>
+    <form name="addVitalForm" class="form-validate" novalidate>
+        <ion-content has-header="true" class="bottom-50">
+            <ion-list>
+                <ion-item class="padding">
+                    <p class="no-padding"><span class="required">{{MEDICALRECORDSCONSTANTS.VITALSDATELABEL}} : <i class="icon ion-calendar placeholder-icon"></i></span></p>
+                    <label class="item item-input item-md-label no-padding border-none">
+                        <input class="input md-input no-padding no-margin" name="Vitalsdate" type="text" placeholder="{{MEDICALRECORDSCONSTANTS.DATEPLACEHOLDER}}" style="height: 30px;" ng-model="vital.Vitalsdate" ng-click="openVitalDatePicker()" required readonly>
+                        <div class="highlight highlight-calm"></div>
+                    </label>
+                </ion-item>
+                <ion-item class="padding">
+                    <p class="no-padding"><span class="required">{{MEDICALRECORDSCONSTANTS.WEIGHTLABEL}} :</span></p>
+                    <label class="item item-input item-md-label no-padding border-none">
+                        <input class="input md-input no-padding no-margin" min="1" name="weight" type="number" placeholder="{{MEDICALRECORDSCONSTANTS.WEIGHTLABEL}}" style="height: 30px;" ng-model="vital.Weight" ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/" required>
+                        <div class="highlight highlight-calm"></div>
+                    </label>
+                </ion-item>
+                <ion-item class="padding">
+                    <p class="no-padding"><span class="required">{{MEDICALRECORDSCONSTANTS.HEIGHTLABEL}} :</span></p>
+                    <label class="item item-input item-md-label no-padding border-none">
+                        <input class="input md-input no-padding no-margin" min="1" name="height" type="number" placeholder="{{MEDICALRECORDSCONSTANTS.HEIGHTLABEL}}" style="height: 30px;" ng-model="vital.Height" ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/" required>
+                        <div class="highlight highlight-calm"></div>
+                    </label>
+                </ion-item>
+                <ion-item class="padding">
+                    <p class="no-padding"><span>{{MEDICALRECORDSCONSTANTS.BPSYSTOLICLABEL}} :</span></p>
+                    <label class="item item-input item-md-label no-padding border-none">
+                        <input class="input md-input no-padding no-margin" name="systolic" type="number" placeholder="{{MEDICALRECORDSCONSTANTS.BLOODPRESLABEL}}" style="height: 30px;" ng-model="vital.Bps" ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/">
+                        <div class="highlight highlight-calm"></div>
+                    </label>
+                </ion-item>
+                <ion-item class="padding">
+                    <p class="no-padding"><span>{{MEDICALRECORDSCONSTANTS.BPDIASTOLICLABEL}} :</span></p>
+                    <label class="item item-input item-md-label no-padding border-none">
+                        <input class="input md-input no-padding no-margin" name="dystolic" type="number" placeholder="{{MEDICALRECORDSCONSTANTS.BLOODPRESLABEL}}" style="height: 30px;" ng-model="vital.Bpd" ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/">
+                        <div class="highlight highlight-calm"></div>
+                    </label>
+                </ion-item>
+                <ion-item class="padding">
+                    <p class="no-padding"><span>{{MEDICALRECORDSCONSTANTS.TEMPERATURELABEL}} (&#8451;):</span></p>
+                    <label class="item item-input item-md-label no-padding border-none">
+                        <input class="input md-input no-padding no-margin" name="temperature" type="number" placeholder="Temperature (&#8451;)" style="height: 30px;" ng-model="vital.Temperature" ng-init="vital.Temperature = ''" ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/">
+                        <div class="highlight highlight-calm"></div>
+                    </label>
+                </ion-item>
+                <ion-item class="padding">
+                    <p class="no-padding"><span>{{MEDICALRECORDSCONSTANTS.PULSELABEL}} :</span></p>
+                    <label class="item item-input item-md-label no-padding border-none">
+                        <input class="input md-input no-padding no-margin" name="pulse" type="number" placeholder="{{MEDICALRECORDSCONSTANTS.PULSELABEL}}" style="height: 30px;" ng-model="vital.Pulse" ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/">
+                        <div class="highlight highlight-calm"></div>
+                    </label>
+                </ion-item>
+                <ion-item class="padding">
+                    <p class="no-padding"><span>{{MEDICALRECORDSCONSTANTS.TEMPLOCLABEL}} : </span></p>
+                    <label class="item item-input no-padding item-select insurance-select border-none">&nbsp;
+                        <select type="text" class="bg-opacity provider-select" ng-options="tempLoc for tempLoc in tempLocation" ng-model="vital.Tempmethod">
+                            <option selected="selected" value="">{{MEDICALRECORDSCONSTANTS.SELECTTEMPLOCATION}}</option>
+                        </select>
+                    </label>
+                </ion-item>
+                <ion-item class="padding">
+                    <p class="no-padding"><span>{{MEDICALRECORDSCONSTANTS.HEADCICUMLABEL}} :</span></p>
+                    <label class="item item-input item-md-label no-padding border-none">
+                        <input class="input md-input no-padding no-margin" name="headCircumference" type="number" placeholder="{{MEDICALRECORDSCONSTANTS.HEADCICUMLABEL}}" style="height: 30px;" ng-model="vital.Headcirc" ng-init="vital.Headcirc = ''" ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/">
+                        <div class="highlight highlight-calm"></div>
+                    </label>
+                </ion-item>
+                <ion-item class="padding">
+                    <p class="no-padding"><span>{{MEDICALRECORDSCONSTANTS.RESPIRATIONLABEL}} :</span></p>
+                    <label class="item item-input item-md-label no-padding border-none">
+                        <input class="input md-input no-padding no-margin" name="respiration" type="number" placeholder="{{MEDICALRECORDSCONSTANTS.RESPIRATIONLABEL}}" style="height: 30px;" ng-model="vital.Respiration" ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/">
+                        <div class="highlight highlight-calm"></div>
+                    </label>
+                </ion-item>
+                <ion-item class="padding">
+                    <p class="no-padding"><span>{{MEDICALRECORDSCONSTANTS.WAISTCIRCUMLABEL}} :</span></p>
+                    <label class="item item-input item-md-label no-padding border-none">
+                        <input class="input md-input no-padding no-margin" name="waistCircumference" type="number" placeholder="{{MEDICALRECORDSCONSTANTS.WAISTCIRCUMLABEL}}" style="height: 30px;" ng-model="vital.Waistcirc" ng-init="vital.Waistcirc = ''" ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/">
+                        <div class="highlight highlight-calm"></div>
+                    </label>
+                </ion-item>
+                <ion-item class="padding">
+                    <p class="no-padding"><span>{{MEDICALRECORDSCONSTANTS.OXYGENSATULABEL}} :</span></p>
+                    <label class="item item-input item-md-label no-padding border-none">
+                        <input class="input md-input no-padding no-margin" name="oxygenSaturation" type="number" placeholder="{{MEDICALRECORDSCONSTANTS.OXYGENSATULABEL}}" style="height: 30px;" ng-model="vital.Oxygensaturation" ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/">
+                        <div class="highlight highlight-calm"></div>
+                    </label>
+                </ion-item>
+                <ion-item class="padding">
+                    <p class="no-padding"><span>{{MEDICALRECORDSCONSTANTS.OTHERNOTESLABEL}} :</span></p>
+                    <label class="item item-input no-padding border-none">
+                        <textarea class="textarea" name="otherNotes" type="text" placeholder="{{MEDICALRECORDSCONSTANTS.OTHERNOTESLABEL}}" ng-model="vital.Vitalnote"></textarea>
+                    </label>
+                </ion-item>
+            </ion-list>
+        </ion-content>
+        <div class="tabs ng-scope tabs-icon-top tabs-positive">
+            <button title="Save" style="background-color: transparent; border: none;" class="tab-item bottom-icon" ng-click="addVitals(vital,addVitalForm)"> <i class="icon ion-checkmark-circled"></i><span>{{MEDICALRECORDSCONSTANTS.SAVEBUTTON}}</span></button> <a title="Cancel" class="tab-item bottom-icon" ng-click="myGoBack()"><i class="icon ion-android-cancel"></i><span>{{MEDICALRECORDSCONSTANTS.CANCELBUTTON}}</span></a> </div>
+    </form>
+</ion-view>
+-->
+<ion-view title="{{MEDICALRECORDSCONSTANTS.VITALSTITLE}}">
+    <ion-nav-buttons side="left"> <span ng-click="myGoBack()">
+        <button class="button button-clear icon ion-ios-arrow-back left-menu"></button>
+        </span> </ion-nav-buttons>
+    <ion-nav-buttons side="right">
+        <button title="Notifications" class="button button-clear ion-android-notifications notification" ui-sref="app.patientReminder"><span class="badge badge-assertive">{{Notification}}</span></button>
+        <button class="button button-clear ion-android-more-vertical right-menu" ng-click="popover.show($event)"> </button>
+    </ion-nav-buttons>
+    <form name="addVitalForm" class="form-validate" novalidate>
+        <ion-content has-header="true" class="bottom-50">
+            <ion-list>
+                <ion-item class="padding">
+                    <p class="no-padding"><span class="required">{{MEDICALRECORDSCONSTANTS.VITALSDATELABEL}} : <i class="icon ion-calendar placeholder-icon"></i></span></p>
+                    <label class="item item-input item-md-label no-padding border-none">
+                        <input class="input md-input no-padding no-margin" name="Vitalsdate" type="text" placeholder="{{MEDICALRECORDSCONSTANTS.DATEPLACEHOLDER}}" style="height: 30px;" ng-model="vital.Vitalsdate" ng-click="openVitalDatePicker()" required readonly>
+                        <div class="highlight highlight-calm"></div>
+                    </label>
+                </ion-item>
+                <ion-item class="padding">
+                    <p class="no-padding"><span class="required">{{MEDICALRECORDSCONSTANTS.WEIGHTLABEL}} :</span></p>
+                    <label class="item item-input item-md-label no-padding border-none">
+                        <input class="input md-input no-padding no-margin" min="1" name="weight" type="number" placeholder="{{MEDICALRECORDSCONSTANTS.WEIGHTLABEL}}" style="height: 30px;" ng-model="vital.Weight" ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/" required>
+                        <div class="highlight highlight-calm"></div>
+                    </label>
+                </ion-item>
+                <ion-item class="padding">
+                    <p class="no-padding"><span class="required">{{MEDICALRECORDSCONSTANTS.HEIGHTLABEL}} :</span></p>
+                    <label class="item item-input item-md-label no-padding border-none">
+                        <input class="input md-input no-padding no-margin" min="1" name="height" type="number" placeholder="{{MEDICALRECORDSCONSTANTS.HEIGHTLABEL}}" style="height: 30px;" ng-model="vital.Height" ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/" required>
+                        <div class="highlight highlight-calm"></div>
+                    </label>
+                </ion-item>
+                <ion-item class="padding">
+                    <p class="no-padding"><span>{{MEDICALRECORDSCONSTANTS.BPSYSTOLICLABEL}} :</span></p>
+                    <label class="item item-input item-md-label no-padding border-none">
+                        <input class="input md-input no-padding no-margin" name="systolic" type="number" placeholder="{{MEDICALRECORDSCONSTANTS.BLOODPRESLABEL}}" style="height: 30px;" ng-model="vital.Bps" ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/">
+                        <div class="highlight highlight-calm"></div>
+                    </label>
+                </ion-item>
+                <ion-item class="padding">
+                    <p class="no-padding"><span>{{MEDICALRECORDSCONSTANTS.BPDIASTOLICLABEL}} :</span></p>
+                    <label class="item item-input item-md-label no-padding border-none">
+                        <input class="input md-input no-padding no-margin" name="dystolic" type="number" placeholder="{{MEDICALRECORDSCONSTANTS.BLOODPRESLABEL}}" style="height: 30px;" ng-model="vital.Bpd" ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/">
+                        <div class="highlight highlight-calm"></div>
+                    </label>
+                </ion-item>
+                <ion-item class="padding">
+                    <p class="no-padding"><span>{{MEDICALRECORDSCONSTANTS.TEMPERATURELABEL}} (&#8451;):</span></p>
+                    <label class="item item-input item-md-label no-padding border-none">
+                        <input class="input md-input no-padding no-margin" name="temperature" type="number" placeholder="Temperature (&#8451;)" style="height: 30px;" ng-model="vital.Temperature" ng-init="vital.Temperature = ''" ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/">
+                        <div class="highlight highlight-calm"></div>
+                    </label>
+                </ion-item>
+                <ion-item class="padding">
+                    <p class="no-padding"><span>{{MEDICALRECORDSCONSTANTS.PULSELABEL}} :</span></p>
+                    <label class="item item-input item-md-label no-padding border-none">
+                        <input class="input md-input no-padding no-margin" name="pulse" type="number" placeholder="{{MEDICALRECORDSCONSTANTS.PULSELABEL}}" style="height: 30px;" ng-model="vital.Pulse" ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/">
+                        <div class="highlight highlight-calm"></div>
+                    </label>
+                </ion-item>
+                <ion-item class="padding">
+                    <p class="no-padding"><span>{{MEDICALRECORDSCONSTANTS.TEMPLOCLABEL}} : </span></p>
+                    <label class="item item-input no-padding item-select insurance-select border-none">&nbsp;
+                        <select type="text" class="bg-opacity provider-select" ng-options="tempLoc for tempLoc in tempLocation" ng-model="vital.Tempmethod">
+                            <option selected="selected" value="">{{MEDICALRECORDSCONSTANTS.SELECTTEMPLOCATION}}</option>
+                        </select>
+                    </label>
+                </ion-item>
+                <ion-item class="padding">
+                    <p class="no-padding"><span>{{MEDICALRECORDSCONSTANTS.HEADCICUMLABEL}} :</span></p>
+                    <label class="item item-input item-md-label no-padding border-none">
+                        <input class="input md-input no-padding no-margin" name="headCircumference" type="number" placeholder="{{MEDICALRECORDSCONSTANTS.HEADCICUMLABEL}}" style="height: 30px;" ng-model="vital.Headcirc" ng-init="vital.Headcirc = ''" ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/">
+                        <div class="highlight highlight-calm"></div>
+                    </label>
+                </ion-item>
+                <ion-item class="padding">
+                    <p class="no-padding"><span>{{MEDICALRECORDSCONSTANTS.RESPIRATIONLABEL}} :</span></p>
+                    <label class="item item-input item-md-label no-padding border-none">
+                        <input class="input md-input no-padding no-margin" name="respiration" type="number" placeholder="{{MEDICALRECORDSCONSTANTS.RESPIRATIONLABEL}}" style="height: 30px;" ng-model="vital.Respiration" ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/">
+                        <div class="highlight highlight-calm"></div>
+                    </label>
+                </ion-item>
+                <ion-item class="padding">
+                    <p class="no-padding"><span>{{MEDICALRECORDSCONSTANTS.WAISTCIRCUMLABEL}} :</span></p>
+                    <label class="item item-input item-md-label no-padding border-none">
+                        <input class="input md-input no-padding no-margin" name="waistCircumference" type="number" placeholder="{{MEDICALRECORDSCONSTANTS.WAISTCIRCUMLABEL}}" style="height: 30px;" ng-model="vital.Waistcirc" ng-init="vital.Waistcirc = ''" ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/">
+                        <div class="highlight highlight-calm"></div>
+                    </label>
+                </ion-item>
+                <ion-item class="padding">
+                    <p class="no-padding"><span>{{MEDICALRECORDSCONSTANTS.OXYGENSATULABEL}} :</span></p>
+                    <label class="item item-input item-md-label no-padding border-none">
+                        <input class="input md-input no-padding no-margin" name="oxygenSaturation" type="number" placeholder="{{MEDICALRECORDSCONSTANTS.OXYGENSATULABEL}}" style="height: 30px;" ng-model="vital.Oxygensaturation" ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/">
+                        <div class="highlight highlight-calm"></div>
+                    </label>
+                </ion-item>
+                <ion-item class="padding">
+                    <p class="no-padding"><span>{{MEDICALRECORDSCONSTANTS.OTHERNOTESLABEL}} :</span></p>
+                    <label class="item item-input no-padding border-none">
+                        <textarea class="textarea" name="otherNotes" type="text" placeholder="{{MEDICALRECORDSCONSTANTS.OTHERNOTESLABEL}}" ng-model="vital.Vitalnote"></textarea>
+                    </label>
+                </ion-item>
+            </ion-list>
+        </ion-content>
+        <div class="tabs ng-scope tabs-icon-top tabs-positive">
+            <button title="Save" style="background-color: transparent; border: none;" class="tab-item bottom-icon" ng-click="addVitals(vital,addVitalForm)"> <i class="icon ion-checkmark-circled"></i><span>{{MEDICALRECORDSCONSTANTS.SAVEBUTTON}}</span></button> <a title="Cancel" class="tab-item bottom-icon" ng-click="myGoBack()"><i class="icon ion-android-cancel"></i><span>{{MEDICALRECORDSCONSTANTS.CANCELBUTTON}}</span></a> </div>
+    </form>
+    <!--
+    <form name="addVitalForm" class="form-validate" novalidate >
+        <ion-content has-header="true" class="bottom-50">
+            <ion-list>
+                <ion-item class="padding">
+                    <p class="no-padding"><span class="required">{{MEDICALRECORDSCONSTANTS.VITALSDATELABEL}} : <i class="icon ion-calendar placeholder-icon"></i></span></p>
+                    <label class="item item-input item-md-label no-padding border-none">
+                        <input class="input md-input no-padding no-margin" name="Vitalsdate" type="text" placeholder="{{MEDICALRECORDSCONSTANTS.DATEPLACEHOLDER}}" style="height: 30px;" ng-model="vital.Vitalsdate" ng-click="openVitalDatePicker()" required readonly>
+                        <div class="highlight highlight-calm"></div>
+                    </label>
+                </ion-item>
+                <ion-item class="padding">
+                    <p class="no-padding"><span>{{MEDICALRECORDSCONSTANTS.HEIGHTLABEL}} :</span> <span> {{vital.Height == 0 ? '' : vital.Height}} </span>  </p>
+                    <div class="item range">
+                        <i >{{range.minHeight}}</i>
+                        <input class="input md-input no-padding no-margin" name="height" style="height: 40px;" type="range" min="{{range.minHeight}}" max="{{range.maxHeight}}" step="0.1" ng-model="vital.Height" >
+                        <i >{{range.maxHeight}}</i>
+                        <div class="highlight highlight-calm"></div>
+                    </div>
+                </ion-item>
+                <ion-item class="padding">
+                    <p class="no-padding"><span>{{MEDICALRECORDSCONSTANTS.WEIGHTLABEL}} :</span> <span> {{vital.Weight == 0 ? '' : vital.Weight}} </span> </p>
+                    <div class="item range">
+                        <i >{{range.minWeight}}</i>
+                        <input class="input md-input no-padding no-margin" name="Weight" style="height: 40px;" type="range" min="{{range.minWeight}}" max="{{range.maxWeight}}" step="0.1" ng-model="vital.Weight">
+                        <i >{{range.maxWeight}}</i>
+                        <div class="highlight highlight-calm"></div>
+                    </div>
+                </ion-item>
+                <ion-item class="padding">
+                    <p class="no-padding"><span>{{MEDICALRECORDSCONSTANTS.BPSYSTOLICLABEL}} :</span> <span> {{vital.Bps == 0 ? '' : vital.Bps}} </span>  </p>
+                    <div class="item range">
+                        <i >{{range.minBP}}</i>
+                        <input class="input md-input no-padding no-margin" name="systolic" style="height: 40px;"  type="range" min="{{range.minBP}}" max="{{range.maxBP}}" step="1" ng-model="vital.Bps">
+                        <i >{{range.maxBP}}</i>
+                        <div class="highlight highlight-calm"></div>
+                    </div>
+                </ion-item>
+                <ion-item class="padding">
+                    <p class="no-padding"><span>{{MEDICALRECORDSCONSTANTS.BPDIASTOLICLABEL}} :</span> <span> {{vital.Bpd == 0 ? '' : vital.Bpd}} </span> </p>
+                    <div class="item range">
+                        <i >{{range.minBP}}</i>
+                        <input class="input md-input no-padding no-margin" name="dystolic" style="height: 40px;"  type="range" min="{{range.minBP}}" max="{{range.maxBP}}" step="1" ng-model="vital.Bpd">
+                        <i >{{range.maxBP}}</i>
+                        <div class="highlight highlight-calm"></div>
+                    </div>
+                </ion-item>
+                <ion-item class="padding">
+                    <p class="no-padding"><span>{{MEDICALRECORDSCONSTANTS.TEMPERATURELABEL}} :</span> <span>{{vital.Temperature == 0 ? '' :vital.Temperature }}</span></p>
+                    <div class="item range">
+                        <i >{{range.minTemp}}</i>
+                        <input class="input md-input no-padding no-margin" name="temperature" style="height: 40px;" type="range" min="{{range.minTemp}}" max="{{range.maxTemp}}" step="1" ng-model="vital.Temperature">
+                        <i >{{range.maxTemp}}</i>
+                        <div class="highlight highlight-calm"></div>
+                    </div>
+                </ion-item>
+                <ion-item class="padding">
+                    <p class="no-padding"><span>{{MEDICALRECORDSCONSTANTS.PULSELABEL}} :</span> <span>{{vital.Pulse == 0 ? '' :vital.Pulse }}</span> </p>
+                    <div class="item range">
+                        <i >{{range.minPluse}}</i>
+                        <input class="input md-input no-padding no-margin" name="pulse" style="height: 40px;" type="range" min="{{range.minPluse}}" max="{{range.maxPluse}}" step="1" ng-model="vital.Pulse">
+                        <i >{{range.maxPluse}}</i>
+                        <div class="highlight highlight-calm"></div>
+                    </div>
+                </ion-item>
+                <ion-item class="padding">
+                    <p class="no-padding"><span>{{MEDICALRECORDSCONSTANTS.TEMPLOCLABEL}} : </span></p>
+                   <label class="item item-input no-padding item-select insurance-select border-none">&nbsp;
+                        <select type="text" class="bg-opacity provider-select" ng-options="tempLoc for tempLoc in tempLocation" ng-model="vital.Tempmethod">
+                            <option selected="selected" value="">{{MEDICALRECORDSCONSTANTS.SELECTTEMPLOCATION}}</option>
+                        </select>
+                    </label> 
+                </ion-item>
+                <ion-item class="padding">
+                    <p class="no-padding"><span>{{MEDICALRECORDSCONSTANTS.HEADCICUMLABEL}} :</span> <span>{{vital.Headcirc == 0 ? '' :vital.Headcirc}}</span></p>
+                    <div class="item range">
+                        <i >{{range.minHeadCirc}}</i>
+                        <input class="input md-input no-padding no-margin" name="headCircumference" style="height: 40px;" type="range" min="{{range.minHeadCirc}}" max="{{range.maxHeadCirc}}" step="1" ng-model="vital.Headcirc">
+                        <i >{{range.maxHeadCirc}}</i>
+                        <div class="highlight highlight-calm"></div>
+                    </div>
+                </ion-item>
+                <ion-item class="padding">
+                    <p class="no-padding"><span>{{MEDICALRECORDSCONSTANTS.RESPIRATIONLABEL}} :</span> <span>{{vital.Respiration == 0 ? '' :vital.Respiration}}</span></p>
+                    <div class="item range">
+                        <i >{{range.minResipra}}</i>
+                        <input class="input md-input no-padding no-margin" name="respiration" style="height: 40px;"  type="range" min="{{range.minResipra}}" max="{{range.maxResipra}}" step="1" ng-model="vital.Respiration">
+                        <i >{{range.maxResipra}}</i>
+                        <div class="highlight highlight-calm"></div>
+                    </div>
+                </ion-item>
+                <ion-item class="padding">
+                    <p class="no-padding"><span>{{MEDICALRECORDSCONSTANTS.WAISTCIRCUMLABEL}} :</span> <spa>{{vital.Waistcirc == 0 ? '' :vital.Waistcirc}}</spa>  </p>
+                    <div class="item range">
+                        <i >{{range.minWaistCirc}}</i>
+                        <input class="input md-input no-padding no-margin" name="waistCircumference" style="height: 40px;"  type="range" min="{{range.minWaistCirc}}" max="{{range.maxWaistCirc}}" step="1" ng-model="vital.Waistcirc">
+                        <i >{{range.maxWaistCirc}}</i>
+                        <div class="highlight highlight-calm"></div>
+                    </div>
+                </ion-item>
+                <ion-item class="padding">
+                    <p class="no-padding"><span>{{MEDICALRECORDSCONSTANTS.OXYGENSATULABEL}} :</span> <span>{{vital.Oxygensaturation == 0 ? '' :vital.Oxygensaturation}}</span></p>
+                    <div class="item range">
+                        <i >{{range.minOxy}}</i>
+                        <input class="input md-input no-padding no-margin" name="oxygenSaturation" style="height: 40px;"  type="range" min="{{range.minOxy}}" max="{{range.maxOxy}}" step="1" ng-model="vital.Oxygensaturation">
+                        <i >{{range.maxOxy}}</i>
+                        <div class="highlight highlight-calm"></div>
+                    </div>
+                </ion-item>
+
+            </ion-list>
+        </ion-content>
+        <div class="tabs ng-scope tabs-icon-top tabs-positive">
+            <button title="Save" style="background-color: transparent; border: none;" class="tab-item bottom-icon" ng-click="addVitals(vital,addVitalForm)"> <i class="icon ion-checkmark-circled"></i><span>{{MEDICALRECORDSCONSTANTS.SAVEBUTTON}}</span></button>
+            <a title="Cancel" class="tab-item bottom-icon" ng-click="myGoBack()"><i class="icon ion-android-cancel"></i><span>{{MEDICALRECORDSCONSTANTS.CANCELBUTTON}}</span></a> </div>
+    </form>
+-->
+</ion-view>

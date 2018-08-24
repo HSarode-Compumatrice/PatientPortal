@@ -1,0 +1,43 @@
+ 
+.cf:before,
+.cf:after {
+    content: " ";
+    display: table;
+}
+
+.cf:after {
+    clear: both;
+}
+
+.progress-wrapper{
+    position: relative;
+    margin:20px auto;
+    font-size: 40px;
+}
+
+.progress{
+    position: absolute;
+    color: #bbb;
+    font-weight: 100;
+    line-height: 1;
+}
+ 
+ 
+.back{
+    position: fixed;
+    top:5px;
+    right:5px;
+}
+
+.ng-cloak{
+    display: none;
+}
+
+@media(max-width: 480px){
+    .back{
+        position: static;
+        display: block;
+        text-align: center;
+    } 
+    
+}

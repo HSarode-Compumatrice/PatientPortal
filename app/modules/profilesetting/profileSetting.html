@@ -1,0 +1,163 @@
+<ion-view title="{{PATIENTPROFILECONSTANTS.MYPROFILETITLE}}">
+    <ion-nav-buttons side="left">
+        <button menu-toggle="left" class="button button-clear icon ion-navicon left-menu"></button>
+        <div class="app-logo">
+            <img class="title-image" src="img/ajax-loader.gif" ng-src="{{orgLogoURL?orgLogoURL:defaultLogoURL}}" err-SRC="{{errorLogoURL}}"
+                height="25" /> </div>
+    </ion-nav-buttons>
+    <ion-nav-buttons side="right">
+        <button title="Notifications" class="button button-clear ion-android-notifications notification" ui-sref="app.patientReminder">
+            <span class="badge badge-assertive">{{Notification}}</span>
+        </button>
+        <button class="button button-clear ion-android-more-vertical right-menu" ng-click="popover.show($event)"> </button>
+    </ion-nav-buttons>
+    <ion-content has-header="true">
+        <div id="profile-bg"></div>
+        <div id="content">
+            <div id="profile-info">
+                <div id="profile-image">
+                    <img ng-click="takePhoto()" src="img/ajax-loader.gif" ng-src="{{profileimgUrl?profileimgUrl:defaultPatientImage}}"
+                        err-SRC="{{defaultPatientImage}}" width="100%" height="100%" />
+                    <!--<img ng-click="takePhoto()" src="img/ajax-loader.gif" ng-src="{{profileimgUrl+patinetProfileId}}" err-SRC="{{defaultPatientImage}}" width="100%" height="100%"/> -->
+                </div>
+                <a title="Take Photo" ng-click="takePhoto()" class="button button-clear camera-icon">
+                    <i class="icon ion-ios-camera"></i>
+                </a>
+                <h3 id="profile-name">
+                    <span>{{profileData.FirstName | capitalize}}</span> 
+                    <span ng-if="profileData.MiddleName">&nbsp;{{profileData.MiddleName | capitalize}}&nbsp;</span>
+                    <span>{{profileData.LastName | capitalize}}</span></h3>
+            </div>
+            <div class="edit-triangle" ui-sref="app.profileEdit">
+                <a title="Edit Profile" class="button button-clear triangle-icon">
+                    <i class="icon ion-ios-compose-outline"></i>
+                </a>
+                <div class="triangle-bg"></div>
+            </div>
+        </div>
+        <!-- <div>
+            <span>{{vital.Vitalsdate}}</span>
+            <span>{{vital.Height}}</span>
+            <span>{{vital.Weight}}</span>
+            <span>{{vital.Bmi}}</span>
+            <span>{{vital.Bps}}</span>
+            <span>{{vital.Bpd}}</span>
+            <span>{{vital.Temperature}}</span>
+            <span>{{vital.Pulse}}</span>
+            <span>{{vital.Headcirc}}</span>
+            <span>{{vital.Waistcirc}}</span>
+            <span>{{vital.Respiration}}</span>
+            <span>{{vital.Oxygensaturation}}</span>
+            
+        </div> -->
+        <ion-item class="profile-item border-none">
+            <div class="list profile-list">
+                <div class="row" ng-if="facilityName && !IsSSNshow">
+                    <div class="col col-40 item-text-wrap">
+                        <i class="icon icon-fw ion-filing"></i>&nbsp;
+                        <strong>Facililty : </strong>
+                    </div>
+                    <div class="col col-60 item-text-wrap">
+                        <span>{{facilityName}}</span>
+                    </div>
+                </div>
+                <div class="row" ng-if="profileData.SSN && !IsSSNshow">
+                    <div class="col col-40 item-text-wrap">
+                        <i class="icon icon-fw ion-lock-combination"></i>&nbsp;
+                        <strong>{{PATIENTPROFILECONSTANTS.SSNLABEL}} :</strong>
+                    </div>
+                    <div class="col col-60 item-text-wrap">
+                        <span>{{profileData.SSN}}</span>
+                    </div>
+                </div>
+                <div class="row" ng-if="profileData.aadharCardNo && IsSSNshow">
+                    <div class="col col-40 item-text-wrap">
+                        <i class="icon icon-fw ion-lock-combination"></i>&nbsp;
+                        <strong>{{PATIENTPROFILECONSTANTS.ADHARCARDNO}} :</strong>
+                    </div>
+                    <div class="col col-60 item-text-wrap">
+                        <span>{{profileData.aadharCardNo}}</span>
+                    </div>
+                </div>
+                <div class="row" ng-if="profileData.Sex">
+                    <div class="col col-40 item-text-wrap">
+                        <i class="icon-fw icon ion-male" ng-if="profileData.Sex=='Male'"></i>
+                        <i class="icon icon-fw ion-female" ng-if="profileData.Sex=='Female'"></i>&nbsp;
+                        <strong>{{PATIENTPROFILECONSTANTS.GENDERLABEL}} :</strong>
+                    </div>
+                    <div class="col col-60 item-text-wrap">
+                        <span>{{profileData.Sex}}</span>
+                    </div>
+                </div>
+                <div class="row" ng-if="profileData.DateOfBirth">
+                    <div class="col col-40 item-text-wrap">
+                        <i class="icon ion-calendar icon-fw"></i>&nbsp;
+                        <strong>{{PATIENTPROFILECONSTANTS.DOBLABEL}} :</strong>
+                    </div>
+                    <div class="col col-60 item-text-wrap">
+                        <span>{{profileData.DateOfBirth | date: 'MMM dd yyyy'}}</span>
+                    </div>
+                </div>
+                <div class="row" ng-if="profileData.blood_group">
+                    <div class="col col-40 item-text-wrap">
+                        <i class="icon ion-waterdrop icon-fw"></i>&nbsp;
+                        <strong>{{PATIENTPROFILECONSTANTS.BLOODGROUPLABEL}} :</strong>
+                    </div>
+                    <div class="col col-60 item-text-wrap">
+                        <span>{{profileData.blood_group }}</span>
+                    </div>
+                </div>
+                <div class="row" ng-if="profileData.MotherName">
+                    <div class="col col-40 item-text-wrap">
+                        <i class="icon ion-person-stalker icon-fw"></i>&nbsp;
+                        <strong>{{PATIENTPROFILECONSTANTS.MOTHERLABEL}} :</strong>
+                    </div>
+                    <div class="col col-60 item-text-wrap">
+                        <span>{{profileData.MotherName}}</span>
+                    </div>
+                </div>
+                <!-- <div class="row" ng-if="profileData.PhoneHome!='' && profileData.PhoneHome!='null'">
+                    <div class="col col-40 item-text-wrap"><i class="icon ion-ios-telephone icon-fw"></i>&nbsp;<strong>{{PATIENTPROFILECONSTANTS.HOMEPHONELABEL}} :</strong></div>
+                    <div class="col col-60 item-text-wrap"><span>{{profileData.PhoneHome}}</span></div>
+                </div> -->
+                <div class="row" ng-if="profileData.PhoneCell">
+                    <div class="col col-40 item-text-wrap">
+                        <i class="icon ion-ios-telephone icon-fw"></i>&nbsp;
+                        <strong>{{PATIENTPROFILECONSTANTS.CELLPHONELABEL}} :</strong>
+                    </div>
+                    <div class="col col-60 item-text-wrap">
+                        <span ng-if="profileData.cellCountryCode">{{profileData.cellCountryCode}}-</span>
+                        <span>{{profileData.PhoneCell}}</span>
+                    </div>
+                </div>
+                <div class="row" ng-if="profileData.Email">
+                    <div class="col col-40 item-text-wrap">
+                        <i class="icon ion-ios-email icon-fw"></i>&nbsp;
+                        <strong>{{PATIENTPROFILECONSTANTS.EMAILLABEL}} :</strong>
+                    </div>
+                    <div class="col col-60 item-text-wrap">
+                        <span>{{profileData.Email | lowercase}}</span>
+                    </div>
+                </div>
+                <div class="row" ng-if="profileData.StreetName || profileData.City || profileData.CountryName || profileData.StateName">
+                    <div class="col col-40 item-text-wrap">
+                        <i class="icon ion-location icon-fw"></i>&nbsp;
+                        <strong>{{PATIENTPROFILECONSTANTS.ADDRESSLABEL}} :</strong>
+                    </div>
+                    <div class="col col-60 item-text-wrap">
+                        <span ng-if="profileData.StreetName">{{profileData.StreetName}}</span>
+                        <span ng-if="profileData.City">, {{profileData.City}}</span>
+                        <span ng-if="profileData.StateName">, {{profileData.StateName}}</span>
+                        <span ng-if="profileData.CountryName">, {{profileData.CountryName}}</span>
+                        <span ng-if="profileData.postalcode">, {{profileData.postalcode}}</span>.</div>
+                </div>
+            </div>
+        </ion-item>
+        <input type="file" file-model="myFile" id="filePicker" style="display:none" accept="image/*">
+     </ion-content>
+     <!-- <div class="tabs tabs-icon-top tabs-positive">
+        <a class="tab-item disable-user-behavior reminder-icon" title="Message" ui-sref="app.viewMedicalRecords({type:'history'})"> <i class="icon ion ion-medkit"></i><span>{{MEDICALRECORDSCONSTANTS.GENERALHISTORYLABEL}}</span></a>
+        <a class="tab-item disable-user-behavior reminder-icon" title="Cancel"  ui-sref="app.viewMedicalRecords({type:'lifeStyle'})" > <i class="icon ion ion-man"></i><span>{{MEDICALRECORDSCONSTANTS.LIFESTYLEHISTORYLABEL}}</span></a>
+        <a class="tab-item disable-user-behavior reminder-icon" title="Delete"  ui-sref="app.viewMedicalRecords({type:'familyHistory'})"> <i class="icon ion ion-person-stalker"></i><span>{{MEDICALRECORDSCONSTANTS.FAMILYHISTORYLABEL}}</span></a>        
+    </div> -->
+</ion-view>

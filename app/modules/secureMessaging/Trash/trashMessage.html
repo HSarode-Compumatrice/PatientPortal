@@ -1,0 +1,62 @@
+<ion-view title="{{SECUREMESSAGECONSTANTS.TRASHTITLE}}">
+    <ion-nav-buttons side="left">
+        <button menu-toggle="left" class="button button-clear icon ion-navicon left-menu"></button>
+        <div class="app-logo"><img class="title-image" src="img/ajax-loader.gif" ng-src="{{orgLogoURL?orgLogoURL:defaultLogoURL}}" err-SRC="{{errorLogoURL}}" height="25" /> </div>
+    </ion-nav-buttons>
+    <ion-nav-buttons side="right">
+        <button title="Notifications" class="button button-clear ion-android-notifications notification" ui-sref="app.patientReminder"><span class="badge badge-assertive">{{Notification}}</span></button>
+        <button class="button button-clear ion-android-more-vertical right-menu" ng-click="popover.show($event)"> </button>
+    </ion-nav-buttons>
+    <button class="button button-clear button-float bottom-120" ui-sref="app.composeMessage" title="Compose"> <i class="icon ion-edit"></i> </button>
+    <button title="Load More" class="button button-clear button-float" ng-show="!isLoadComplete && isOnline" ng-click="loadMore();"> <i class="icon ion-android-more-horizontal"></i> </button>
+    <div class="data-loading" ng-show="isLoadMore && isOnline">{{SECUREMESSAGECONSTANTS.LOADINGLABEL}}
+        <ion-spinner icon="lines"></ion-spinner>
+    </div>
+    <ion-content has-header="true" class="bottom-50 top-30 body-grey">
+        <div class="search-box">
+            <div class="item-input-wrapper no-padding">
+                <label class="item-input item-md-label no-padding no-margin full-width">
+                    <input type="text" class="input md-input" ng-model="$parent.search" ng-change="searchMessage()" placeholder="{{SECUREMESSAGECONSTANTS.SEARCHMESSAGELABEL}}" />
+                    <div class="highlight highlight-calm"></div>
+                </label>
+                <button title="Search" class="button button-positive go-btn search-btn" ng-click="searchMessage()"><i class="icon ion-ios-search placeholder-icon text-white"></i></button>
+            </div>
+        </div>
+        <ion-list show-delete="showDelete" show-reorder="showReorder">
+            <div class="no-data-center" ng-show="trashMessages.length<=0">
+                <div class="row alert-padding">
+                    <div class="col no-data"> <i class="icon ion-information-circled"> </i>
+                        <h5 class="item-text-wrap">{{SECUREMESSAGECONSTANTS.TRASHERRORMESSAGE}} </h5> </div>
+                </div>
+            </div>
+            <ion-item ng-repeat="data in trashMessages" item="data" class="item-remove-animate border-xs" ui-sref="app.trashDetail({'MessageData': data})">
+                <div class="row no-padding left-padding-5">
+                    <div class="col no-padding">
+                        <p class="text-primary"><b>{{SECUREMESSAGECONSTANTS.TOLABEL}} : {{data.To}}</b></p>
+                    </div>
+                    <div class="col no-padding" align="right">
+                        <p class="sub-text"> {{data.Date| date:'MMM dd yyyy hh:mm a'}} </p>
+                    </div>
+                </div>
+                <div class="row no-padding left-padding-5">
+                    <div class="col no-padding">
+                        <p class="pointer">{{data.Body}}</p>
+                    </div>
+                </div>
+                <div class="col no-padding" align="right">
+                    <label class="checkbox small-checkbox">
+                        <input type="checkbox" class="" ng-model="data.Selected" ng-click="selectTrashCheckBox(data, $event);"> </label>
+                </div>
+                <ion-option-button class="button-assertive min-width-40" ng-click="deleteMessage(data)"> <i class="icon ion-trash-b text-white"></i> </ion-option-button>
+                <ion-reorder-button class="ion-navicon" on-reorder="moveItem(item, $fromIndex, $toIndex)"></ion-reorder-button>
+            </ion-item>
+        </ion-list>
+    </ion-content>
+    <div class="tabs tabs-icon-top tabs-positive">
+        <a class="tab-item disable-user-behavior bottom-icon inactive" title="Inbox Items" ui-sref="app.Message"> <i class="icon ion-email"></i><span class="tab-title ng-binding" ng-bind-html="title"></span><span>{{SECUREMESSAGECONSTANTS.INBOXTITLE}}</span></a>
+        <a class="tab-item disable-user-behavior bottom-icon inactive" ui-sref="app.sentMessage" title="Sent Items" icon-on="ion-ios-filing" icon-off="ion-ios-filing-outline"> <i class="icon ion-android-send icon-md"></i><span class="tab-title ng-binding" ng-bind-html="title"></span><span>{{SECUREMESSAGECONSTANTS.SENTTITLE}}</span></a>
+        <a class="tab-item disable-user-behavior bottom-icon active" title="Trash Items" ui-sref="app.trashMessage" icon-on="ion-ios-filing" icon-off="ion-ios-filing-outline"> <i class="icon ion-trash-b"></i><span class="tab-title ng-binding" ng-bind-html="title"></span><span>{{SECUREMESSAGECONSTANTS.TRASHTITLE}}</span></a>
+        <a class="tab-item disable-user-behavior bottom-icon active " ng-click="CheckAllMessage()" ng-class="{hideSelectAll:trashMessages.length<=0?true:false}" title="Select All"> <i class="icon" ng-class="selectAllMessage? 'ion-android-checkbox-outline' : 'ion-android-checkbox-outline-blank'" style="font-size:25px;"></i><span ng-if="selectAllMessage">{{SECUREMESSAGECONSTANTS.DESELECTALLLABEL}}</span><span ng-if="!selectAllMessage">{{SECUREMESSAGECONSTANTS.SELECTALLLABEL}}</span></a>
+        <a class="tab-item disable-user-behavior bottom-icon" ng-class="{delete:!selectAllMessage,hideSelectAll:trashMessages.length<=0?true:false}" ng-click="DeleteAllMessage()" title="Delete" icon-on="ion-ios-filing" icon-off="ion-ios-filing-outline"> <i class="icon ion-trash-a"></i><span class="tab-title ng-binding" ng-bind-html="title"></span><span>{{SECUREMESSAGECONSTANTS.DELETELABEL}}</span></a>
+    </div>
+</ion-view>

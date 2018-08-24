@@ -1,0 +1,37 @@
+<ion-view title="{{HELPCONSTANT.HELPTITLE}}">
+    <ion-nav-buttons side="left">
+        <button menu-toggle="left" class="button button-clear icon ion-navicon left-menu"></button>
+        <div class="app-logo"> <img class="title-image" src="img/ajax-loader.gif" ng-src="{{orgLogoURL?orgLogoURL:defaultLogoURL}}" err-SRC="{{errorLogoURL}}" height="25" /> </div>
+    </ion-nav-buttons>
+    <ion-nav-buttons side="right">
+        <button title="Notifications" class="button button-clear ion-android-notifications notification" ui-sref="app.patientReminder"><span class="badge badge-assertive">{{Notification}}</span></button>
+        <button class="button button-clear ion-android-more-vertical right-menu" ng-click="popover.show($event)"></button>
+    </ion-nav-buttons>
+    <ion-content has-header="true" class="body-grey">
+        <form name="helpForm" class="form-validate" novalidate>
+            <ion-list>
+                <ion-item class="item-list" ng-click="showContact()">
+                    <p class="left text-primary">{{HELPCONSTANT.CONTACTUSLABEL}}</p>
+                    <p class="right"><i class="icon" ng-class="contactShow ? 'ion-chevron-down' : 'ion-chevron-right'"></i></p>
+                </ion-item>
+                <div class="card item-list no-margin bg-transparent" ng-show="contactShow">
+                    <div class="padding">
+                        <textarea id="helpdesc" class="textarea" ng-model="Help.description" placeholder="{{HELPCONSTANT.DESCRIPTIONPLACEHOLDERLABEL}}" required></textarea>
+                        <button class="button button-full button-small button-positive" ng-click="addHelp(helpForm)"><i class="icon ion-paper-airplane"></i> {{HELPCONSTANT.SENDLABEL}}</button>
+                    </div>
+                </div>
+                <ion-item class="item-list" ng-click="redirectToPage('FAQ')">
+                    <p><a class="pointer">{{HELPCONSTANT.FAQLABEL}}</a></p>
+                </ion-item>
+                <ion-item class="item-list" ng-click="redirectToPage('TERMS')">
+                    <p><a class="pointer">{{HELPCONSTANT.TERMACONDITIONLABEL}}</a></p>
+                </ion-item>
+                <ion-item class="item-list" ng-click="redirectToPage('ABOUT')">
+                    <p><a class="pointer">{{HELPCONSTANT.ABOUTUSLABEL}}</a></p>
+                </ion-item>
+            </ion-list>
+        </form>
+    </ion-content>
+    <div class="tabs ng-scope tabs-icon-top tabs-positive">
+            <button title="twitter" style="background-color: transparent; border: none;" class="tab-item bottom-icon" ng-click="shareViaTwitter()"> <i class="icon ion-social-twitter"></i><span>{{HELPCONSTANT.TWITTERLABEL}}</span></button> <a title="facebook" class="tab-item bottom-icon" ng-click="shareViaFacebook()"><i class="icon ion-social-facebook"></i><span>{{HELPCONSTANT.FACEBOOKLABEL}}</span></a> </div>
+</ion-view>

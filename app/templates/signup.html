@@ -1,0 +1,93 @@
+<ion-view title="{{REGISTERCONSTANT.TITLEPAGE}}">
+    <div class="bar-positive nav-title-slide-ios bar bar-header" align-title="center">
+        <div class="buttons buttons-left"><span class="left-buttons"> <span ui-sref="login" ><button class="button button-clear icon ion-ios-arrow-back left-menu"></button></span> </span>
+        </div>
+        <div class="app-logo"><img class="title-image" src="img/small-icon.svg" height="25" /> </div>
+        <div class="title title-center header-item" style="left: 93px; right: 93px;">{{REGISTERCONSTANT.TITLEPAGE}}</div>
+    </div>
+    <ion-content has-header="true" class="top-39 signup">
+        <form name="myForm" class="form-validate bottom-large-margin" ng-hide="IsSuccess" novalidate>
+            <div class="row">
+                <div class="col">
+                    <div class="list login-padding no-margin">
+                        <label class="item item-input item-floating-label login-label password-label item-md-label" style="background-color: transparent !important;border: none;"> <i class="icon ion-person placeholder-icon"></i>
+                            <input type="text" class="input login-input md-input top-input" name="fName" placeholder="{{REGISTERCONSTANT.FIRSTNAMEPLACEHOLDER}}" ng-model="user.FirstName" required/>
+                            <div class="highlight highlight-calm"></div>
+                        </label>
+                        <label class="item item-input item-floating-label login-label password-label item-md-label" style="background-color: transparent !important;border: none;"> <i class="icon ion-person placeholder-icon"></i>
+                            <input type="text" class="input login-input md-input " name="lName" placeholder="{{REGISTERCONSTANT.LASTNAMEPLACEHOLDER}}" ng-model="user.LastName" required/>
+                            <div class="highlight highlight-calm"></div>
+                        </label>
+                        <label class="item item-input item-floating-label login-label password-label item-md-label" style="background-color: transparent !important;border: none;"> <i class="icon ion-ios-email placeholder-icon"></i>
+                            <input type="text" class="input login-input md-input" style="margin: 0px 0px 1px !important;border-bottom: 1px solid #ddd;" name="email" placeholder="{{REGISTERCONSTANT.EMAILPLACEHOLDER}}" ng-model="user.email" ng-pattern="/^[A-Za-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/" required/>
+                            <div class="highlight highlight-calm"></div>
+                        </label>
+                        <div class="row no-padding" style="position: relative; top: -13px;">
+                            <select-country-code></select-country-code>
+                            <div class="col no-padding">
+                                <label class="item item-input item-md-label no-padding border-none">
+                                    <input type="text" id="mobileNo" style="border-right: 1px solid #ddd;" ng-keyup="limitKeypress('mobileNo',phoneMaxLength)" class="input login-input md-input" name="mobile" placeholder="Phone or Mobile No. &#42;" string-to-number ng-model="user.mobileno" ng-maxlength="{{phoneMaxLength}}" ng-pattern="/^[0-9]/" ng-minlength="{{phoneMaxLength}}" required/>
+                                    <div class="highlight highlight-calm"></div>
+                                </label>
+                            </div>
+                        </div>
+                        <!--
+                        <label class="item item-input item-floating-label login-label password-label item-md-label"> <i class="icon ion-information placeholder-icon"></i>
+                            <input type="text" class="input login-input md-input" name="uid" placeholder="UID : Aadhar / Voter / Pan Number" ng-model="user.UID" required/>
+                            <div class="highlight highlight-calm"></div>
+                        </label>
+-->
+                        <!--<div class="item item-input item-select title-select gender-select">
+                            <div class="bor-pad">
+                                <div class="input-label"><i class="icon ion-man placeholder-icon"></i> {{REGISTERCONSTANT.SEXLABEL}} </div>
+                                <select ng-options="sex for sex in genderList" ng-model="user.Sex" required>
+                                    <option selected="selected" value="">- {{REGISTERCONSTANT.SELECTGENDERLABEL}} -</option>
+                                </select>
+                            </div>
+                        </div>-->
+                        <!--
+                        <div class="item item-input item-select title-select gender-select">
+                            <div class="bor-pad">
+                                <div class="input-label"><i class="icon ion-home placeholder-icon"></i> {{REGISTERCONSTANT.COUNTRYLABEL}} </div>
+                                <select ng-change="statewiseCity()" ng-model="user.CountryCode" ng-options="country.countryISONAME as country.countryName for country in Countries" required>
+                                    <option selected="selected" value="">- {{REGISTERCONSTANT.SELECTCOUNTRYLABEL}} -</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="item item-input item-select title-select gender-select">
+                            <div class="bor-pad">
+                                <div class="input-label"><i class="icon ion-home placeholder-icon"></i> {{REGISTERCONSTANT.STATELABEL}} </div>
+                                <select ng-options="state.StateCode as state.StateName for state in states" ng-model="user.StateCode" required>
+                                    <option selected="selected" value="">- {{REGISTERCONSTANT.SELECTSTATELABEL}} -</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <label class="item item-input item-floating-label login-label password-label item-md-label"> <i class="icon ion-home placeholder-icon"></i>
+                            <input type="text" class="input login-input md-input" name="city" placeholder="City" ng-model="user.city" required/>
+                            <div class="highlight highlight-calm"></div>
+                        </label>
+                        <label class="item item-input item-floating-label login-label password-label item-md-label"> <i class="icon ion-home placeholder-icon"></i>
+                            <input type="text" class="input login-input md-input" name="postal Code" placeholder="Postal Code" ng-model="user.postalcode" ng-pattern="/^(\d{6}-\d{5}|\d{6})$/" ng-keypress="limitKeypress($event,user.postalcode,6)" required/>
+                            <div class="highlight highlight-calm"></div>
+                        </label>
+--></div>
+                    <div style="text-align:center;color:red;"> {{errormessage}} </div>
+                    <div class="no-padding">
+                        <button class="button button-full button-positive ink forgot-btn  ink icon ion-edit signupbutton" ng-click="registerUser(user,myForm)"> {{REGISTERCONSTANT.SIGNUPLABEL}}</button>
+                        <button class="button button-full button-stable ink" ui-sref="login">{{REGISTERCONSTANT.CANCELLABEL}}</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <div class="extra-large-margin-forgot" ng-show="IsSuccess">
+            <div class="row alert-padding">
+                <div class="col go-to-login">
+                    <h5 class="item-text-wrap">{{REGISTERCONSTANT.SUCCESSMESSAGE}}</h5> <a class="button button-clear text-primary" ui-sref="login">{{REGISTERCONSTANT.GOTOLOGINLABEL}}</a> </div>
+            </div>
+        </div>
+    </ion-content>
+    <div class="tabs copyright-tab">
+        <p><small>&copy; {{APPCONSTANTS.YEARLABEL}} <a href="http://patientconnect360.com/" target="_blank">{{APPCONSTANTS.APPNAMELABEL}}</a> {{APPCONSTANTS.ALLRIGHTSRSERVEDLABEL}}</small></p>
+    </div>
+</ion-view>

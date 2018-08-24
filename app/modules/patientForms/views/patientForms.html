@@ -1,0 +1,95 @@
+<ion-view title="{{formCategoryName}}">
+    <ion-nav-buttons side="left"> <span ng-click="myGoBack()">
+        <button class="button button-clear icon ion-ios-arrow-back left-menu"></button>
+        </span> </ion-nav-buttons>
+    <ion-nav-buttons side="right">
+        <button title="Notifications" class="button button-clear ion-android-notifications notification" ui-sref="app.patientReminder"><span class="badge badge-assertive">{{Notification}}</span></button>
+        <button class="button button-clear ion-android-more-vertical right-menu" ng-click="popover.show($event)"> </button>
+    </ion-nav-buttons>
+    <ion-content has-header="true">
+        <div class="item form-thumbnail-header" ng-if="appointmentDetails">
+            <div class="item-text-wrap book-sub-text"> <span class="font-medium">{{appointmentDetails.title}}  {{appointmentDetails.userFirstName}} {{appointmentDetails.userLastName}}</span>
+                <div class="item-text-wrap book-sub-text right clearfix"> <span class="item-text-wrap book-sub-text right clearfix">{{appointmentDetails.eventDate | date : APPCONSTANTS.DATEFORMAT}} </span></div>
+                <div class="item-text-wrap"> <span class="item-text-wrap book-sub-text right clearfix">{{appointmentDetails.appointmentStartTime | date :'hh:mm:a'}}</span>
+                    <p class="book-sub-text"> {{PATIENTFORMCONSTANTS.SPECIALITYLABEL}}: {{appointmentDetails.speciality}}</p>
+                    <p class="book-sub-text"> {{PATIENTFORMCONSTANTS.REASONLABEL}}: {{appointmentDetails.pc_hometext}}</p>
+                    <p class="book-sub-text">{{PATIENTFORMCONSTANTS.IDLABEL}}:{{appointmentDetails.pc_eid}}</p>
+                </div>
+            </div>
+        </div>
+        <div class="no-data-center" ng-show="assignedPackets.length<=0 && Ismessageshow">
+            <div class="row alert-padding">
+                <div class="col no-data"> <i class="icon ion-information-circled"> </i>
+                    <h5 class="item-text-wrap">{{PATIENTFORMCONSTANTS.EMPTYMESSAGE}} </h5> </div>
+            </div>
+        </div>
+        <!--<div ng-repeat="packet in patientFormCtrl.assignedPackets">
+                <ion-item class="no-padding" ng-repeat="template in packet.packetsAssign.templates">
+                    <div class="card margin-md">
+                        <div class="item dashboard-header">
+                            <h2>{{template.formName}} ({{packet.packetsAssign.packetName}})</h2> </div>
+                        <div class="card ideal-card">
+                            <div class="row center no-padding min-height-60">
+                                <div class="green-triangle-bg"></div>
+                                <div class="col">
+                                    <p class="text-primary right clearfix">Status: <span title="{{template.formStatus.status}}" class="ion ion-ios-circle-filled" ng-class="template.formStatus.class == 'success'? 'icon-success-color': (template.formStatus.class == 'danger' ?'icon-danger-color': 'icon-info-color')"></span></p>
+                                    <p>Assigned By : Dr. {{patientFormCtrl.appointmentDetails.userFirstName}} {{patientFormCtrl.appointmentDetails.userLastName}}</p>
+                                    <p class="sub-text">Last Modified Date : {{assignDate | date:'MMM dd yyyy'}}</p>
+                                </div>
+                            </div>
+                            <div class="row appointment-card">
+                                <div class="col col-33 no-padding">
+                                    <a ng-click="patientFormCtrl.editForm(template.formtemplate_guid,packet.id )" class="button button-clear text-primary icon ion-edit absolute-center"></a>
+                                </div>
+                                <div class="col col-33 no-padding">
+                                    <a ng-click="patientFormCtrl.viewForm(template.formtemplate_guid,packet.id )" class="button button-clear text-primary icon ion-eye absolute-center" ng-if="template.formStatus.status != 'New'"></a>
+                                </div>
+                                <div class="col col-33 no-padding">
+                                    <a class="button button-clear text-primary icon ion-ios-download absolute-center"></a>
+                                </div>
+                            </div>
+                            <hr class="no-padding no-margin"> </div>
+                    </div>
+                </ion-item>
+            </div>-->
+        <div ng-repeat="packet in assignedPackets">
+            <div class="card margin-md" ng-repeat="template in packet.templates">
+                <div class="item dashboard-header">
+                    <h2>{{template.formTemplate.formName}} ({{packet.packetName}})</h2> </div>
+                <ion-list>
+                    <ion-item class="no-padding">
+                        <div class="card ideal-card">
+                            <div class="row no-padding min-height-60">
+                                <div ng-class="{'blue-triangle-bg':template.status=='NEW', 'red-triangle-bg': template.status=='DENIED','yellow-triangle-bg':template.status=='PENDING','green-triangle-bg':template.status=='APPROVED'}"></div>
+                                <div class="col">
+                                    <!--<p class="text-primary right clearfix">{{PATIENTFORMCONSTANTS.STATUSLABEL}}: <span title="{{template.status}}" class="ion ion-ios-circle-filled" ng-class="template.status == 'APPROVED'? 'icon-success-color': ((template.status == undefined ||template.status == 'DENY')  ?'icon-danger-color': 'icon-info-color')"></span></p>-->
+                                    <p class="text-primary right clearfix" ng-show="template.status=='NEW'"><i class="icon ion-ios-paper">&nbsp;&nbsp;{{template.status|capitalize}}</i></p>
+                                    <p class="text-approved right clearfix" ng-show="template.status=='APPROVED'"><i class="icon ion-ios-checkmark">&nbsp;&nbsp;{{template.status|capitalize}}</i></p>
+                                    <p class="text-pending right clearfix" ng-show="template.status=='PENDING'"><i class="icon ion-android-time">&nbsp;&nbsp;{{template.status|capitalize}}</i></p>
+                                    <p class="fa-red right clearfix" ng-show="template.status=='DENIED'"><i class="icon ion-android-alert font-13 fa-red">&nbsp;&nbsp;{{template.status|capitalize}}</i></p>
+                                    <p>{{PATIENTFORMCONSTANTS.ASSIGNEDBYLABEL}} : {{appointmentDetails.title}} {{appointmentDetails.userFirstName}} {{appointmentDetails.userLastName}}</p>
+                                    <p class="sub-text">{{PATIENTFORMCONSTANTS.LASTMODIFIEDDATELABEL}} : {{assignDate | date:'MMM dd yyyy'}}</p>
+                                </div>
+                            </div>
+                            <div class="row appointment-card">
+                                <div class="col col-33 no-padding">
+                                    <a ui-sref="app.editForm({
+                                        'formtemplate': template, 'packetAssignId': packet.packetid, 'assignedPackets':assignedPackets, 'appointment': appointmentDetails, 'type':formCategoryName })" class="button button-clear text-primary icon ion-edit absolute-center" ng-show="FormStatus!=5"></a>
+                                </div>
+                                <div class="col col-33 no-padding">
+                                    <a ui-sref="app.ViewForm({'formtemplate': template, 'type':formCategoryName})" class="button button-clear text-primary icon ion-eye absolute-center"></a>
+                                </div>
+                                <!-- <div class="col col-33 no-padding">
+                                    <a class="button button-clear text-primary icon ion-ios-download absolute-center" ng-click="formDownload(template.PDFTemplateHTML,template.formTemplate.formName)"></a>
+                                </div> --></div>
+                        </div>
+                    </ion-item>
+                </ion-list>
+            </div>
+        </div>
+    </ion-content>
+    <div class="tabs tabs-icon-top tabs-positive">
+        <a class="tab-item disable-user-behavior bottom-icon" ng-class="{'active':formCategoryName=='Consent', 'inactive':formCategoryName!='Consent'}" title="Consent" ng-click="getForms('Consent')"> <i class="icon ion-ios-paper"></i><span class="tab-title ng-binding"></span><span>Consent</span></a>
+        <a ng-click="getForms('Laboratory')" class="tab-item disable-user-behavior bottom-icon" ng-class="{'active':formCategoryName=='Laboratory', 'inactive':formCategoryName!='Laboratory'}" title="Laboratory"> <i class="icon ion-beaker"></i><span class="tab-title ng-binding">Laboratory</span></a>
+    </div>
+</ion-view>

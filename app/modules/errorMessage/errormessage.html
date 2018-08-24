@@ -1,0 +1,18 @@
+<ion-view title="{{ERRORMESSAGECONSTANTS.ERRORTITLE}}" class="bg-gray">
+    <div class="tabs tabs-icon-top tabs-positive">
+        <a class="tab-item bottom-icon" ng-click="goBack()"> <i class="icon ion-arrow-left-c"></i><span class="tab-title">{{ERRORMESSAGECONSTANTS.BACKBUTTON}}</span> </a>
+        <a class="tab-item bottom-icon" ng-click="patientlogin()"> <i class="icon ion-log-in"></i><span class="tab-title">{{ERRORMESSAGECONSTANTS.LOGINBUTTON}}</span> </a>
+    </div>
+    <ion-content has-header="true" class="bg-gray">
+        <div class="list no-margin">
+            <div class="top-padding-10">
+                <div class="text-center alert-danger"> <i class="icon ion-alert-circled error-icon"></i>
+                    <h3 class="top-margin-lg fa-red">{{ERRORMESSAGECONSTANTS.OOPSERROR}}</h3>
+                    <p class="top-margin-md">{{ERRORMESSAGECONSTANTS.RETURNEDMESSAGE}} "{{errorMessage}}"</p>
+                    <p class="top-margin-md">{{ERRORMESSAGECONSTANTS.SOMETHINGWRONG}}</p>
+                    <p class="top-margin-md">{{ERRORMESSAGECONSTANTS.EMAILUSMESSAGE}} <a class="pointer" ng-click="composeEmail()"> &nbsp;{{ERRORMESSAGECONSTANTS.SUPPORTEMAIL}}</a> </p>
+                </div>
+            </div>
+        </div>
+    </ion-content>
+</ion-view>

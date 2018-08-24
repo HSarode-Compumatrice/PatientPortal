@@ -1,0 +1,32 @@
+<ion-view title="My Devices">
+    <ion-nav-buttons side="left">
+        <button menu-toggle="left" class="button button-clear icon ion-navicon"></button>
+    </ion-nav-buttons>
+    <ion-nav-buttons side="right"> <a href="" class="text-white notificationIcon"><i class="icon ion-android-notifications icon-md"></i><span class="badge badge-assertive">0</span></a> </ion-nav-buttons>
+    <ion-content has-header="true" class="bg-image">
+        <ion-view title="My Devices">
+            <ion-nav-buttons side="left">
+                <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
+            </ion-nav-buttons>
+            <ion-nav-buttons side="right"> <a href="" class="text-white notificationIcon"><i class="icon ion-android-notifications icon-md"></i><span class="badge badge-assertive">{{Notification.TotalBadge}}</span></a>
+                <button class="button button-icon ion-android-more-vertical rightMenuCustomCss" ng-click="popover.show($event)"> </button>
+            </ion-nav-buttons>
+            <ion-content has-header="true" class="top-0 bg-image">
+                <form>
+                    <div class="logo"> <img src="img/jawbone_logo.png"> </div>
+                    <div class="list login-padding no-margin">
+                        <label class="item item-input bg-opacity">
+                            <input type="text" class="border-none login-input" placeholder="Login ID" /> </label>
+                        <label class="item item-input bg-opacity">
+                            <input type="password" class="border-none login-input" placeholder="Password" /> </label>
+                    </div>
+                    <div class="login-padding">
+                        <div ui-sref="app.jawbonedetails">
+                            <button type="submit" class="button button-block button-positive login-btn">LOGIN</button>
+                        </div>
+                    </div>
+                </form>
+            </ion-content>
+        </ion-view>
+    </ion-content>
+</ion-view>

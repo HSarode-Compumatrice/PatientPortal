@@ -1,0 +1,95 @@
+<ion-view title="{{MEDICALRECORDSCONSTANTS.MEDICALRECORDSTITLE}}">
+    <ion-nav-buttons side="left">
+        <button menu-toggle="left" ng-hide="isReturnToDashboard" class="button button-clear icon ion-navicon left-menu"></button>
+        <button ng-click="myGoBack()" ng-show="isReturnToDashboard" class="button button-clear icon ion-ios-arrow-back left-menu"></button>
+        <div class="app-logo"> <img class="title-image" src="img/ajax-loader.gif" ng-src="{{orgLogoURL?orgLogoURL:defaultLogoURL}}" err-SRC="{{errorLogoURL}}" height="25" /> </div>
+    </ion-nav-buttons>
+    <ion-nav-buttons side="right">
+        <button class="button button-clear ion-android-notifications notification" ui-sref="app.patientReminder"><span class="badge badge-assertive">{{Notification}}</span></button>
+        <button class="button button-clear ion-android-more-vertical right-menu" ng-click="popover.show($event)"> </button>
+    </ion-nav-buttons>
+    <ion-content has-header="true" class="bg-gray bottom-50">
+        <div class="medical-record-grid">
+            <div class="row">
+                <div class="col-50" ui-sref="app.viewMedicalRecords({type:'vital'})">
+                    <div class="grid-card button button-stable">
+                        <span class="add-box" ui-sref="app.addMedicalRecords({type:'vital',redirect:'medic'})" ng-click="$event.stopPropagation()"><i class="ion ion-plus-circled royal"></i></span>
+                        <i class="ion ion-ios-pulse-strong royal"></i>
+                        <label class="checkbox small-checkbox" ng-click="$event.stopPropagation()">
+                            <input id="Vitals" class="" type="checkbox" ng-model="checkboxModel.value1" ng-change="selectCheckBox(sectionTypeValue.Vitals)"> 
+                        </label>
+                        <h6>{{MEDICALRECORDSCONSTANTS.VITALSLABEL}}</h6>
+                    </div>
+                </div>
+                <div class="col-50" ui-sref="app.viewMedicalRecords({type:'problem'})">
+                    <div class="grid-card button button-stable"><span class="add-box" ui-sref="app.addMedicalRecords({type:'problem'})" ng-click="$event.stopPropagation()"><i class="ion ion-plus-circled positive"></i></span><i class="ion icon-problem positive"></i>
+                        <label class="checkbox small-checkbox" ng-click="$event.stopPropagation()">
+                            <input id="Problems" class="" type="checkbox" ng-model="checkboxModel2.value1" ng-change="selectCheckBox(sectionTypeValue.MedicalProblems)"> 
+                        </label>
+                        <h6>{{MEDICALRECORDSCONSTANTS.MEDICALPROBLEMSLABEL}}</h6>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                 <div class="col-50" ui-sref="app.viewMedicalRecords({type:'history'})">
+                    <div class="grid-card button button-stable"><span class="add-box" ui-sref="app.addMedicalRecords({type:'history','issueSelected':pastHistory})" ng-click="$event.stopPropagation()"><i class="ion ion-plus-circled calm"></i></span><i class="ion ion-medkit calm"></i>
+                        <label class="checkbox small-checkbox" ng-click="$event.stopPropagation()">
+                            <input id="FamilySocialHistory" type="checkbox" class="" ng-model="checkboxModel3.value1" ng-change="selectCheckBox(sectionTypeValue.MedicalHistory)"> 
+                        </label>
+                        <h6>{{MEDICALRECORDSCONSTANTS.GENERALHISTORYLABEL}}</h6>
+                    </div>
+                </div> 
+                <div class="col-50" ui-sref="app.viewMedicalRecords({type:'surgery'})">
+                    <div class="grid-card button button-stable"><span class="add-box" ui-sref="app.addMedicalRecords({type:'surgery'})" ng-click="$event.stopPropagation()"><i class="ion ion-plus-circled assertive"></i></span><i class="ion ion-scissors assertive"></i>
+                        <label class="checkbox small-checkbox" ng-click="$event.stopPropagation()">
+                            <input id="Surgery" type="checkbox" class="" ng-model="checkboxModel5.value1" ng-change="selectCheckBox(sectionTypeValue.Surgery)"> 
+                        </label>
+                        <h6>{{MEDICALRECORDSCONSTANTS.SURGERYLABEL}}</h6>
+                    </div>
+                </div>
+            </div>            
+            <div class="row">
+                <div class="col-50" ui-sref="app.viewMedicalRecords({type:'lifeStyle'})">
+                    <div class="grid-card button button-stable"><span class="add-box" ui-sref="app.addMedicalRecords({type:'lifeStyle'})" ng-click="$event.stopPropagation()"><i class="ion ion-plus-circled balanced"></i></span><i class="ion ion-man balanced"></i>
+                        <label class="checkbox small-checkbox" ng-click="$event.stopPropagation()">
+                            <input id="Problems" type="checkbox" class="" ng-model="checkboxModel7.value1" ng-change="selectCheckBox(sectionTypeValue.LifeStyleHistory)"> 
+                        </label>
+                        <h6 class="adjust-margin">{{MEDICALRECORDSCONSTANTS.LIFESTYLEHISTORYLABEL}}</h6>
+                    </div>
+                </div>
+                <div class="col-50" ui-sref="app.viewMedicalRecords({type:'allergy'})">
+                    <div class="grid-card button button-stable"><span class="add-box" ui-sref="app.addMedicalRecords({type:'allergy'})" ng-click="$event.stopPropagation()"><i class="ion ion-plus-circled dark"></i></span><i class="ion ion-ios-nutrition dark"></i>
+                        <label class="checkbox small-checkbox" ng-click="$event.stopPropagation()">
+                            <input id="Allergy" type="checkbox" class="" ng-model="checkboxModel6.value1" ng-change="selectCheckBox(sectionTypeValue.Allergy)"> 
+                        </label>
+                        <h6>{{MEDICALRECORDSCONSTANTS.ALLERGIESLABEL}}</h6>
+                    </div>
+                </div>
+              
+            </div>
+            <div class="row">
+                <div class="col-50" ui-sref="app.viewMedicalRecords({type:'familyHistory'})">
+                    <div class="grid-card button button-stable"><span class="add-box" ui-sref="app.addMedicalRecords({type:'familyHistory'})" ng-click="$event.stopPropagation()"><i class="ion ion-plus-circled energized"></i></span><i class="ion ion-person-stalker energized"></i>
+                        <label class="checkbox small-checkbox" ng-click="$event.stopPropagation()">
+                            <input id="Problems" type="checkbox" class="" ng-model="checkboxModel8.value1" ng-change="selectCheckBox(sectionTypeValue.FamilyHistory)"> 
+                        </label>
+                        <h6 class="adjust-margin">{{MEDICALRECORDSCONSTANTS.FAMILYHISTORYLABEL}}</h6>
+                    </div>
+                </div> 
+                  <div class="col-50" ui-sref="app.viewMedicalRecords({type:'dental'})">
+                    <div class="grid-card button button-stable"><span class="add-box" ui-sref="app.addMedicalRecords({type:'dental'})" ng-click="$event.stopPropagation()"><i class="ion ion-plus-circled dental"></i></span><i class="ion icon-tooth dental"></i>
+                        <label class="checkbox small-checkbox" ng-click="$event.stopPropagation()">
+                            <input id="Problems" type="checkbox" class="" ng-model="checkboxModel9.value1" ng-change="selectCheckBox(sectionTypeValue.Dental)"> 
+                        </label>
+                        <h6 class="adjust-margin">{{MEDICALRECORDSCONSTANTS.DENTALLABEL}}</h6>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </ion-content>
+    <div class="tabs tabs-icon-top tabs-positive">
+        <a class="tab-item disable-user-behavior medical-history-icon" ng-class="{share: !selectAll}" ng-click="sharePDF()"> <i class="icon ion-android-share-alt"></i><span>{{MEDICALRECORDSCONSTANTS.SHARELABEL}}</span></a>
+        <a class="tab-item disable-user-behavior medical-history-icon" ng-class="{pdf: !selectAll}" ng-click="downloadPdf()"> <i class="icon ion-ios-cloud-download-outline"></i><span>{{MEDICALRECORDSCONSTANTS.DOWNLOADLABEL}} {{MEDICALRECORDSCONSTANTS.PDFLABEL}}</span></a>
+        <a class="tab-item disable-user-behavior medical-history-icon" ng-click="checkSection()" id="sectionMedicalHistory"> <i class="icon" ng-class="selectAll? 'ion-android-checkbox-outline' : 'ion-android-checkbox-outline-blank'"></i><span ng-if="selectAll">{{MEDICALRECORDSCONSTANTS.DESELECTALLLABEL}}</span><span ng-if="!selectAll">{{MEDICALRECORDSCONSTANTS.SELECTALLLABEL}}</span></a>
+    </div>
+</ion-view>

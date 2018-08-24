@@ -1,0 +1,24 @@
+<ion-view title={{physicianName}}>
+    <ion-nav-buttons side="left">
+        <button ng-click="myGoBack()" class="button button-clear icon ion-ios-arrow-back"></button>
+        <div class="app-logo"><img class="title-image" src="img/ajax-loader.gif" ng-src="{{orgLogoURL?orgLogoURL:defaultLogoURL}}" err-SRC="{{errorLogoURL}}" height="25" /> </div>
+    </ion-nav-buttons>
+    <button class="button button-assertive button-fab button-fab-bottom-right end-call-btn"> <i class="icon ion-ios-telephone"></i> </button>
+    <ion-content has-header="true" class="bottom-50">
+        <div class="hero positive-bg profile-bg">            
+            <div class="content video-content">
+                <div class="physician"><img class="profile-avatar" src="../../../img/Userm.jpg" /> 
+                    <h4 class="light">Angela Howley</h4>
+                    <h5 class="light animate-flicker">{{CHATCONSTANTS.CALLINGLABEL}}</h5>
+                </div>
+            </div>
+        </div>
+            <div class="dr-image">
+            </div>
+    </ion-content>
+    <div class="tabs tabs-positive">
+        <a class="tab-item"> <i class="icon ion-ios-reverse-camera"></i> </a>
+        <a class="tab-item"> <i class="icon icon ion-volume-low"></i> </a>
+        <a class="tab-item"> <i class="icon ion-ios-mic-off"></i></a>
+    </div>
+</ion-view>

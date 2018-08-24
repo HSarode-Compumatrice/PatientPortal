@@ -1,0 +1,39 @@
+<ion-view title="{{APPCONSTANTS.MEDICALPASSPORTTITLE}}">
+    <ion-nav-buttons side="left">
+        <button menu-toggle="left" class="button button-clear icon ion-navicon"></button>
+        <div class="app-logo"> <img class="title-image" src="img/ajax-loader.gif" ng-src="{{orgLogoURL?orgLogoURL:defaultLogoURL}}" err-SRC="{{errorLogoURL}}" height="25" /> </div>
+    </ion-nav-buttons>
+    <ion-nav-buttons side="right">
+        <button title="Notifications" class="button button-clear ion-android-notifications notification" ui-sref="app.patientReminder"><span class="badge badge-assertive">{{Notification}}</span></button>
+        <button class="button button-clear ion-android-more-vertical right-menu" ng-click="popover.show($event)"> </button>
+    </ion-nav-buttons>
+    <ion-content has-header="true" class="body-grey" delegate-handle="mainScroll">
+        <!-- <div class="card margin-md"> 
+                 <div class="col col-20"> <img id="photo" class="ion-img-responsive" src="img/cards/ae.png" /> </div>
+         </div>   -->
+    </ion-content>
+    <div class="card" style="margin:0 auto;position:relative;margin-top:60px" id="printableArea" ng-show="displayCard">
+        <div class="card-title">
+            <h4 class="card-title" style="text-align: center;background: #337AB7;padding: 10px; color: white;">{{APPCONSTANTS.MEDICALPASSPORTHEADING}}</h4> </div>
+        <div class="card-body" style="margin-left:10px;margin-right:10px;margin-bottom:10px">
+            <div class="card-text">
+                <label>{{PatientData.FirstName}} {{PatientData.MiddleName}} {{PatientData.LastName}} </label>
+            </div>
+            <div style="float:right"> <img class="img-fluid" ng-src="{{profileimgUrl?profileimgUrl:defaultPatientImage}}" style="height: 100px; width: 100px;" err-SRC="{{defaultPatientImage}}" /> </div>
+            <div>
+                <label><span ng-if="PatientData.StreetName">{{PatientData.StreetName}}, </span><span ng-if="PatientData.City">{{PatientData.City}} - </span><span ng-if="PatientData.postalcode">{{PatientData.postalcode}}</span></label>
+            </div>
+            <div>
+                <label>{{APPCONSTANTS.BLOODGROUPLABEL}}: {{PatientData.blood_group}}</label>
+            </div>
+            <div>
+                <label>{{APPCONSTANTS.EMERGENCYCONTACTNOLABEL}}: {{PatientData.emergency_contact}}</label>
+            </div>
+            <div style="margin-top:20px;"> <img ng-src="{{qrimage}}" style="height: 100px; width: 100px;" /> </div>
+        </div>
+    </div>
+    <div style="margin:0 auto;position:relative;margin-top:60px;text-align:center;font-size:15px;" ng-show="displayMessage"> {{APPCONSTANTS.PASSPORTNOTGENERATEDMSG}}</div>
+    <div class="tabs tabs-icon-bottom tabs-positive">
+        <!-- <a class="tab-item disable-user-behavior medical-history-icon "  ng-click="share()"> <i class="icon ion-android-share-alt"></i><span>{{MEDICALRECORDSCONSTANTS.SHARELABEL}}</span></a> -->
+        <!-- <a class="tab-item disable-user-behavior medical-history-icon"  ng-click="download()"> <i class="icon ion-ios-cloud-download-outline"></i><span>{{MEDICALRECORDSCONSTANTS.DOWNLOADLABEL}} </span></a> --></div>
+</ion-view>

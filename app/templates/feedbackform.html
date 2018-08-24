@@ -1,0 +1,51 @@
+<ion-view title="{{APPLICATIONFEEDBACKCONSTANT.FEEDBACKTITLE}}">
+    <ion-nav-buttons side="left"> <span ng-click="myGoBack()">
+        <button class="button button-clear icon ion-ios-arrow-back left-menu"></button>
+        </span>
+        <div class="app-logo"> <img class="title-image" src="img/ajax-loader.gif" ng-src="{{orgLogoURL?orgLogoURL:defaultLogoURL}}" err-SRC="{{errorLogoURL}}" height="25" /> </div>
+    </ion-nav-buttons>
+    <ion-nav-buttons side="right">
+        <button title="Notifications" class="button button-clear ion-android-notifications notification" ui-sref="app.patientReminder"><span class="badge badge-assertive">{{Notification}}</span></button>
+        <button class="button button-clear ion-android-more-vertical right-menu" ng-click="popover.show($event)"> </button>
+    </ion-nav-buttons>
+    <form name="userFeedback" class="form-validate" novalidate>
+        <ion-content has-header="true" class="bottom-50">
+            <div class="list">
+                <div class="item item-divider feedback-questions">1. {{APPLICATIONFEEDBACKCONSTANT.QUESTION1}}</div>
+                <div class="row top-border-xs top-padding-0" ng-repeat="item in questionOneTwoOptions">
+                    <div class="col no-padding">
+                        <label class="item item-radio">
+                            <input type="radio" ng-value="item.value" ng-model="data.questionOne" name="question-one" required>
+                            <div class="item-content"><span class="item-text-wrap">{{item.text}}</span></div> <i class="radio-icon ion-checkmark"></i> </label>
+                    </div>
+                </div>
+                <div class="item item-divider feedback-questions">2. {{APPLICATIONFEEDBACKCONSTANT.QUESTION2}}</div>
+                <div class="row top-border-xs top-padding-0" ng-repeat="item in questionOneTwoOptions">
+                    <div class="col no-padding">
+                        <label class="item item-radio">
+                            <input type="radio" ng-value="item.value" ng-model="data.questionTwo" name="question-two" required>
+                            <div class="item-content"><span class="item-text-wrap">{{item.text}}</span></div> <i class="radio-icon ion-checkmark"></i> </label>
+                    </div>
+                </div>
+                <div class="item item-divider feedback-questions">3. {{APPLICATIONFEEDBACKCONSTANT.QUESTION3}}</div>
+                <div class="row top-border-xs top-padding-0" ng-repeat="item in questionThreeOptions">
+                    <div class="col no-padding">
+                        <label class="item item-radio">
+                            <input type="radio" ng-value="item.value" ng-model="data.questionThree" name="question-three" required>
+                            <div class="item-content"><span class="item-text-wrap">{{item.text}}</span></div> <i class="radio-icon ion-checkmark"></i> </label>
+                    </div>
+                </div>
+                <div class="item item-divider feedback-questions">4. {{APPLICATIONFEEDBACKCONSTANT.SUGGESSIONMESSAGE}}</div>
+                <div class="padding">
+                    <textarea class="textarea" ng-model="data.questionFour" placeholder="{{APPLICATIONFEEDBACKCONSTANT.NAMECONTACTPLACEHOLDER}}" style="min-height: 50px;"></textarea>
+                </div>
+                <div class="item item-divider feedback-questions">5. {{APPLICATIONFEEDBACKCONSTANT.QUESTION4}}</div>
+                <div class="padding">
+                    <textarea class="textarea" ng-model="data.questionFive" placeholder="{{APPLICATIONFEEDBACKCONSTANT.COMMENTQUESCONCPLACEHOLDER}}"></textarea>
+                </div>
+            </div>
+        </ion-content>
+        <div class="tabs ng-scope tabs-icon-top tabs-positive">
+            <button title="Save" style="background-color: transparent; border: none;" class="tab-item bottom-icon" ng-click="save(userFeedback)"> <i class="icon ion-checkmark-circled"></i><span>{{APPLICATIONFEEDBACKCONSTANT.SAVEBUTTON}}</span></button> <a title="Cancel" class="tab-item bottom-icon" ng-click="myGoBack()"><i class="icon ion-android-cancel"></i><span>{{APPLICATIONFEEDBACKCONSTANT.CANCELBUTTON}}</span></a> </div>
+    </form>
+</ion-view>

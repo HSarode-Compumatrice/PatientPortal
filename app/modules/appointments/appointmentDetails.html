@@ -1,0 +1,46 @@
+<ion-view title="{{APPOINTMENTSCONSTANTS.APPOINTMENTDETAILLABEL}}">
+    <ion-nav-buttons side="left"> <span ng-click="gotoAppointmentslist()">
+        <button class="button button-clear icon ion-ios-arrow-back left-menu"></button>
+        </span>
+        <div class="app-logo"> <img class="title-image" src="img/ajax-loader.gif" ng-src="{{orgLogoURL?orgLogoURL:defaultLogoURL}}" err-SRC="{{errorLogoURL}}" height="25" /> </div>
+    </ion-nav-buttons>
+    <ion-nav-buttons side="right">
+        <button title="Notifications" class="button button-clear ion-android-notifications notification" ui-sref="app.patientReminder"><span class="badge badge-assertive">{{Notification}}</span></button>
+        <button class="button button-clear ion-android-more-vertical right-menu" ng-click="popover.show($event)"> </button>
+    </ion-nav-buttons>
+    <ion-content has-header="true">
+        <div class="item appointment-detail-header">
+            <h2 class="font-medium text-center text-white">{{appointment.appointmentTitle}}</h2>
+            <hr class="heading-hr">
+            <p class="right clearfix text-white font-medium">{{APPOINTMENTSCONSTANTS.STATUSLABEL}} <span ng-switch="appointment.pc_apptstatus"><span ng-switch-when="-">{{APPOINTMENTSCONSTANTS.STATUSNONE}}</span><span ng-switch-when="*">{{APPOINTMENTSCONSTANTS.STATUSREMDONE}}</span><span ng-switch-when="+">{{APPOINTMENTSCONSTANTS.STATUSCHARTPULLED}}</span><span ng-switch-when="x">{{APPOINTMENTSCONSTANTS.STATUSCANCELED}}</span><span ng-switch-when="?">{{APPOINTMENTSCONSTANTS.STATUSNOSHOW}}</span><span ng-switch-when="@">{{APPOINTMENTSCONSTANTS.STATUSARRIVED}}</span><span ng-switch-when="~">{{APPOINTMENTSCONSTANTS.STATUSARRIVEDLATE}}</span><span ng-switch-when="!">{{APPOINTMENTSCONSTANTS.STATUSLEFTWOVISIT}}</span><span ng-switch-when="#">{{APPOINTMENTSCONSTANTS.STATUSINSISSUE}}</span><span ng-switch-when="&lt;">{{APPOINTMENTSCONSTANTS.STATUSINEXAM}}</span><span ng-switch-when="&gt;">{{APPOINTMENTSCONSTANTS.STATUSCHECKEDOUT}}</span><span ng-switch-when="$">{{APPOINTMENTSCONSTANTS.STATUSCODINGDONE}}</span><span ng-switch-when="%">{{APPOINTMENTSCONSTANTS.STATUSCANCELED24}}</span><span ng-switch-default>{{APPOINTMENTSCONSTANTS.STATUSNONE}}</span></span>
+            </p> <span class="font-medium text-white">{{appointment.eventDate | date:'longDate'}} - {{appointment.appointmentStartTime}}</span>
+            <p class="right clear text-white font-medium" ng-if=" appointment.pceventstatus == 0">{{APPOINTMENTSCONSTANTS.REQUESTLABEL}}</p>
+            <p class="right clear text-white font-medium" ng-if=" appointment.pceventstatus == 1">{{APPOINTMENTSCONSTANTS.SCHEDULELABEL}}</p>
+            <p class="text-white font-medium">{{APPOINTMENTSCONSTANTS.APPOINTMENTIDLABEL}}: {{appointment.pc_eid}}</p>
+        </div>
+        <div class="padding-LR-10 top-margin-sm">
+            <p class="no-margin label-grey">{{APPOINTMENTSCONSTANTS.DOCTORLABEL}}</p>
+            <p class="no-margin static-text">{{physician.title | capitalize}} {{physician.firstname | capitalize}} {{physician.lastname | capitalize}} {{physician.specialty}}</p>
+            <hr class="no-padding">
+            <p class="no-margin label-grey">{{APPOINTMENTSCONSTANTS.ADDRESSLABEL}}</p>
+            <p class="static-text"><span ng-if="physician.mainAddressLine1">{{physician.mainAddressLine1}} ,</span> <span ng-if="physician.mainCity">{{physician.mainCity}} ,</span> <span ng-if="physician.mainState">{{physician.mainState}} ,</span> <span ng-if="physician.mainZip">{{physician.mainZip}}.</span></p>
+            <hr class="no-padding">
+            <p class="no-margin label-grey" ng-if="appointment.pc_hometext">{{APPOINTMENTSCONSTANTS.REASONLABEL}}</p>
+            <p class="static-text" ng-if="appointment.pc_hometext">{{appointment.pc_hometext}}</p>
+            <hr class="no-padding">
+            <p class="no-margin label-grey" ng-if="appointment.cancelReason">Reason for cancellation</p>
+            <p class="static-text" ng-if="appointment.cancelReason">{{appointment.cancelReason}}</p>
+        </div>
+    </ion-content>
+    <div class="tabs tabs-icon-top tabs-positive">
+        <a class="tab-item disable-user-behavior reminder-icon" title="Message" ui-sref="app.composeMessage({'PhysicianId': appointment.uprovider_id})"> <i class="icon ion-ios-email-outline"></i><span>{{APPOINTMENTSCONSTANTS.MESSAGELABEL}}</span></a>
+        <a class="tab-item disable-user-behavior reminder-icon" title="Cancel" ng-click="cancelAppointment(appointment,false)" ng-if="appointment.eventDate >= currentDate"> <i class="icon ion-android-cancel"></i><span>{{APPOINTMENTSCONSTANTS.CANCELLABEL}}</span></a>
+        <a class="tab-item disable-user-behavior reminder-icon" title="Delete" ng-click="cancelAppointment(appointment,true)" ng-if="appointment.eventDate < currentDate"> <i class="icon ion-android-cancel"></i><span>{{APPOINTMENTSCONSTANTS.CANCELLABEL}}</span></a>
+        <a class="tab-item disable-user-behavior reminder-icon" title="{{APPOINTMENTSCONSTANTS.RESCHEDULELABEL}}" ng-click="resheduleAppointment(appointment)" ng-if="(appointment.eventDate +' '+ appointment.appointmentStartTime)>= currentDate && appointment.appointment_type == 0"> <i class="icon icon-re-schedule "></i><span>{{APPOINTMENTSCONSTANTS.RESCHEDULELABEL}}</span></a>
+        <a class="tab-item disable-user-behavior reminder-icon" title="{{APPOINTMENTSCONSTANTS.REREQUESTLABEL}}" ng-click="reRequestAppointment(appointment)" ng-if="(appointment.eventDate +' '+ appointment.appointmentStartTime)>= currentDate && appointment.appointment_type == 1"> <i class="icon icon-re-schedule"></i><span>{{APPOINTMENTSCONSTANTS.REREQUESTLABEL}}</span></a>
+        <a ng-if="appointment.pceventstatus!=0 && !showformmenu" class="tab-item disable-user-behavior reminder-icon" title="Form" ui-sref="app.patientForms({appointment: appointment,type: 'Consent'})"> <i class="icon ion-ios-paper"></i><span>{{APPOINTMENTSCONSTANTS.CONSENTLABEL}}</span></a>
+        <a ng-if="appointment.pceventstatus!=0 && !showformmenu" class="tab-item disable-user-behavior reminder-icon" title="Form" ui-sref="app.patientForms({appointment: appointment,type:'Laboratory'})"> <i class="icon ion-beaker"></i><span>{{APPOINTMENTSCONSTANTS.LABORATORYLABEL}}</span></a>
+    </div>
+    <!--<div class="tabs tabs-icon-top tabs-positive" ng-if="isHistoryAppointment">
+        <a class="tab-item disable-user-behavior reminder-icon" title="Message" ui-sref="app.composeMessage({'PhysicianId': appointment.uprovider_id})"> <i class="icon ion-ios-email-outline"></i><span>{{APPOINTMENTSCONSTANTS.MESSAGELABEL}}</span></a> <a class="tab-item disable-user-behavior reminder-icon" ng-if="appointment.isAppointmentRequested==1" ui-sref="app.addAppointment({'status':0,'physicianId': appointment.uprovider_id})"><i class="icon icon-calendar-plus"></i><span>{{APPOINTMENTSCONSTANTS.RQUESTLABEL}}</span> </a> <a class="tab-item disable-user-behavior reminder-icon" ng-if="appointment.isAppointmentRequested==0" ui-sref="app.addAppointment({'status':1,physicianId': appointment.uprovider_id})"><i class="icon icon-calendar-plus"></i><span>{{APPOINTMENTSCONSTANTS.SCHEDULELABEL}}</span></a> </div>-->
+</ion-view>

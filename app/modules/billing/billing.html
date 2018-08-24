@@ -1,0 +1,201 @@
+<ion-view title="{{BILLINGCONSTANTS.BILLINGTITLE}}">
+    <ion-nav-buttons side="left">
+        <button menu-toggle="left" class="button button-clear icon ion-navicon left-menu"></button>
+        <div class="app-logo"> <img class="title-image" src="img/ajax-loader.gif" ng-src="{{orgLogoURL?orgLogoURL:defaultLogoURL}}" err-SRC="{{errorLogoURL}}" height="25" /> </div>
+    </ion-nav-buttons>
+    <ion-nav-buttons side="right">
+        <button title="Notifications" class="button button-clear ion-android-notifications notification" ui-sref="app.patientReminder"><span class="badge badge-assertive">{{Notification}}</span></button>
+        <button class="button button-clear ion-android-more-vertical right-menu" ng-click="popover.show($event)"> </button>
+    </ion-nav-buttons>
+    <ion-content has-header="true" class="top-30 body-grey bottom-50">
+        <div class="search-box" ng-if="totalBalDue != zeroValue && !isPaymentHistory">
+            <div class="item-input-wrapper no-padding">
+                <label class="item-input item-md-label no-padding no-margin full-width">
+                    <input type="text" class="input md-input" ng-model="search.encounterPayement" placeholder="{{BILLINGCONSTANTS.SEARCHVISITPLACEHOLDER}}" />
+                    <div class="highlight highlight-calm"></div>
+                </label>
+                <button title="Search" class="button button-positive go-btn search-btn"><i class="icon ion-ios-search placeholder-icon text-white"></i></button>
+            </div>
+        </div>
+        <div class="search-box" ng-if="paymentHistoryArray.length > 0 && isPaymentHistory">
+            <div class="item-input-wrapper no-padding">
+                <label title="Visit Number" class="item-input item-md-label no-padding no-margin full-width">
+                    <input type="text" class="input md-input" ng-model="search.encounterId" placeholder="{{BILLINGCONSTANTS.SEARCHVISITPLACEHOLDER}}" />
+                    <div class="highlight highlight-calm"></div>
+                </label>
+                <button title="Search" class="button button-positive go-btn search-btn"><i class="icon ion-ios-search placeholder-icon text-white"></i></button>
+            </div>
+        </div>
+        <!--
+        <ion-item class="no-padding border-none no-margin" ng-if="totalBalDue>0 && !isPaymentHistory" style="background-color: #c0cafb;">
+            <ion-list>
+                <div class="card bg-gray">
+                    <div class="row no-padding">
+                        <div class="col col-50">
+                            <h3 class="no-margin">{{BILLINGCONSTANTS.TOTALAMOUNT}} <br>
+                           {{currencySign}} {{totalBalDue}}</h3> </div>
+                        <div class="col col-center">
+                            <button title="Pay Now" class="button button-small button-full button-positive no-margin pay-button" ng-click="gotoMakePayment()">{{BILLINGCONSTANTS.PAYNOWLABEL}} <i class="icon ion-ios-play"></i> </button>
+                        </div>
+                    </div>
+                </div>
+            </ion-list>
+        </ion-item>
+-->
+        <div class="no-data-center" ng-if="(totalBalDue == zeroValue || search.filtered_result1.length <= 0)&& !isPaymentHistory && isInited">
+            <div class="row alert-padding">
+                <div class="col no-data"> <i class="icon ion-information-circled"> </i>
+                    <h5 class="item-text-wrap">{{BILLINGCONSTANTS.BILLINGERRORMESSAGE}} </h5> </div>
+            </div>
+        </div>
+        <div class="no-data-center" ng-if="(search.filtered_result2.length <= 0 || paymentHistoryArray.length <= 0) && isPaymentHistory">
+            <div class="row alert-padding">
+                <div class="col no-data"> <i class="icon ion-information-circled"> </i>
+                    <h5 class="item-text-wrap">{{BILLINGCONSTANTS.BILLINGERRORMESSAGE}} </h5> </div>
+            </div>
+        </div>
+        <!--<ion-item class="no-padding border-none body-grey" ng-show="totalBalDue != zeroValue">-->
+        <ion-item class="no-padding border-none body-grey" ng-if="totalBalDue != zeroValue && !isPaymentHistory">
+            <ion-list ng-repeat="bill in search.filtered_result1 = (billingInfo | searchForPayement:search.encounterPayement) | orderBy:'-encounterId'">
+                <div ng-hide="bill.PatientBalance == zeroValue">
+                    <div class="card margin-md">
+                        <div class="item dashboard-header">
+                            <div class="row no-padding top-padding-xs">
+                                <div class="col col-33 col-center text-left padding-LR-5">
+                                    <h4 class="text-primary">{{BILLINGCONSTANTS.VISITNOLABEL}} : {{bill.encounterId}}</h4> </div>
+                                <div class="col col-33 col-center text-left padding-LR-5" ng-if="bill.FeeDetails.length>0">
+                                    <h4 class="text-primary">Dr : {{bill.FeeDetails[0].provider}}</h4> </div>
+                                <div class="col col-33 col-center text-right padding-LR-5">
+                                    <h4 class="text-primary">{{bill.EncounterDate | ParseDateFilter | date:'MMM dd yyyy'}}</h4> </div>
+                            </div>
+                        </div>
+                        <div class="card no-margin no-padding">
+                            <div class="row">
+                                <div class="col col-40 padding-LR-5"></div>
+                                <div class="col col-30 col-center text-right padding-LR-5"><span class="font-medium">{{BILLINGCONSTANTS.PAYMENTLABEL}}</span></div>
+                                <div class="col col-30 col-center text-right padding-LR-5"><span class="font-medium">{{BILLINGCONSTANTS.BALANCELABEL}}</span></div>
+                            </div>
+                            <div class="row">
+                                <div class="col col-40 padding-LR-5"><span>{{BILLINGCONSTANTS.BYPATIENTLABEL}}</span></div>
+                                <div class="col col-30 text-right padding-LR-5"><span>{{currencySign}} {{bill.PatientPayment}}</span></div>
+                                <div class="col col-30 text-right padding-LR-5"><span>{{currencySign}} {{bill.PatientBalance}}</span></div>
+                            </div>
+                            <div class="row">
+                                <div class="col col-70 col-center padding-LR-5">
+                                    <h3>{{BILLINGCONSTANTS.TOTALAMOUNT}}</h3> </div>
+                                <div class="col col-30 col-center text-right padding-LR-5">
+                                    <h3>{{currencySign}} {{bill.PatientBill}}</h3> </div>
+                            </div>
+                            <div class="row appointment-card">
+                                <div class="col col-50 no-padding">
+                                    <!--                                    <a style="display:none" class="button button-clear text-primary icon ion-medkit absolute-center"></a>-->
+                                    <a href title="Download" class="button button-clear text-primary icon ion-ios-download absolute-center" ng-click="generateBillPDF(bill)"></a>
+                                </div>
+                                <div class="col col-50 no-padding">
+                                    <button title="Pay Now" class="button button-full button-positive no-margin pay-button" ng-click="gotoMakePayment(bill)">{{BILLINGCONSTANTS.PAYNOWLABEL}} <i class="icon ion-ios-play"></i> </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </ion-list>
+            <!--<div class="no-data-center" ng-if="filtered_result.length <= 0">
+                <div class="row alert-padding">
+                    <div class="col no-data"> <i class="icon ion-information-circled"> </i>
+                        <h5 class="item-text-wrap">{{BILLINGCONSTANTS.NEWERRORMESSAGE}} </h5>
+                    </div>
+                </div>
+            </div>-->
+        </ion-item>
+        <ion-item class="no-padding border-none body-grey" ng-if="isPaymentHistory">
+            <ion-list ng-repeat="bill in search.filtered_result2 = (paymentHistoryArray | filter:search.encounterId) | orderBy:'-encounterId'">
+                <div class="pointer" ng-click="gotoPaymentDetails(bill)">
+                    <!--<div class="card margin-md">
+                        <div class="item dashboard-header">
+                            <div class="row no-padding top-padding-xs">
+                                <div class="col col-50 col-center text-left padding-LR-5">
+                                    <h4 class="text-primary">{{BILLINGCONSTANTS.VISITNOLABEL}} : {{bill.encounterId}}</h4>
+								</div>
+                            </div>
+                        </div>
+                        <div class="card no-margin no-padding">
+                            <div class="row">
+                                <div class="col col-40 padding-LR-5"></div>
+                                <div class="col col-30 col-center text-right padding-LR-5"><span class="font-medium">{{BILLINGCONSTANTS.PAYMENTLABEL}}</span></div>
+                                <div class="col col-30 col-center text-right padding-LR-5"><span class="font-medium">{{BILLINGCONSTANTS.ADJUSTMENTLABEL}}</span></div>
+                            </div>
+                            <div class="row">
+                                <div class="col col-40 padding-LR-5"><span>{{BILLINGCONSTANTS.BYPATIENTLABEL}}</span></div>
+                                <div class="col col-30 text-right padding-LR-5"><span>{{currencySign}} {{bill.paidAmount}}</span></div>
+                                <div class="col col-30 text-right padding-LR-5"><span>{{currencySign}} {{bill.adjustAmount}}</span></div>
+                            </div>
+                            <div class="row">
+                                <div class="col col-70 col-center padding-LR-5">
+                                    <h3>{{BILLINGCONSTANTS.TOTALAMOUNT}}</h3>
+                                </div>
+                                <div class="col col-30 col-center text-right padding-LR-5">
+                                    <h3>{{bill.totalAmount}}</h3>
+                                </div>
+                            </div>
+                            <div class="row appointment-card">
+                                <div class="col col-50 no-padding">
+                                    <a style="display:none" class="button button-clear text-primary icon ion-medkit absolute-center"></a>
+                                </div>
+                                <div class="col col-50 no-padding">
+                                    <a href class="button button-clear text-primary icon ion-ios-download absolute-center" ng-click="generateBillPDF(bill)"> </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>-->
+                    <div class="card margin-md">
+                        <div class="item dashboard-header">
+                            <div class="row no-padding top-padding-xs">
+                                <div class="col col-50 col-center text-left padding-LR-5">
+                                    <h4 class="text-primary">{{BILLINGCONSTANTS.VISITNOLABEL}} : {{bill.encounterId}}</h4> </div>
+                                <div class="col col-50 col-center text-right padding-LR-5">
+                                    <h4 class="text-primary">{{bill.EncounterDate | ParseDateFilter | date:'MMM dd yyyy'}}</h4> </div>
+                            </div>
+                        </div>
+                        <div class="card no-margin no-padding">
+                            <div class="row">
+                                <div class="col col-40 padding-LR-5"></div>
+                                <div class="col col-30 col-center text-right padding-LR-5"><span class="font-medium">{{BILLINGCONSTANTS.PAYMENTLABEL}}</span></div>
+                                <div class="col col-30 col-center text-right padding-LR-5"><span class="font-medium">{{BILLINGCONSTANTS.BILLINGCONSTANTS.BALANCELABEL}}</span></div>
+                            </div>
+                            <div class="row">
+                                <div class="col col-40 padding-LR-5"><span>{{BILLINGCONSTANTS.BYPATIENTLABEL}}</span></div>
+                                <div class="col col-30 text-right padding-LR-5"><span>{{currencySign}} {{bill.PatientPayment}}</span></div>
+                                <div class="col col-30 text-right padding-LR-5"><span>{{currencySign}} {{bill.PatientBalance}}</span></div>
+                            </div>
+                            <div class="row">
+                                <div class="col col-70 col-center padding-LR-5">
+                                    <h3>{{BILLINGCONSTANTS.TOTALAMOUNT}}</h3> </div>
+                                <div class="col col-30 col-center text-right padding-LR-5">
+                                    <h3>{{currencySign}} {{bill.PatientBill}}</h3> </div>
+                            </div>
+                            <div class="row appointment-card">
+                                <div class="col col-50 no-padding">
+                                    <p class="payment-type">{{BILLINGCONSTANTS.PAYEMENTTYPE}}:&nbsp;&nbsp;<b>{{bill.payer_type}}</b></p>
+                                </div>
+                                <div class="col col-50 no-padding">
+                                    <a title="Download" href class="button button-clear text-primary icon ion-ios-download absolute-center" ng-click="generateBillPDF(bill)"> </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </ion-list>
+            <!--<div class="no-data-center" ng-if="filtered_result.length <= 0">
+                <div class="row alert-padding">
+                    <div class="col no-data"> <i class="icon ion-information-circled"> </i>
+                        <h5 class="item-text-wrap">{{BILLINGCONSTANTS.NEWERRORMESSAGE}} </h5>
+                    </div>
+                </div>
+            </div>-->
+        </ion-item>
+    </ion-content>
+    <div class="tabs tabs-icon-top tabs-positive">
+        <a class="tab-item disable-user-behavior bottom-icon" ng-class="{'active':!isPaymentHistory, 'inactive':isPaymentHistory}" title="Payment" ng-click="switchToPayement()"> <i ng-if="currencySign == '₦'" class="icon icon-fw icon-nigeria-naira"></i><i ng-if="currencySign == '$'" class="icon icon-fw ion-social-usd"></i> <i ng-if="currencySign == '₹'" class="icon icon-fw icon-indian-rupee"></i><span class="tab-title ng-binding"></span><span>{{BILLINGCONSTANTS.PAYEMENTTABLABEL}}</span></a>
+        <a class="tab-item disable-user-behavior bottom-icon" ng-class="{'active':isPaymentHistory, 'inactive':!isPaymentHistory}" title="History" ng-click="switchToHistory()"> <i class="icon ion-ios-clock-outline"></i><span class="tab-title ng-binding">{{BILLINGCONSTANTS.HISTORYTABLABEL}}</span></a>
+    </div>
+</ion-view>

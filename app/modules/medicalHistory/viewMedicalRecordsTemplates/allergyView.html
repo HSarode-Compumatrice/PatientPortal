@@ -1,0 +1,80 @@
+<ion-view title="{{MEDICALRECORDSCONSTANTS.ALLERGIESLABEL}}">
+    <ion-nav-buttons side="left"> <span ng-click="myGoBack()">
+            <button class="button button-clear icon ion-ios-arrow-back left-menu"></button>
+        </span> </ion-nav-buttons>
+    <ion-nav-buttons side="right">
+        <button class="button button-clear ion-android-notifications notification" ui-sref="app.patientReminder"> <span class="badge badge-assertive">{{Notification}}</span> </button>
+        <button class="button button-clear ion-android-more-vertical right-menu" ng-click="popover.show($event)"> </button>
+    </ion-nav-buttons>
+    <!-- <ion-content has-header="true" class="bottom-50 bg-gray">
+        <ion-item class="item-accordion body-grey">
+            <div class="item alert alert-info icon ion-information-circled" ng-show="AllergyData.length<=0"> {{noDataFound}} </div>
+            <div class="card MD-card" ng-show="AllergyData" ng-repeat="allergyData in AllergyData">
+                <div class="row striped">
+                    <div class="col col-30"> <span>{{MEDICALRECORDSCONSTANTS.TITLELABEL}} </span> </div>
+                    <div class="col col-70"> <span class="left-margin-minus-5">: {{allergyData.Title}} </span> </div>
+                </div>
+                <div class="row striped">
+                    <div class="col col-30"> <span>{{MEDICALRECORDSCONSTANTS.DIAGNOSISLABEL}} </span> </div>
+                    <div class="col col-70"> <span class="left-margin-minus-5">: {{allergyData.Diagnosis}}</span> </div>
+                </div>
+                <div class="row striped">
+                    <div class="col col-30"> <span>{{MEDICALRECORDSCONSTANTS.STARTDATELABEL}} </span> </div>
+                    <div class="col col-70"> <span class="left-margin-minus-5">: {{allergyData.Begdate | date:'MMM dd yyyy'}}</span> </div>
+                </div>
+                <div class="row striped" ng-if="allergyData.Referredby">
+                    <div class="col col-30"> <span>{{MEDICALRECORDSCONSTANTS.REFERREDBYLABEL}} </span> </div>
+                    <div class="col col-70"> <span class="left-margin-minus-5">: {{allergyData.Referredby}}</span> </div>
+                </div>
+                <div class="row striped" ng-if="allergyData.Destination">
+                    <div class="col col-30"> <span>{{MEDICALRECORDSCONSTANTS.DESTINATIONLABEL}} </span> </div>
+                    <div class="col col-70"> <span class="left-margin-minus-5">: {{allergyData.Destination}}</span> </div>
+                </div>
+                <div class="row striped">
+                    <div class="col col-30"> <span>{{MEDICALRECORDSCONSTANTS.OUTCOMELABEL}} </span> </div>
+                    <div class="col col-70">
+                        <p class="left-margin-minus-5">: <span ng-if="allergyData.Outcome==0">{{MEDICALRECORDSCONSTANTS.OUTCOMEUNASSIGNED}}</span> <span ng-if="allergyData.Outcome==1">{{MEDICALRECORDSCONSTANTS.OUTCOMERESOLVED}}</span> <span ng-if="allergyData.Outcome==2">{{MEDICALRECORDSCONSTANTS.OUTCOMEIMPROVED}}</span> <span ng-if="allergyData.Outcome==3">{{MEDICALRECORDSCONSTANTS.OUTCOMESTATUSQUO}}</span> <span ng-if="allergyData.Outcome==4">{{MEDICALRECORDSCONSTANTS.OUTCOMEWORSE}}</span> <span ng-if="allergyData.Outcome==5">{{MEDICALRECORDSCONSTANTS.OUTCOMEPENDINGFOLLOWUP}}</span> </p>
+                    </div>
+                </div>
+                <div class="row striped">
+                    <div class="col col-30"> <span>{{MEDICALRECORDSCONSTANTS.OCCURANCELABEL}} </span> </div>
+                    <div class="col col-70">
+                        <p class="left-margin-minus-5">: <span ng-if="allergyData.Occurrence==0">{{MEDICALRECORDSCONSTANTS.OCCURANCEUNKNOWN}}</span> <span ng-if="allergyData.Occurrence==1">{{MEDICALRECORDSCONSTANTS.FIRST}}</span> <span ng-if="allergyData.Occurrence==4">{{MEDICALRECORDSCONSTANTS.OCCURANCECHRONICREC}}</span> <span ng-if="allergyData.Occurrence==5">{{MEDICALRECORDSCONSTANTS.OCCURANCEACUTECHRONIC}}</span> <span ng-if="allergyData.Occurrence==6">{{MEDICALRECORDSCONSTANTS.EARLYRECURRENCE}}</span> <span ng-if="allergyData.Occurrence==7">{{MEDICALRECORDSCONSTANTS.LATERECURRENCE}}</span> <span ng-if="allergyData.Occurrence==8">{{MEDICALRECORDSCONSTANTS.DELAYEDRECURRENCE}}</span> </p>
+                    </div>
+                </div>
+            </div>
+        </ion-item>
+    </ion-content> -->
+
+    <ion-content has-header="true" class="bottom-50 bg-gray">
+            <ion-item class="item-accordion body-grey no-padding no-margin">
+                <div class="item alert alert-info icon ion-information-circled" ng-show="AllergyData.length<=0"> {{noDataFound}}</div>
+                <div class="card MD-card" ng-show="AllergyData" ng-repeat="allergyData in AllergyData">
+                    <div class="row medicalProblem" ng-class="{active:!allergyData.Enddate,resolved:allergyData.Enddate}">
+                        <div class="col col-90 no-padding"><span class="medicalProblemTitle">{{allergyData.Title}}</span></div>
+                        <!--<div class="col col-10 no-padding">
+                            <button class="button button-clear ion-android-notifications notification medicalProblemBadge">
+                            <span class="badge badge-assertive">12</span>
+                            </button>
+                        </div>-->
+                    </div>
+                    <div class="row striped">
+                        <div class="col col-50"><span> <i class="icon icon-start-date assertive"></i> {{allergyData.Begdate | date:'MMM dd yyyy'}}</span></div>
+                        <div class="col col-50" ng-if="allergyData.Enddate"><span> <i class="icon icon-end-date balanced"></i> {{allergyData.Enddate | date:'MMM dd yyyy'}}</span></div>
+                    </div>
+                    <div class="row striped">
+                        <div class="col"><span> {{MEDICALRECORDSCONSTANTS.DIAGNOSISLABEL}} : <span class="font-medium">{{allergyData.Diagnosis}}</span></span></div>
+                    </div>
+                    <div class="row striped">
+                        <div class="col"><span> {{MEDICALRECORDSCONSTANTS.REFERREDBYLABEL}} : <span class="font-medium"> {{allergyData.Referredby}}</span></span></div>
+                    </div>
+                    <div class="row striped">
+                        <div class="col"> <span>{{MEDICALRECORDSCONSTANTS.OUTCOMELABEL}} : <span class="font-medium"><span ng-if="allergyData.Outcome==0">{{MEDICALRECORDSCONSTANTS.OUTCOMEUNASSIGNED}}</span> <span ng-if="allergyData.Outcome==1">{{MEDICALRECORDSCONSTANTS.OUTCOMERESOLVED}}</span> <span ng-if="allergyData.Outcome==2">{{MEDICALRECORDSCONSTANTS.OUTCOMEIMPROVED}}</span> <span ng-if="allergyData.Outcome==3">{{MEDICALRECORDSCONSTANTS.OUTCOMESTATUSQUO}}</span> <span ng-if="allergyData.Outcome==4">{{MEDICALRECORDSCONSTANTS.OUTCOMEWORSE}}</span> <span ng-if="allergyData.Outcome==5">{{MEDICALRECORDSCONSTANTS.OUTCOMEPENDINGFOLLOWUP}}</span> </span></span>
+                        </div>
+                        <div class="col"> <span>{{MEDICALRECORDSCONSTANTS.OCCURANCELABEL}} : <span class="font-medium"><span ng-if="allergyData.Occurrence==0">{{MEDICALRECORDSCONSTANTS.OCCURANCEUNKNOWN}}</span> <span ng-if="allergyData.Occurrence==1">{{MEDICALRECORDSCONSTANTS.FIRST}}</span><span ng-if="allergyData.Occurrence==4">{{MEDICALRECORDSCONSTANTS.OCCURANCECHRONICREC}}</span> <span ng-if="allergyData.Occurrence==5">{{MEDICALRECORDSCONSTANTS.OCCURANCEACUTECHRONIC}}</span> <span ng-if="allergyData.Occurrence==6">{{MEDICALRECORDSCONSTANTS.EARLYRECURRENCE}}</span> <span ng-if="allergyData.Occurrence==7">{{MEDICALRECORDSCONSTANTS.LATERECURRENCE}}</span> <span ng-if="allergyData.Occurrence==8">{{MEDICALRECORDSCONSTANTS.DELAYEDRECURRENCE}}</span></span></span>
+                        </div>
+                    </div>                
+                </div>
+            </ion-item>
+        </ion-content>
+</ion-view>

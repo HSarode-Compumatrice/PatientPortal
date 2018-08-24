@@ -1,0 +1,300 @@
+<ion-view title="{{pageTitle}}">
+    <ion-nav-buttons side="left">
+        <button ng-click="myGoBack()" class="button button-clear icon ion-ios-arrow-back left-menu"></button>
+        <div class="app-logo"> <img class="title-image" src="img/ajax-loader.gif" ng-src="{{orgLogoURL?orgLogoURL:defaultLogoURL}}" err-SRC="{{errorLogoURL}}" height="25" /> </div>
+    </ion-nav-buttons>
+    <ion-nav-buttons side="right">
+        <button title="Notifications" class="button button-clear ion-android-notifications notification" ui-sref="app.patientReminder"><span class="badge badge-assertive">{{Notification}}</span></button>
+        <button class="button button-clear ion-android-more-vertical right-menu" ng-click="popover.show($event)"> </button>
+    </ion-nav-buttons>
+    <form name="myForm" class="form-validate" novalidate ng-class="{'ng-submitted':isSubmitted}">
+        <div class="bar bar-subheader">
+            <div class="tabs tabs-positive update-insurance">
+                <a class="tab-item" href="" ng-class="{active:tab=='Insurance'}" ng-click="tabClick(myForm,'Insurance')"> <span>{{INSURANCESCONSTANTS.INSURANCEINFOLABEL}}</span> </a>
+                <a class="tab-item" href="" ng-class="{active:tab=='Personal'}" ng-click="tabClick(myForm,'Personal')"> <span>{{INSURANCESCONSTANTS.PERSONALINFOLABEL}}</span> </a>
+                <a class="tab-item" href="" ng-class="{active:tab== 'Address'}" ng-click="tabClick(myForm,'Address')"> <span>{{INSURANCESCONSTANTS.ADDRESSLABEL}}</span> </a>
+            </div>
+        </div>
+        <ion-content has-header=" true" class="top-75 bottom-50">
+            <ion-list>
+                <ion-item class="no-padding">
+                    <div ng-show="scanCardData">{{scanCardData}}</div>
+                    <div ng-show="tab=='Insurance'">
+                        <!--<form name="insuranceUpdateForm1" class="form-validate" novalidate>-->
+                        <div class="row no-padding" ng-if="!isUpdateInsurance">
+                            <div class="col col-40"> <span class="required">{{INSURANCESCONSTANTS.INSURANCETYPELABEL}}:</span> </div>
+                            <div class="col col-60">
+                                <label class="item item-input no-padding item-select insurance-select">&nbsp;
+                                    <select name="typeID" class="form-control bg-opacity provider-select" ng-model="insurance.insuranceType" required>
+                                        <option class="full-width" value="">- {{INSURANCESCONSTANTS.SELECTINSURANCETYPELABEL}} -</option>
+                                        <option ng-repeat="insuranceType in insuranceTypeList" value="{{insuranceType.Type}}">{{insuranceType.Type}}</option>
+                                    </select>
+                                </label>
+                            </div>
+                        </div>
+                        <!--<div class="row no-padding" ng-if="isUpdateInsurance">
+                            <div class="col col-40"> <span class="required">{{INSURANCESCONSTANTS.INSURANCETYPELABEL}}:</span> </div>
+                            <div class="col col-60">
+                                <label class="item item-input no-padding item-select insurance-select">&nbsp;
+                                    <select name="typeID" class="form-control bg-opacity provider-select" ng-model="insurance.insuranceType" required disabled>
+                                        <option class="full-width" value="">- {{INSURANCESCONSTANTS.SELECTINSURANCETYPELABEL}} -</option>
+                                        <option ng-repeat="insuranceType in insuranceTypeList" value="{{insuranceType.Type}}">{{insuranceType.Type}}</option>
+                                    </select>
+                                </label>
+                            </div>
+                        </div>-->
+                        <div class="row no-padding" ng-if="isUpdateInsurance">
+                            <div class="col col-40 top-margin-md"> <span>{{INSURANCESCONSTANTS.INSURANCETYPELABEL}}: </span> </div>
+                            <div class="col col-60">
+                                <label class="item item-input item-md-label no-padding">
+                                    <input name="typeID" class="input md-input" ng-model="insurance.insuranceType" type="text" placeholder="{{INSURANCESCONSTANTS.SELECTINSURANCETYPELABEL}}" required disabled>
+                                    <div class="highlight highlight-calm"></div>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="row no-padding">
+                            <div class="col top-margin-xs col-40"> <span class="required">{{INSURANCESCONSTANTS.PROVIDERNAMELABEL}}:</span> </div>
+                            <div class="col col-60">
+                                <label class="item item-input no-padding item-select insurance-select">&nbsp;
+                                    <select name="providerID" ng-options="insuranceProviders.Id as insuranceProviders.Name for insuranceProviders in insuranceCompanies" class="form-control bg-opacity provider-select" data-ng-model="insurance.insuranceProviderId" required>
+                                        <option class="full-width" value="">- {{INSURANCESCONSTANTS.SELECTPROVIDERNAMELABEL}} -</option>
+                                    </select>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="row no-padding">
+                            <div class="col col-40 top-margin-md"> <span>{{INSURANCESCONSTANTS.PLANNAMELABEL}}: </span> </div>
+                            <div class="col col-60">
+                                <label class="item item-input item-md-label no-padding">
+                                    <input name="planname" class="input md-input" ng-model="insurance.insurancePlanName" type="text" placeholder="{{INSURANCESCONSTANTS.PLANNAMELABEL}}">
+                                    <div class="highlight highlight-calm"></div>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="row no-padding">
+                            <div class="col col-40 top-margin-md"> <span class="required">{{INSURANCESCONSTANTS.EFFECTIVEDATELABEL}}: <i class="icon ion-calendar placeholder-icon"></i> </span> </div>
+                            <div class="col col-60">
+                                <label class="item item-input item-md-label no-padding">
+                                    <input name="effdate" class="input md-input pointer" ng-model="insurance.insuranceEffectiveDate" type="text" placeholder="{{INSURANCESCONSTANTS.DATEPLACEHOLDER}}" ng-value="insurance.EffDate" ng-click="openDatePicker()" required readonly>
+                                    <div class="highlight highlight-calm"></div>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="row no-padding">
+                            <div class="col col-40 top-margin-md"> <span class="required">{{INSURANCESCONSTANTS.POLICYNUMBERLABEL}}:</span> </div>
+                            <div class="col col-60">
+                                <label class="item item-input item-md-label no-padding">
+                                    <input name="policynumber" class="input md-input" ng-model="insurance.insurancePolicyNumber" type="text" placeholder="{{INSURANCESCONSTANTS.POLICYNUMBERLABEL}}" required>
+                                    <div class="highlight highlight-calm"></div>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="row no-padding">
+                            <div class="col col-40 top-margin-md"> <span>{{INSURANCESCONSTANTS.GROUPNUMBERLABEL}}:</span> </div>
+                            <div class="col col-60">
+                                <label class="item item-input item-md-label no-padding">
+                                    <input class="input md-input" ng-model="insurance.insuranceGroupNumber" type="text" placeholder="{{INSURANCESCONSTANTS.GROUPNUMBERLABEL}}">
+                                    <div class="highlight highlight-calm"></div>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="row no-padding" ng-if="!IsSSNshow">
+                            <div class="col col-40 top-margin-md"> <span>{{INSURANCESCONSTANTS.SSNLABEL}}: </span> </div>
+                            <div class="col col-60">
+                                <label class="item item-input item-md-label no-padding">
+                                    <input class="input md-input" string-to-number ng-model="insurance.insuranceHolderSSN" type="number" placeholder="{{INSURANCESCONSTANTS.SSNLABEL}}" ng-pattern="/^\+?\d{3}[- ]?\d{2}[- ]?\d{4}$/" ng-keypress="limitKeypress($event,insurance.insuranceHolderSSN,9)" disabled>
+                                    <div class="highlight highlight-calm"></div>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="row no-padding" ng-if="IsSSNshow">
+                            <div class="col col-40 top-margin-md"> <span>{{INSURANCESCONSTANTS.ADHARCARDNO}}: </span> </div>
+                            <div class="col col-60">
+                                <label class="item item-input item-md-label no-padding">
+                                    <input class="input md-input" name="adharcardno" string-to-number ng-model="insurance.aadharCardNo" type="number" placeholder="{{INSURANCESCONSTANTS.ADHARLABEL}}" ng-pattern="/^\+?\d{4}[- ]?\d{4}[- ]?\d{4}$/">
+                                    <div class="highlight highlight-calm"></div>
+                                </label>
+                            </div>
+                        </div>
+                        <!-- <div class="padding-LR-10">
+                            <button ng-click="updateInsurance(insurance,insuranceUpdateForm1)" class="button button-full button-positive ink top-margin-0">
+                                {{INSURANCESCONSTANTS.SENDBUTTON}}
+                            {{buttonlabel}}
+                            </button>
+                            <button ng-click="myGoBack()" class="button button-full button-stable ink">{{INSURANCESCONSTANTS.CANCELBUTTON}}</button>
+                        </div>-->
+                        <!-- </form>-->
+                    </div>
+                    <div ng-show="tab=='Personal'">
+                        <!-- <form name="insuranceUpdateForm2" class="form-validate" novalidate>-->
+                        <div class="row no-padding">
+                            <div class="col col-40 top-margin-md"> <span class="required">{{INSURANCESCONSTANTS.SELECTPROVIDERLABEL}}:</span> </div>
+                            <div class="col col-60">
+                                <label class="item item-input no-padding item-select insurance-select">&nbsp;
+                                    <select name="relation" ng-model="insurance.insuranceHolder" ng-options="relations for relations in relationList" class="form-control bg-opacity provider-select" ng-change="getRelationData(insurance.insuranceHolder)" required>
+                                        <option class="full-width" value="">- {{INSURANCESCONSTANTS.SELECTPROVIDERLABEL}} -</option>
+                                    </select>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="row no-padding">
+                            <div class="col col-40 top-margin-md"> <span class="required">{{INSURANCESCONSTANTS.FIRSTNAMELABEL}}:</span> </div>
+                            <div class="col col-60">
+                                <label class="item item-input item-md-label no-padding">
+                                    <input name="firstName" class="input md-input" ng-model="insurance.insuranceHolderFirstName" type="text" placeholder="{{INSURANCESCONSTANTS.FIRSTNAMELABEL}}" required>
+                                    <div class="highlight highlight-calm"></div>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="row no-padding">
+                            <div class="col col-40 top-margin-md"> <span>{{INSURANCESCONSTANTS.MIDDLENAMELABEL}}:</span> </div>
+                            <div class="col col-60">
+                                <label class="item item-input item-md-label no-padding">
+                                    <input class="input md-input" name="middleName" ng-model="insurance.insuranceHolderMiddleName" type="text" placeholder="{{INSURANCESCONSTANTS.MIDDLENAMELABEL}}">
+                                    <div class="highlight highlight-calm"></div>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="row no-padding">
+                            <div class="col col-40 top-margin-md"> <span class="required">{{INSURANCESCONSTANTS.LASTNAME}}:</span> </div>
+                            <div class="col col-60">
+                                <label class="item item-input item-md-label no-padding">
+                                    <input class="input md-input" name="lastName" ng-model="insurance.insuranceHolderLastName" type="text" placeholder="{{INSURANCESCONSTANTS.LASTNAME}}" required>
+                                    <div class="highlight highlight-calm"></div>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="row no-padding">
+                            <div class="col col-40 top-margin-md"> <span class="required">{{INSURANCESCONSTANTS.DATEOFBIRTHLABEL}}: <i class="icon ion-calendar placeholder-icon"></i></span> </div>
+                            <div class="col col-60">
+                                <label class="item item-input item-md-label no-padding">
+                                    <input class="input md-input pointer" name="dob" ng-model="insurance.insuranceHolderDateOfBirth" type="text" ng-value="insurance.insuranceHolderDateOfBirth" placeholder="{{INSURANCESCONSTANTS.DATEPLACEHOLDER}}" ng-click="openDobDatePicker()" required readonly>
+                                    <div class="highlight highlight-calm"></div>
+                                </label>
+                            </div>
+                        </div>
+                        <!--
+                        <div class="row no-padding">
+                            <div class="col col-40 top-margin-md"> <span class="required">{{INSURANCESCONSTANTS.SELECTPROVIDERLABEL}}:</span> </div>
+                            <div class="col col-60">
+                                <label class="item item-input no-padding item-select insurance-select">&nbsp;
+                                    <select name="relation" ng-model="insurance.insuranceHolder" ng-options="relations for relations in relationList" class="form-control bg-opacity provider-select" required>
+                                        <option class="full-width" value="">- {{INSURANCESCONSTANTS.SELECTPROVIDERLABEL}} -</option>
+                                    </select>
+                                </label>
+                            </div>
+                        </div>
+-->
+                        <div class="row no-padding">
+                            <div class="col col-40 top-margin-md"> <span class="required">{{INSURANCESCONSTANTS.GENDERLABEL}}:</span> </div>
+                            <div class="col col-60">
+                                <label class="item item-input no-padding item-select insurance-select">&nbsp;
+                                    <select name="sexID" ng-options="sex for sex in genderList" class="form-control bg-opacity provider-select" ng-model="insurance.insuranceHolderSex" required>
+                                        <option class="full-width" value="">- {{INSURANCESCONSTANTS.SELECTGENDERLABEL}} -</option>
+                                    </select>
+                                </label>
+                            </div>
+                        </div> 
+                        <div class="row no-padding">
+                            <div class="col col-40 top-margin-md"> 
+                                <span>{{INSURANCESCONSTANTS.SUBSCRIBERPHONELABEL}}:</span> </div>
+                            <div class='col no-padding' style='flex: 0 0 70px; max-width: 70px;'>
+                                <label class='item item-input item-md-label no-padding border-none' style='display: inline-grid; height: 100%; min-height: 100%;background-color: transparent !important;border-right: none;'> 
+                                    <select class="form-control bg-opacity provider-select bookSearch" style='background-color: transparent !important;height: 35px; border-radius: 0; border-right: none;' ng-model="selectedCountryCell" ng-init="selectedCountryCell=selectedLen" style="border-radius: 0;">
+                                        <option ng-repeat="country in APPCONSTANTS.INTERNATIONALNOARRAY" ng-selected="{{country.DEFAULT == true}}" value="{{country.MAXLENGTHFORPHONE}}">{{country.PHONECODE}}</option>
+                                    </select>
+                                </label>
+                            </div>
+                            <div class="col no-padding">
+                                <label class="item item-input item-md-label no-padding border-none">
+                                    <input class="input md-input" string-to-number name="PhoneNumber" ng-model="insurance.insuranceHolderCellNumber" type="number" ng-maxlength="{{selectedCountryCell}}" ng-pattern="/^[0-9]/" ng-minlength="{{selectedCountryCell}}" placeholder="{{INSURANCESCONSTANTS.SUBSCRIBERPHONELABEL}}">
+                                    <div class="highlight highlight-calm"></div>
+                                </label>
+                            </div>
+                        </div>
+                        <!--<div class="row no-padding">
+                            <div class="col col-40 top-margin-md"> <span>{{INSURANCESCONSTANTS.SUBSCRIBERPHONELABEL}}:</span> </div>
+                            <div class="col col-60">
+                                <label class="item item-input no-padding item-select insurance-select" style="height: 35px; border-radius: 0; width: 70px; min-width: 70px; display: inline-block;">
+                                    <select class="form-control bg-opacity provider-select bookSearch" ng-model="selectedCountryCell" ng-init="selectedCountryCell=selectedLen" style="border-radius: 0;">
+                                        <option ng-repeat="country in APPCONSTANTS.INTERNATIONALNOARRAY" ng-selected="{{country.DEFAULT == true}}" value="{{country.MAXLENGTHFORPHONE}}">{{country.PHONECODE}}</option>
+                                    </select>
+                                </label>
+                                <label class="item item-input item-md-label no-padding" style="display: inline-block; width: 84%; min-width: 84%;">
+                                    <input class="input md-input" string-to-number name="PhoneNumber" ng-model="insurance.insuranceHolderCellNumber" type="number" ng-maxlength="{{selectedCountryCell}}" ng-pattern="/^[0-9]/" ng-minlength="{{selectedCountryCell}}" placeholder="{{INSURANCESCONSTANTS.SUBSCRIBERPHONELABEL}}">
+                                    <div class="highlight highlight-calm"></div>
+                                </label>
+                            </div>
+                        </div>-->
+                        <!-- <div class="padding-LR-10">
+                            <button ng-click="updateInsurance(insurance,insuranceUpdateForm2)" class="button button-full button-positive ink top-margin-0">  
+                                {{INSURANCESCONSTANTS.SENDBUTTON}}
+                            {{buttonlabel}}
+                            </button>
+                            <button ng-click="myGoBack()" class="button button-full button-stable ink">{{INSURANCESCONSTANTS.CANCELBUTTON}}</button>
+                        </div>-->
+                        <!-- </form>-->
+                    </div>
+                    <div ng-show="tab=='Address'">
+                        <!--  <form name="insuranceUpdateForm3" class="form-validate" novalidate>-->
+                        <div class="row no-padding">
+                            <div class="col col-40 top-margin-md"> <span>{{INSURANCESCONSTANTS.SUBSCRIBERADDRESSLABEL}}:</span> </div>
+                            <div class="col col-60">
+                                <label class="item item-input item-md-label no-padding">
+                                    <input class="input md-input" ng-model="insurance.insuranceHolderStreet" type="text" placeholder="{{INSURANCESCONSTANTS.SUBSCRIBERADDRESSLABEL}}">
+                                    <div class="highlight highlight-calm"></div>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="row no-padding">
+                            <div class="col col-40 top-margin-md"> <span class="required">{{INSURANCESCONSTANTS.COUNTRYLABEL}}:</span> </div>
+                            <div class="col col-60">
+                                <label class="item item-input no-padding item-select insurance-select">&nbsp;
+                                    <select name="country" class="form-control bg-opacity provider-select" ng-change="statewiseCity()" ng-options="country.countryISONAME as country.countryName for country in Countries" ng-model="insurance.insuranceHolderCountry" required>
+                                        <option class="full-width" value="">- {{INSURANCESCONSTANTS.SELECTCOUNTRYLABEL}} -</option>
+                                    </select>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="row no-padding">
+                            <div class="col col-40 top-margin-md"> <span class="required">{{INSURANCESCONSTANTS.STATELABEL}}:</span> </div>
+                            <div class="col col-60">
+                                <label class="item item-input no-padding item-select insurance-select">&nbsp;
+                                    <select name="stateName" class="form-control bg-opacity provider-select" ng-options="state.StateCode as state.StateName for state in states" ng-model="insurance.insuranceHolderState" required>
+                                        <option class="full-width" value="">- {{INSURANCESCONSTANTS.SELECTSTATELABEL}} -</option>
+                                    </select>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="row no-padding">
+                            <div class="col col-40 top-margin-md"> <span class="required">{{INSURANCESCONSTANTS.CITYLABEL}}:</span> </div>
+                            <div class="col col-60">
+                                <label class="item item-input item-md-label no-padding">
+                                    <input class="input md-input" ng-model="insurance.insuranceHolderCity" type="text" placeholder="{{INSURANCESCONSTANTS.CITYLABEL}}" required>
+                                    <div class="highlight highlight-calm"></div>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="row no-padding">
+                            <div class="col col-40 top-margin-md"> <span class="required">{{INSURANCESCONSTANTS.ZIPCODELABEL}}:</span> </div>
+                            <div class="col col-60">
+                                <label class="item item-input item-md-label no-padding">
+                                    <input class="input md-input" string-to-number ng-model="insurance.insuranceHolderZipCode" name="zipcode" type="number" placeholder="{{INSURANCESCONSTANTS.ZIPCODELABEL}}" ng-maxlength="{{Maxlength}}" ng-pattern="/^[0-9]/" ng-minlength="{{Maxlength}}" required>
+                                    <div class="highlight highlight-calm"></div>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="padding-LR-10">
+                            <button ng-click="updateInsurance(myForm,insurance)" class="button button-full button-positive ink top-margin-0">
+                                <!--                                {{INSURANCESCONSTANTS.SENDBUTTON}}-->{{buttonlabel}}</button>
+                            <button ng-click="myGoBack()" class="button button-full button-stable ink">{{INSURANCESCONSTANTS.CANCELBUTTON}}</button>
+                        </div>
+                        <!-- </form>-->
+                    </div>
+                </ion-item>
+            </ion-list>
+        </ion-content>
+        <div class="tabs ng-scope tabs-icon-top tabs-positive" style="display:none;">
+            <button style="background-color: transparent; border: none;" class="tab-item disable-user-behavior bottom-icon" ng-click="updateInsurance(insurance,insuranceUpdateForm)"> <i class="icon ion-loop"></i><span>{{INSURANCESCONSTANTS.UPDATEBUTTON}}</span></button> <a class="tab-item disable-user-behavior bottom-icon" ui-sref="app.insuranceHistory"><i class="icon ion-android-cancel"></i><span>{{INSURANCESCONSTANTS.CANCELBUTTON}}</span></a> </div>
+    </form>
+</ion-view>

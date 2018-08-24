@@ -1,0 +1,78 @@
+<ion-view title="{{PATIENTDOCUMENTSCONSTANTS.DOCUMENTSTITLE}}">
+    <ion-nav-buttons side="left">
+        <button menu-toggle="left" class="button button-clear icon ion-navicon left-menu"></button>
+        <div class="app-logo"> <img class="title-image" src="img/ajax-loader.gif" ng-src="{{orgLogoURL?orgLogoURL:defaultLogoURL}}" err-SRC="{{errorLogoURL}}" height="25" /> </div>
+    </ion-nav-buttons>
+    <ion-nav-buttons side="right">
+        <button title="Notifications" class="button button-clear ion-android-notifications notification" ui-sref="app.patientReminder"><span class="badge badge-assertive">{{Notification}}</span></button>
+        <button class="button button-clear ion-android-more-vertical right-menu" ng-click="popover.show($event)"> </button>
+    </ion-nav-buttons>
+    <input type="file" file-model="myFile" id="DocumentFilePicker" style="display:none;">
+    <ion-floating-menu title="Add Document" bottom="60px">
+        <ion-floating-item icon="ion-information-circled" text="Patient Information" ng-click="selectDocument(PATIENTDOCUMENTSCONSTANTS.PATIENTDOCUMENTCATEGORY[2].key,PATIENTDOCUMENTSCONSTANTS.PATIENTDOCUMENTCATEGORY[2].name)"></ion-floating-item>
+        <ion-floating-item icon="ion-clipboard" text="Medical Record" ng-click="selectDocument(PATIENTDOCUMENTSCONSTANTS.PATIENTDOCUMENTCATEGORY[1].key,PATIENTDOCUMENTSCONSTANTS.PATIENTDOCUMENTCATEGORY[1].name)"></ion-floating-item>
+        <ion-floating-item icon="ion-ios-flask" text="Lab Report" ng-click="selectDocument(PATIENTDOCUMENTSCONSTANTS.PATIENTDOCUMENTCATEGORY[0].key,PATIENTDOCUMENTSCONSTANTS.PATIENTDOCUMENTCATEGORY[0].name)"></ion-floating-item>
+        <ion-floating-item ng-if="false" icon="ion-person" text="Person" click="myEvent()"></ion-floating-item>
+    </ion-floating-menu>
+    <ion-content has-header="true" class="bottom-50 document-header">
+        <div ng-if="!isPhysicianDisplay">
+            <ion-item class="padding-TB-md" style="padding: 0px !important;">
+                <label class="item item-input item-select reason-item border-none">
+                    <select id="providerdropdown" ng-model="$parent.provider" class="form-control bg-opacity provider-select login-input login-select" ng-change="providerswitch(provider)" required>
+                        <option selected="selected" value="">- {{PATIENTDOCUMENTSCONSTANTS.PHYSICIANSLABEL}} -</option>
+                        <option class="full-width" value="{{physician.id}}" ng-repeat="physician in PhysiciansData">{{physician.title | capitalize}} {{physician.firstname | capitalize}} {{physician.lastname | capitalize}}</option>
+                    </select>
+                </label>
+            </ion-item>
+        </div>
+        <div class="search-box">
+            <div class="item-input-wrapper no-padding">
+                <label class="item-input item-md-label no-padding no-margin full-width">
+                    <input type="text" class="input md-input" placeholder="Search By Name" ng-model="searchDocuments.name" />
+                    <div class="highlight highlight-calm"></div>
+                </label>
+                <button title="Search" class="button button-positive go-btn search-btn"><i class="icon ion-ios-search placeholder-icon text-white"></i></button>
+            </div>
+        </div>
+        <ion-list>
+            <div ng-repeat="cat in categorydocuments | searchDocumentFor:categoryName as filteredDocuments">
+                <div class="no-data-center" ng-show="cat.documents.length<=0 || searchDocuments.filteredItems.length<=0">
+                    <div class="row alert-padding">
+                        <div class="col no-data"> <i class="icon ion-information-circled"> </i>
+                            <h5 class="item-text-wrap">{{PATIENTDOCUMENTSCONSTANTS.NODOCUMENTSFOUND}}</h5> </div>
+                    </div>
+                </div>
+                <div ng-if="cat.documents.length>0">
+                    <div class="card margin-md" ng-class="{'approved':doc.approval_status ==2, 'pending': doc.approval_status ==1,'denied':doc.approval_status ==3}" ng-repeat="doc in searchDocuments.filteredItems = ( cat.documents | searchDocByName:searchDocuments.name )">
+                        <ion-item class="no-padding">
+                            <div class="card no-padding no-margin">
+                                <div class="item item-avatar document-thumbnail" ng-click="documentPreview(doc,$index,doc.fileName)"> <img class="document-image" ng-src="{{doc.logo}}" />
+                                    <p>{{doc.fileName}}</p>
+                                    <p ng-if="!isPhysicianDisplay">{{doc.doctorFirstName}} {{doc.doctorLastName}}</p>
+                                    <div class="clearfix"></div>
+                                </div>
+                                <div class="row appointment-card border-none">
+                                    <div class="col col-40 no-padding"> <span class="sub-text absolute-center">{{doc.date | ParseDateFilter | date:'MMM dd yyyy hh:mm a'}}</span> </div>
+                                    <div class="col col-20 no-padding">
+                                        <a title="Share" ng-click="shareFile(doc)" class="button button-clear text-primary icon ion-android-share-alt absolute-center"></a>
+                                    </div>
+                                    <div class="col col-20 no-padding">
+                                        <a title="Download" ng-click="downloadFile(doc)" class="button button-clear text-primary icon ion-ios-download absolute-center"></a>
+                                    </div>
+                                    <div class="col col-20 no-padding">
+                                        <a title="Delete" ng-click="deleteDocument(doc,$parent.$index,$index)" class="button button-clear text-primary icon ion-trash-b absolute-center"></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </ion-item>
+                    </div>
+                </div>
+            </div>
+        </ion-list>
+    </ion-content>
+    <div class="tabs tabs-icon-top tabs-positive">
+        <a ng-click="getDocuments(PATIENTDOCUMENTSCONSTANTS.PATIENTDOCUMENTCATEGORY[0].name)" class="tab-item disable-user-behavior bottom-icon" ng-class="{'active':categoryName=='Lab Report', 'inactive':categoryName!='Lab Report'}" title="LabReport"> <i class="icon ion-ios-flask"></i><span class="tab-title"></span><span>{{PATIENTDOCUMENTSCONSTANTS.LABREPORTLABEL}}</span></a>
+        <a ng-click="getDocuments(PATIENTDOCUMENTSCONSTANTS.PATIENTDOCUMENTCATEGORY[1].name)" class="tab-item disable-user-behavior bottom-icon" ng-class="{'active':categoryName=='Medical Record', 'inactive':categoryName!='Medical Record'}" title="MedicalRecord"> <i class="icon ion-clipboard"></i><span class="tab-title">{{PATIENTDOCUMENTSCONSTANTS.MEDICALREPORTLABEL}}</span></a>
+        <a ng-click="getDocuments(PATIENTDOCUMENTSCONSTANTS.PATIENTDOCUMENTCATEGORY[2].name)" class="tab-item disable-user-behavior bottom-icon" title="PatientInfo" ng-class="{'active':categoryName=='Patient Information', 'inactive':categoryName!='Patient Information'}"> <i class="icon ion-information-circled"></i><span class="tab-title">{{PATIENTDOCUMENTSCONSTANTS.PATIENTIFOLABEL}}</span></a>
+    </div>
+</ion-view>

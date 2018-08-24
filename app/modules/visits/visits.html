@@ -1,0 +1,73 @@
+<ion-view title="{{VISITSCONSTANTS.VISITSTITLE}}">
+    <ion-nav-buttons side="left">
+        <button menu-toggle="left" ng-hide="isReturnToDashboard" class="button button-clear icon ion-navicon left-menu"></button>
+        <button ng-click="myGoBack()" ng-show="isReturnToDashboard" class="button button-clear icon ion-ios-arrow-back left-menu"></button>
+        <div class="app-logo"> <img class="title-image" src="img/ajax-loader.gif" ng-src="{{orgLogoURL?orgLogoURL:defaultLogoURL}}" err-SRC="{{errorLogoURL}}" height="25" /> </div>
+    </ion-nav-buttons>
+    <ion-nav-buttons side="right">
+        <button title="Notifications" class="button button-clear ion-android-notifications notification" ui-sref="app.patientReminder"><span class="badge badge-assertive">{{Notification}}</span></button>
+        <button class="button button-clear ion-android-more-vertical right-menu" ng-click="popover.show($event)"> </button>
+    </ion-nav-buttons>
+    <button title="Load More" class="button button-clear button-float bottom-20" ng-show="!isLoadComplete && isOnline" ng-click="loadMore();"> <i class="icon ion-android-more-horizontal"></i> </button>
+    <div class="data-loading bottom-0" ng-show="isLoadMore && isOnline">{{VISITSCONSTANTS.LOADINGLABEL}}
+        <ion-spinner icon="lines"></ion-spinner>
+    </div>
+    <ion-content has-header="true" class="body-grey">
+        <div class="search-box">
+            <div class="item-input-wrapper no-padding">
+                <label class="item-input item-md-label no-padding no-margin full-width">
+                    <input type="text" class="input md-input" placeholder="{{VISITSCONSTANTS.SEARCHVISITPLACEHOLDER}}" ng-model="$parent.search" ng-change="searchVisits()" />
+                    <div class="highlight highlight-calm"></div>
+                </label>
+                <button title="Search" class="button button-positive go-btn search-btn" ng-click="searchVisits()"><i class="icon ion-ios-search placeholder-icon text-white"></i></button>
+            </div>
+        </div>
+        <div class="absolute-center" ng-show="myVisits.length<=0">
+            <div class="row alert-padding">
+                <div class="col no-data"> <i class="icon ion-information-circled"> </i>
+                    <h5 class="item-text-wrap">{{VISITSCONSTANTS.VISITMESSAGE}} </h5> </div>
+            </div>
+        </div>
+        <ion-list>
+            <ion-item class="no-padding body-grey" ng-repeat="visits in myVisits | orderBy:encounter:reverse">
+                <div class="card portal-card">                    
+                    <div class="item item-icon-right item-button-right white-space no-padding"> <a ui-sref="app.details({'visit': visits})" class="sub-text right visit-no text-primary">{{VISITSCONSTANTS.VISITNOLABEL}} : {{visits.encounter}}</a>
+                        <div class="row center no-padding min-height-65">
+                            <div class="green-triangle-bg"></div>
+                            <div ui-sref="app.details({'visit': visits})" class="col col-15 no-padding text-center">
+                                <p class="text-primary">{{visits.date | date:'MMM'}}</p>
+                                <p class="date text-primary">{{visits.date | date:'dd'}}</p>
+                                <p class="text-primary">{{visits.date | date:'yyyy'}}</p>
+                            </div>
+                            <div class="col col-60 no-padding">
+                                <p ui-sref="app.physicianProfile({'physicianId': visits.provider_id})" class="pointer"> {{visits.utitle | capitalize}} {{visits.firstname | capitalize}} {{visits.lastname | capitalize}}</p>
+                                <p ui-sref="app.details({'visit': visits})" class="item-icon-right"><i class="button button-clear text-primary icon ion-ios-chatboxes-outline icon-visit-chat" ng-click="chatDetails(visits);$event.stopPropagation()"></i></p>
+                                <p ui-sref="app.details({'visit': visits})" class="sub-text">{{VISITSCONSTANTS.VISITCATEGORYLABEL}} : {{visits.pc_catname}}</p>
+                                <p ui-sref="app.details({'visit': visits})" class="sub-text">{{VISITSCONSTANTS.SENSITIVITYLABEL}} : {{visits.sensitivity}}</p>
+                                <p ui-sref="app.details({'visit': visits})" class="sub-text">{{VISITSCONSTANTS.DESCRIPTIONLABEL}} : {{visits.reason}}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row appointment-card">
+                        <div class="col col-25 no-padding">
+                            <a title="Message" class="button button-clear text-primary icon ion-ios-email-outline absolute-center" ui-sref="app.composeMessage({'PhysicianId': visits.provider_id})"></a>
+                        </div>
+                        <div class="col col-25 no-padding">
+                            <a title="Share" class="button button-clear text-primary icon ion-android-share-alt absolute-center" ng-click="shareFile(visits)"></a>
+                        </div>
+                        <div class="col col-25 no-padding">
+                            <a title="Download" class="button button-clear text-primary icon ion-ios-download absolute-center" ng-click="downloadAndOpenFile(visits)"></a>
+                        </div>
+                        <div class="col col-25 no-padding">
+                            <a class="button button-clear text-primary icon ion-ios-paper absolute-center" title="Consent" ui-sref="app.documents"> </a>
+                        </div>
+                        <!--<div class="col col-25 no-padding">
+                            <a title="Request" ng-if="visits.isAppointmentRequested==1" ui-sref="app.addAppointment({'status':0,'physicianId': visits.provider_id })" class="button button-clear text-primary icon icon-calendar-plus absolute-center"> </a>
+                            <a title="Schedule" ng-if="visits.isAppointmentRequested==0" ui-sref="app.addAppointment({'status':1,'physicianId': visits.provider_id })" class="button button-clear text-primary icon ion-android-time absolute-center"> </a>
+                        </div>-->
+                    </div>
+                </div>
+            </ion-item>
+        </ion-list>
+    </ion-content>
+</ion-view>

@@ -1,0 +1,108 @@
+<ion-view title="{{PATIENTPROFILECONSTANTS.MYPROFILETITLE}}">
+    <ion-nav-buttons side="left"> <span ng-click="myGoBack()">
+        <button class="button button-clear icon ion-ios-arrow-back left-menu"></button>
+        </span>
+        <div class="app-logo"> <img class="title-image" src="img/ajax-loader.gif" ng-src="{{orgLogoURL?orgLogoURL:defaultLogoURL}}" err-SRC="{{errorLogoURL}}" height="25" /> </div>
+    </ion-nav-buttons>
+    <ion-nav-buttons side="right">
+        <button title="Notifications" class="button button-clear ion-android-notifications notification" ui-sref="app.patientReminder"><span class="badge badge-assertive">{{Notification}}</span></button>
+        <button class="button button-clear ion-android-more-vertical right-menu" ng-click="popover.show($event)"> </button>
+    </ion-nav-buttons>
+    <form name="editProfile" class="form-validate" novalidate>
+        <ion-content has-header="true" class="bottom-50 top-39 body-grey">
+            <div class="row">
+                <div class="col">
+                    <div class="list login-padding no-margin">
+                        <label class="item item-input item-floating-label login-label password-label item-md-label" style="background-color: transparent !important;"> <i class="icon ion-ios-person placeholder-icon"></i>
+                            <input style="margin-top: 0" type="text" class="input login-input md-input" name="fName" placeholder="{{PATIENTPROFILECONSTANTS.FIRSTNAMELABEL}}" ng-model="DemographicsData.FirstName" autofocus required/>
+                            <div class="highlight highlight-calm"></div>
+                        </label>
+                        <label class="item item-input item-floating-label login-label password-label item-md-label" style="background-color: transparent !important;"> <i class="icon ion-person placeholder-icon"></i>
+                            <input type="text" class="input login-input md-input" name="mName" placeholder="{{PATIENTPROFILECONSTANTS.MIDDLENAMELABEL}}" ng-model="DemographicsData.MiddleName" />
+                            <div class="highlight highlight-calm"></div>
+                        </label>
+                        <label class="item item-input item-floating-label login-label password-label item-md-label" style="background-color: transparent !important;"> <i class="icon ion-person placeholder-icon"></i>
+                            <input type="text" class="input login-input md-input " name="lName" placeholder="{{PATIENTPROFILECONSTANTS.LASTNAMELABEL}}" ng-model="DemographicsData.LastName" required/>
+                            <div class="highlight highlight-calm"></div>
+                        </label>
+                        <label class="item item-input item-floating-label login-label password-label item-md-label" style="background-color: transparent !important;" ng-if="!IsSSNshow"> <i class="icon ion-pound placeholder-icon pound-icon"></i>
+                            <input type="text" class="input login-input md-input " ng-model="DemographicsData.SSN" name="ssn" type="text" id="ssn" placeholder="{{PATIENTPROFILECONSTANTS.SSNPLACEHOLDER}}" ng-pattern="/^\+?\d{3}[- ]?\d{2}[- ]?\d{4}$/" ng-keyup="limitKeypress('ssn',9)" required/>
+                            <div class="highlight highlight-calm"></div>
+                        </label>
+                        <label class="item item-input item-floating-label login-label password-label item-md-label" style="background-color: transparent !important;" ng-if="IsSSNshow"> <i class="icon placeholder-icon ion-lock-combination"></i>
+                            <input type="text" class="input login-input md-input " ng-model="DemographicsData.aadharCardNo" name="adharcardno" id="adharcardno" type="text" placeholder="{{PATIENTPROFILECONSTANTS.ADHARCARDNO}}" ng-pattern="/^\+?\d{4}[- ]?\d{4}[- ]?\d{4}$/" ng-keyup="limitKeypress('adharcardno',12)" required/>
+                            <div class="highlight highlight-calm"></div>
+                        </label>
+                        <div class="item item-input item-select title-select gender-select" style="top: -9px; margin: 0 0 5px 0 !important;">
+                            <div class="bor-pad">
+                                <div class="input-label"><i class="icon ion-man placeholder-icon"></i> {{PATIENTPROFILECONSTANTS.GENDERLABEL}}</div>
+                                <select ng-options="sex for sex in genderList" ng-model="DemographicsData.Sex" required>
+                                    <option selected="selected" value="">- {{PATIENTPROFILECONSTANTS.SELECTGENDERLABEL}} -</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="item item-input item-select title-select bloodGroup-select" style="top: -9px; margin: 0 0 5px 0 !important;">
+                            <div class="bor-pad">
+                                <div class="input-label"><i class="icon ion-waterdrop placeholder-icon"></i> {{PATIENTPROFILECONSTANTS.BLOODGROUPLABEL}}</div>
+                                <select ng-options="bloodGroup for bloodGroup in bloodGroupList" ng-model="DemographicsData.blood_group" required>
+                                    <option selected="selected" value="">- {{PATIENTPROFILECONSTANTS.SELECTBLOODGROUPLABEL}} -</option>
+                                </select>
+                            </div>
+                        </div>
+                        <label class="item item-input item-floating-label login-label password-label item-md-label" style="background-color: transparent !important;"> <i class="icon ion-person placeholder-icon"></i>
+                            <input type="text" class="input login-input md-input " name="motherName" placeholder="{{PATIENTPROFILECONSTANTS.MOTHERNAMELABEL}}" ng-model="DemographicsData.MotherName" />
+                            <div class="highlight highlight-calm"></div>
+                        </label>
+                        <label class="item item-input item-floating-label login-label password-label item-md-label" style="background-color: transparent !important;"> <i class="icon ion-calendar placeholder-icon"></i>
+                            <input type="text" class="input login-input md-input " name="DOB" placeholder="{{PATIENTPROFILECONSTANTS.DOBLABEL}}" ng-model="DemographicsData.DateOfBirth" ng-click="openDOBDatePicker()" required readonly/>
+                            <div class="highlight highlight-calm"></div>
+                        </label>
+                        <label class="item item-input item-floating-label login-label password-label item-md-label" style="background-color: transparent !important;top: -10px;"> <i class="icon ion-ios-email placeholder-icon"></i>
+                            <input style="letter-spacing: 1px;padding: 19px 0 24px 28px;" name="email" type="email" ng-model="DemographicsData.Email" ng-pattern="/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/" placeholder="{{PATIENTPROFILECONSTANTS.EMAILLABEL}}" />
+                            <div class="highlight highlight-calm"></div>
+                        </label>
+                        <div class="row no-padding" style="position: relative; top: -5px;">
+                            <select-country-code></select-country-code>
+                            <div class="col no-padding">
+                                <label class="item item-input item-md-label no-padding border-none">
+                                    <input type="text" id="cellNo" class="input login-input md-input" ng-keyup="limitKeypress('cellNo',phoneMaxLength)" style="margin: 0; height: 43px;" name="hphone" type="text" placeholder="{{PATIENTPROFILECONSTANTS.CELLPHONELABEL}}" ng-model="DemographicsData.PhoneCell" ng-maxlength="{{phoneMaxLength}}" ng-pattern="/^[0-9]/" ng-minlength="{{phoneMaxLength}}" required/>
+                                    <div class="highlight highlight-calm"></div>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="item item-input item-select title-select gender-select" style="margin:0 0 0 0 !important">
+                            <div class="bor-pad">
+                                <div class="input-label"><i class="icon ion-home placeholder-icon"></i> {{PATIENTPROFILECONSTANTS.COUNTRYLABEL}} </div>
+                                <select name="contrycode" ng-change="statewiseCity(false)" ng-model="DemographicsData.CountryCode" ng-options="country.countryISONAME as country.countryName for country in Countries" required>
+                                    <option selected="selected" value="">- {{PATIENTPROFILECONSTANTS.SELECTCOUNTRYLABEL}} -</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="item item-input item-select title-select gender-select" style="margin:5px 0px 12px !important">
+                            <div class="bor-pad">
+                                <div class="input-label"><i class="icon ion-home placeholder-icon"></i> {{PATIENTPROFILECONSTANTS.STATELABEL}} </div>
+                                <select name="state" style="padding: 0 35px 0 6px;" ng-options="state.StateCode as state.StateName for state in states" ng-model="DemographicsData.StateCode" required>
+                                    <option selected="selected" value="">- {{PATIENTPROFILECONSTANTS.SELECTSTATELABEL}} -</option>
+                                </select>
+                            </div>
+                        </div>
+                        <label class="item item-input item-floating-label login-label password-label item-md-label" style="background-color: transparent !important;"> <i class="icon ion-home placeholder-icon"></i>
+                            <input type="text" class="input login-input md-input" name="city" placeholder="{{PATIENTPROFILECONSTANTS.CITYLABEL}}" ng-model="DemographicsData.City" required/>
+                            <div class="highlight highlight-calm"></div>
+                        </label>
+                        <label class="item item-input item-floating-label login-label password-label item-md-label" style="background-color: transparent !important;"> <i class="icon ion-home placeholder-icon"></i>
+                            <input type="text" class="input login-input md-input" name="StreetName" placeholder="{{PATIENTPROFILECONSTANTS.STREETLABEL}}" ng-model="DemographicsData.StreetName" required/>
+                            <div class="highlight highlight-calm"></div>
+                        </label>
+                        <label class="item item-input item-floating-label login-label password-label item-md-label" style="background-color: transparent !important;"> <i class="icon ion-home placeholder-icon"></i>
+                            <input type="number" string-to-number class="input login-input md-input" name="postalcode" placeholder="{{PATIENTPROFILECONSTANTS.POSTALLABEL}}" ng-model="DemographicsData.postalcode" ng-maxlength="{{Maxlength}}" ng-pattern="/^[0-9]/" ng-minlength="{{Maxlength}}" />
+                            <div class="highlight highlight-calm"></div>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </ion-content>
+        <div class="tabs ng-scope tabs-icon-top tabs-positive">
+            <button style="background-color: transparent; border: none;" class="tab-item bottom-icon" ng-click="save(DemographicsData,editProfile)"> <i class="icon ion-checkmark-circled"></i><span>{{PATIENTPROFILECONSTANTS.SAVEBUTTON}}</span></button> <a class="tab-item bottom-icon" ng-click="myGoBack()"><i class="icon ion-android-cancel"></i><span>{{PATIENTPROFILECONSTANTS.CANCELBUTTON}}</span></a> </div>
+    </form>
+</ion-view>

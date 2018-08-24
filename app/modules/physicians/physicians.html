@@ -1,0 +1,77 @@
+<ion-view title="{{APPOINTMENTSCONSTANTS.PHYSICIANSTITLE}}">
+    <ion-nav-buttons side="left">
+        <button menu-toggle="left" ng-hide="isReturnToDashboard" class="button button-clear icon ion-navicon left-menu"></button>
+        <button ng-click="myGoBack()" ng-show="isReturnToDashboard" class="button button-clear icon ion-ios-arrow-back left-menu"></button>
+        <div class="app-logo"><img class="title-image" src="img/ajax-loader.gif" ng-src="{{orgLogoURL?orgLogoURL:defaultLogoURL}}" err-SRC="{{errorLogoURL}}" height="25" /> </div>
+    </ion-nav-buttons>
+    <ion-nav-buttons side="right">
+        <button title="Notifications" class="button button-clear ion-android-notifications notification" ui-sref="app.patientReminder"><span class="badge badge-assertive">{{Notification}}</span></button>
+        <button class="button button-clear ion-android-more-vertical right-menu" ng-click="popover.show($event)"> </button>
+    </ion-nav-buttons>
+    <button title="Load More" class="button button-clear button-float bottom-20" ng-show="!isLoadComplete" ng-click="loadMore();"> <i class="icon ion-android-more-horizontal"></i> </button>
+    <div class="data-loading bottom-0" ng-show="isLoadMore">{{APPOINTMENTSCONSTANTS.LOADINGLABEL}}
+        <ion-spinner icon="lines"></ion-spinner>
+    </div>
+    <ion-content has-header="true" class="body-grey">
+        <div class="search-box">
+            <div class="item-input-wrapper no-padding">
+                <label class="item-input item-md-label no-padding no-margin full-width">
+                    <input type="text" class="input md-input" placeholder="{{APPOINTMENTSCONSTANTS.PHYSICIANSEARCHPLACEHOLDER}}" ng-model="$parent.searchString" ng-change="searchPhysicians()" ng-model-options="{ debounce: 500 }" />
+                    <div class="highlight highlight-calm"></div>
+                </label>
+                <button title="Search" class="button button-positive go-btn search-btn" ng-click="searchPhysicians()"><i class="icon ion-ios-search placeholder-icon text-white"></i></button>
+            </div>
+        </div>
+        <div class="row no-padding sorting-items">
+            <div class="col col-33 no-padding" align="left">
+                <button class="button button-clear sort-btn" ng-click="setFilter('fname')" ng-class="{'sort-active':selected,reverse: reverse}"> <i class="icon arrow-icon" ng-class="{'ion-arrow-down-b': reverse, 'ion-arrow-up-b': !reverse}"></i> {{APPOINTMENTSCONSTANTS.SORTBYNAMELABEL}} </button>
+            </div>
+            <div class="col col-33  no-padding" align="center">
+                <button class="button button-clear sort-btn" ng-click="setFilter('distance')" ng-class="{'sort-active':selected,reverse: reverse}"> <i class="icon arrow-icon" ng-class="{'ion-arrow-down-b': reverse2, 'ion-arrow-up-b': !reverse2}"></i> {{APPOINTMENTSCONSTANTS.SORTDISTANCETITLE}} </button>
+            </div>
+            <div class="col col-33  no-padding" align="right">
+                <button class="button button-clear sort-btn" ng-click="setFilter('rating')" ng-class="{'sort-active':selected,reverse: reverse}"> <i class="icon arrow-icon" ng-class="{'ion-arrow-down-b': reverse1, 'ion-arrow-up-b': !reverse1}"></i> {{APPOINTMENTSCONSTANTS.SORTBYRATINGLABEL}} </button>
+            </div>
+        </div>
+        <ion-list>
+            <div class="no-data-center" ng-show="(PhysiciansData.length<=0) && isPhysicianData">
+                <div class="row alert-padding">
+                    <div class="col no-data"> <i class="icon ion-information-circled"> </i>
+                        <h5 class="item-text-wrap">{{APPOINTMENTSCONSTANTS.NEWERRORMESSAGE}} </h5> </div>
+                </div>
+            </div>
+            <div ng-repeat="physician in PhysiciansData">
+                <div class="card portal-card">
+                    <div class="item item-thumbnail-left item-icon-right item-button-right doc-thumbnail" ui-sref="app.physicianProfile({'physician': physician,'isProfile':true})" ng-class="{'doc-offline':physician.isOnline=='0' , 'doc-online': physician.isOnline=='1'}"> <img class="doc-image pointer" src="img/ajax-loader.gif" ng-src="{{physician.profileimage?physician.profileimage:defaultUserImage}}" err-SRC="{{defaultUserImage}}" />
+                        <p class="pointer left">{{physician.title}} {{physician.firstname | capitalize}} {{physician.lastname | capitalize}}</p>
+                        <p class="pointer right rating-list-page" ng-show="physician.rating" ui-sref="app.physicianProfile({'physician': physician,'isProfile':false})"> <span><i ng-class="{'ion-ios-star':physician.rating>0,'ion-ios-star-outline':physician.rating<1}"></i></span> <span><i ng-class="{'ion-ios-star':physician.rating>1,'ion-ios-star-outline':physician.rating<2}"></i></span> <span><i ng-class="{'ion-ios-star':physician.rating>2,'ion-ios-star-outline':physician.rating<3}"></i></span> <span><i ng-class="{'ion-ios-star':physician.rating>3,'ion-ios-star-outline':physician.rating<4}"></i></span> <span><i ng-class="{'ion-ios-star':physician.rating>4,'ion-ios-star-outline':physician.rating<5}"></i></span></p>
+                        <div class="clearfix"></div>
+                        <p class="sub-text" ng-if="physician.consultantfee && showNewDashboard" style="position: absolute;right:5px;margin-top: 21px;">{{APPOINTMENTSCONSTANTS.CUNSULTANTFEELABEL}} {{physician.consultantfee}}</p>
+                        <p class="sub-text" ng-if="physician.distance>0" style="position: absolute;right: 5px;">{{physician.distance |number:0}} {{APPOINTMENTSCONSTANTS.DISTANCETITLE}}</p>
+                        <!--                        <p class="sub-text" ng-if="physician.facility">{{physician.facility}} </p>-->
+                        <p class="sub-text" ng-if="physician.specialty" style="width: 80%;">{{physician.specialty}}</p>
+                        <p class="sub-text" ng-if="physician.mobile"><a class="pointer" ng-click="callNumber(physician.mobile); $event.stopPropagation();">{{physician.mobile}}</a></p>
+                        <div class="text-ellipsis"> <span class="sub-text">{{physician.mainAddressLine1}}</span> <span class="sub-text" ng-if="physician.mainAddressLine1">, </span><span class="sub-text">{{physician.mainCity}}</span><span ng-if="physician.mainCity">, </span><span class="sub-text">{{physician.mainState}}</span> </div>
+                    </div>
+                    <div class="row appointment-card">
+                        <div class="col col-25 no-padding">
+                            <a title="Message" class="button button-clear text-primary icon ion-ios-email-outline absolute-center" ui-sref="app.composeMessage({'PhysicianId': physician.id})"></a>
+                        </div>
+                        <div class="col col-25 no-padding">
+                            <a title="Map" class="button button-clear text-primary icon ion-ios-location-outline absolute-center" ui-sref="app.map({physician:physician})"></a>
+                        </div>
+                        <div class="col col-25 no-padding">
+                            <a title="Schedule" class="button button-clear text-primary icon ion-android-time absolute-center" ng-if="physician.isAppointmentRequested==0" ui-sref="app.addAppointment({'status':1,'physician':physician})"></a>
+                            <a title="Request" class="button button-clear text-primary icon icon-calendar-plus absolute-center" ng-if="physician.isAppointmentRequested==1" ui-sref="app.addAppointment({'status':0,'physician':physician})"> </a>
+                        </div>
+                        <div class="col col-25 no-padding">
+                            <a title="Chat" ng-click="chatDetails(physician)" class="button button-clear text-primary icon ion-ios-chatboxes-outline list-chat absolute-center" ng-disabled="physician.isChatallow!=1"></a>
+                        </div>
+                        <!--<div class="col col-20 no-padding">
+                            <a style="margin-top: -5px;" ng-click="callNumber(physician.mobile)" class="button button-clear text-primary icon icon-fw ion-ios-telephone-outline absolute-center"></a>
+                        </div>--></div>
+                </div>
+            </div>
+        </ion-list>
+    </ion-content>
+</ion-view>

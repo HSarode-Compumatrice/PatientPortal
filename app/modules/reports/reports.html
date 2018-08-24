@@ -1,0 +1,125 @@
+<ion-view title="{{REPORTSCONSTANTS.REPORTSTITLE}}">
+    <ion-nav-buttons side="left">
+        <button menu-toggle="left" class="button button-clear icon ion-navicon left-menu"></button>
+        <div class="app-logo"><img class="title-image" src="img/ajax-loader.gif" ng-src="{{orgLogoURL?orgLogoURL:defaultLogoURL}}" err-SRC="{{errorLogoURL}}" height="25" /></div>
+    </ion-nav-buttons>
+    <ion-nav-buttons side="right">
+        <button title="Notifications" class="button button-clear ion-android-notifications notification" ui-sref="app.patientReminder"><span class="badge badge-assertive">{{Notification}}</span></button>
+        <button class="button button-clear ion-android-more-vertical right-menu" ng-click="popover.show($event)"> </button>
+    </ion-nav-buttons>
+    <ion-content has-header="true" class="body-grey" ng-class="{isBrowserView : isbrowser== true}">
+        <div class="card margin-md">
+            <div class="list">
+                <div class="item insurance-header">
+                    <div class="row">
+                        <div class="col">
+                            <h3 class="text-primary">{{REPORTSCONSTANTS.MEDICALREPORTLABEL}}</h3> </div>
+                    </div>
+                </div>
+                <ion-list>
+                    <ion-item class="no-padding insurance-body">
+                        <div class="card no-padding no-margin">
+                            <div class="row no-padding text-justify">
+                                <div class="col">
+                                    <show-more text="medicalInformation" limit="120"> </show-more>
+                                </div>
+                            </div>
+                        </div>
+                    </ion-item>
+                </ion-list>
+                <div class="row appointment-card">
+                    <div class="col col-50 no-padding">
+                        <a title="Download" class="button button-clear text-primary icon ion-ios-download absolute-center" ng-click="generateMedicalReport('')"></a>
+                    </div>
+                    <div class="col col-50 no-padding">
+                        <a title="Share" class="button button-clear text-primary icon ion-android-share-alt absolute-center" ng-click="sharePDF()"></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card margin-md">
+            <div class="list">
+                <div class="item insurance-header">
+                    <div class="row">
+                        <div class="col">
+                            <h3 class="text-primary">{{REPORTSCONSTANTS.CCRLABEL}}</h3> </div>
+                    </div>
+                </div>
+                <ion-list>
+                    <ion-item class="no-padding insurance-body">
+                        <div class="card no-padding no-margin">
+                            <div class="row no-padding text-justify">
+                                <div class="col">
+                                    <show-more text="ccrInformation" limit="120"> </show-more>
+                                </div>
+                            </div>
+                            <!--<div class="row no-padding">
+                                <div class="col">
+                                    <label class="checkbox inline-checkbox small-checkbox">
+                                        <input id="Vitals" type="checkbox" ng-model="dateRange.dateRangeCcr" ng-click="checkCcrError()"> &nbsp;<span>{{REPORTSCONSTANTS.DATERAGELABEL}}</span></label>
+                                </div>
+                            </div>-->
+                            <!--<div ng-show="dateRange.dateRangeCcr">
+                                <div class="row no-padding">
+                                    <div class="col col-33 top-margin-md"> <span>{{REPORTSCONSTANTS.STARTDATELABEL}} : </span> </div>
+                                    <div class="col col-66">
+                                        <label class="item item-input item-md-label no-padding border-none">
+                                            <input class="input pointer" type="text" placeholder="{{REPORTSCONSTANTS.DATEPLACEHOLDER}}" id="sheduleDateId" ng-model="openccrStartDate" ng-click="openCcrStartDatePicker()" readonly>
+                                            <div class="highlight highlight-calm"></div>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="row no-padding">
+                                    <div class="col col-33 top-margin-md"> <span>{{REPORTSCONSTANTS.ENDDATELABEL}} : </span> </div>
+                                    <div class="col col-66">
+                                        <label class="item item-input item-md-label no-padding border-none">
+                                            <input class="input pointer" type="text" placeholder="{{REPORTSCONSTANTS.DATEPLACEHOLDER}}" id="sheduleDateId" ng-model="openccrEndDate" ng-click="openCcrEndDatePicker()" readonly>
+                                            <div class="highlight highlight-calm"></div>
+                                        </label>
+                                    </div>
+                                </div>
+                               </div>-->
+                        </div>
+                    </ion-item>
+                </ion-list>
+                <div class="row appointment-card">
+                    <div class="col col-50 no-padding">
+                        <a title="Download" class="button button-clear text-primary icon ion-ios-download absolute-center" ng-click="ccrCcd('ccr')"></a>
+                    </div>
+                    <div class="col col-50 no-padding">
+                        <a title="Share" class="button button-clear text-primary icon ion-android-share-alt absolute-center" ng-click="ccrCcd('ccrshare')"></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card margin-md">
+            <div class="list">
+                <div class="item insurance-header">
+                    <div class="row">
+                        <div class="col">
+                            <h3 class="text-primary">{{REPORTSCONSTANTS.CCDLABEL}}</h3> </div>
+                    </div>
+                </div>
+                <ion-list>
+                    <ion-item class="no-padding insurance-body">
+                        <div class="card no-padding no-margin">
+                            <div class="row no-padding text-justify">
+                                <div class="col">
+                                    <show-more text="ccdInformation" limit="120"> </show-more>
+                                </div>
+                            </div>
+                        </div>
+                    </ion-item>
+                </ion-list>
+                <div class="row appointment-card">
+                    <div class="col col-50 no-padding">
+                        <a title="Download" class="button button-clear text-primary icon ion-ios-download absolute-center" ng-click="ccrCcd('ccd')"></a>
+                    </div>
+                    <div class="col col-50 no-padding">
+                        <a title="Share" class="button button-clear text-primary icon ion-android-share-alt absolute-center" ng-click="ccrCcd('ccdshare')"></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </ion-content>
+</ion-view>

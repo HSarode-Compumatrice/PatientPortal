@@ -1,0 +1,41 @@
+<ion-view title="{{MEDICALRECORDSCONSTANTS.MEDICALHISTORYTITLE}}">
+        <ion-nav-buttons side="left">
+            <span ng-click="myGoBack()">
+                <button class="button button-clear icon ion-ios-arrow-back left-menu"></button>
+            </span>
+        </ion-nav-buttons>
+        <ion-nav-buttons side="right">
+            <button class="button button-clear ion-android-notifications notification" ui-sref="app.patientReminder">
+                <span class="badge badge-assertive">{{Notification}}</span>
+            </button>
+            <button class="button button-clear ion-android-more-vertical right-menu" ng-click="popover.show($event)"> </button>
+        </ion-nav-buttons>
+
+        <ion-content has-header="true" class="bottom-50 bg-gray">
+            <ion-item class="item-accordion body-grey no-padding no-margin">
+                <div class="item alert alert-info icon ion-information-circled" id="errorMsg" ng-show="pastHistory.length<=0"> {{noDataFound}}                    
+                </div>
+                <!-- <div class="card MD-card" ng-show="pastHistory">
+                    <div class="row striped" ng-repeat="pasthistory in pastHistory">
+                        <div class="col text-wrap"> 
+                        <span ng-if="pasthistory.DiseaseName && !pasthistory.contraceptiveComp && !pasthistory.otherDisease">{{$index+1}}. {{pasthistory.DiseaseName}}</span>
+
+                        <span ng-if="pasthistory.DiseaseName && pasthistory.contraceptiveComp">{{$index+1}}. Contraceptive Complications: {{pasthistory.DiseaseName}}</span>
+
+                        <span ng-if="pasthistory.DiseaseName && pasthistory.otherDisease">{{$index+1}}. Other:  {{pasthistory.DiseaseName}}</span>
+                        </div>
+                    </div>
+                </div> -->
+
+                <div class="card MD-card" ng-show="pastHistory" > 
+                    <div class="row striped" ng-repeat="pasthistory in pastHistory">
+
+                        <div class="col" ng-if="pasthistory.DiseaseName && !pasthistory.contraceptiveComp && !pasthistory.otherDisease"><span>{{$index+1}}. {{pasthistory.DiseaseName}}</span></div>
+                        <div class="col" ng-if="pasthistory.DiseaseName && pasthistory.contraceptiveComp"><span>{{$index+1}}. Contraceptive Complications:<span class="font-medium"> {{pasthistory.DiseaseName}}</span></span></div>
+                        <div class="col" ng-if="pasthistory.DiseaseName && pasthistory.otherDisease"><span>{{$index+1}}. Other:<span class="font-medium">  {{pasthistory.DiseaseName}}</span></span></div>
+                    </div>                    
+                </div>
+
+            </ion-item>
+        </ion-content>        
+    </ion-view>
